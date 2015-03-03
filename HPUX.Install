@@ -1,0 +1,58 @@
+Package name:     gofer
+Version number:   2.30a
+Original author:  Mark P. Jones <N/A>
+Original URL:     ftp://ftp.FreeBSD.org/pub/FreeBSD/ports/distfiles
+HP-UX URL:        http://hpux.connect.org.uk/hppd/cgi-bin/search?package=&term=gofer-
+Install tree:     /opt/gofer
+Report bugs to:   stephie@connect.org.uk
+Tested on:        HP 9000/780/C160 running HP-UX 11.00
+C compiler used:  Version A.11.01.03
+Purpose:
+Another interactive functional programming environment. An interpreter, in
+other words. It is based on Haskell 1.2 and includes Lazy evaluation, higher
+order functions, pattern matching etc. Full Haskell 1.2 expression and pattern
+syntax including lambda, case, conditional and let expressions, and more.
+Date archived:    Tue 20 Jun 2000
+
+-------------------------------------------------------------------------------
+
+System:
+======
+	HP-UX shin B.11.00 A 9000/780
+
+URL:
+====
+	ftp://ftp.FreeBSD.org/pub/FreeBSD/ports/distfiles
+
+HP Porting Changes:
+===================
+
+  Configuration Files:
+      ./Makefile -> Created it and included an install rule.
+
+  In the src dir any headers altered (as per Readme) contain
+  include paths that can be modified (prefixed) via the Makefile.
+
+
+
+Building:
+=========
+
+
+  Run "make" in the top level dir.
+
+  Use "make -n install" to check the defaults, then "make install"
+
+
+
+Installed:
+==========
+ By
+ --     [stephie@connect.org.uk]
+ On
+ --	[ 01/06/00 ]
+ 
+
+
+       HPUX Porting and Archive Centre, Connect, Liverpool University.
+  __/__/__/__/__/__/__/__/__/__/__/__/__/__/__/__/__/__/__/__/__/__/__/__/
