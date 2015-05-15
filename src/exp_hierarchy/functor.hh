@@ -53,7 +53,7 @@ public:
   // Check functions
   inline virtual bool isToken() const { return false; }
   inline virtual bool isConstant() const { return true; }
-  virtual Expression eval(const std::vector<Expression>& values);
+  virtual Expression eval(const std::vector<Expression>& values) const;
 };
 
 

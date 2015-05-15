@@ -40,6 +40,9 @@ bool Functor::insertFunc(std::string identifier, FuncDecl f){
 }
   
 bool Functor::initBaseFunctions(){  
+  // NOTE: Think about moving this into type's class, it should definetly make more sense and be
+  // more readable.
+  
   // plus
   FuncDecl plus = [](std::vector<Expression> values){ return Expression(
 							new SaliraInt(
@@ -54,13 +57,27 @@ bool Functor::initBaseFunctions(){
 							    )
 							);};
   Functor::insertFunc("minus", minus);
+  // Multiplication
+  FuncDecl mult = [](std::vector<Expression> values){ return Expression(
+							new SaliraInt(
+							  ((SaliraInt*)values[0].get())->value() * ((SaliraInt*)values[1].get())->value()
+							    )
+							);};
+  Functor::insertFunc("mult", mult);
+  // Division
+  FuncDecl div = [](std::vector<Expression> values){ return Expression(
+							new SaliraInt(
+							  ((SaliraInt*)values[0].get())->value() / ((SaliraInt*)values[1].get())->value()
+							    )
+							);};
+  Functor::insertFunc("div", mult);
+  
 }
 
 
 // API
 // Problem: Need to check if arguments need to evaluate
-Expression Functor::eval(const std::vector<Expression>& values) { 
-    std::cout << _identifier << std::endl;
+Expression Functor::eval(const std::vector<Expression>& values)const { 
     std::vector<Expression> mid_result;
     for(auto item : _arguments){
       mid_result.push_back(item->eval(values));

@@ -11,11 +11,12 @@
 class PrimitiveValue : public ExpressionBase {
 public:
     PrimitiveValue() 
-      : ExpressionBase(true){}    
+      : ExpressionBase(true){}
     virtual int eval() const {}
     inline virtual bool isToken() const {return false;}
     inline virtual bool isConstant() const {return true;}
-    virtual Expression eval(const std::vector<Expression>& values) { return Expression(this);}
+    virtual Expression eval(const std::vector<Expression>& values) const =0;
+    
 };
 
 class SaliraInt : public PrimitiveValue {
@@ -27,7 +28,9 @@ public:
   inline void setValue(int new_value) { _value = new_value;}
   
   // Eval
-  
+  virtual Expression eval(const std::vector<Expression>& values) const {
+    return Expression(new SaliraInt(_value));
+  }
 };
 
 /*
@@ -41,7 +44,7 @@ private:
 public:
   virtual bool isToken() const { return true; }
   virtual bool isConstant() const { return false; }
-  virtual Expression eval(const std::vector<Expression>& values) { 
+  virtual Expression eval(const std::vector<Expression>& values) const{ 
     return values[_placement];
   }
   Token(int place) : _placement(place), ExpressionBase(false) {}

@@ -32,7 +32,8 @@ public:
   }
   inline virtual bool isConstant() const = 0;
   inline virtual bool isToken() const = 0;
-  virtual Expression eval(const std::vector<Expression>& values) = 0;
+  virtual Expression eval(const std::vector<Expression>& values)const = 0;
+  
   
 };
 
