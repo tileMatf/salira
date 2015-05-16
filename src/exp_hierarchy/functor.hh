@@ -35,21 +35,16 @@ private:
 public:
   Functor(std::string id, std::initializer_list<Expression> list);
   
-  /* 
-   * It should be decided how would arguments will be provided to Expression to 
-   * calculate its value or whatever it should do, for now should be focused on value.
-   * Idea is for expression to have argument list for calculating, so with one Expression defined
-   * you can define another "set of values" (another expressions to be inserted) with which our 
-   * defined expression should work, like tokens.
-   * 
-   * Main reason for this is to enable, simplify and encourage automatic generation of functions based on Expressions,
-   * so you can create re-use existing Expression.
-   * 
-   */
-  Expression operator()(std::vector<Expression> args){
-      return Functor::getFunc(_identifier)(args);
+  void addToArguments(Expression t){
+    _arguments.push_back(t);
   }
   
+  void changeArgument(int index, Expression t){
+	if(index > _arguments.size()){
+	  throw SaliraException("There is no arguments with given index");
+	}
+	_arguments[index] = t;
+  }
   // Check functions
   inline virtual bool isToken() const { return false; }
   inline virtual bool isConstant() const { return true; }

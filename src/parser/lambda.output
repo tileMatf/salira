@@ -1,0 +1,295 @@
+Terminals unused in grammar
+
+   COMMENT
+   LET
+   IN
+   MAX
+   MIN
+   NEG
+
+
+Grammar
+
+    0 $accept: program $end
+
+    1 program: ID ARGS '=' ArGr
+
+    2 ARGS: ARGS ID
+    3     | ID
+
+    4 ArGr: ArGr '+' T
+    5     | ArGr '-' T
+    6     | T
+
+    7 T: T '*' F
+    8  | T '/' F
+    9  | F
+
+   10 F: NUM
+   11  | ID
+   12  | '(' ArGr ')'
+
+
+Terminals, with rules where they appear
+
+$end (0) 0
+'(' (40) 12
+')' (41) 12
+'*' (42) 7
+'+' (43) 4
+'-' (45) 5
+'/' (47) 8
+'=' (61) 1
+error (256)
+NUM (258) 10
+ID (259) 1 2 3 11
+COMMENT (260)
+LET (261)
+IN (262)
+MAX (263)
+MIN (264)
+NEG (265)
+
+
+Nonterminals, with rules where they appear
+
+$accept (18)
+    on left: 0
+program (19)
+    on left: 1, on right: 0
+ARGS (20)
+    on left: 2 3, on right: 1 2
+ArGr (21)
+    on left: 4 5 6, on right: 1 4 5 12
+T (22)
+    on left: 7 8 9, on right: 4 5 6 7 8
+F (23)
+    on left: 10 11 12, on right: 7 8 9
+
+
+state 0
+
+    0 $accept: . program $end
+
+    ID  shift, and go to state 1
+
+    program  go to state 2
+
+
+state 1
+
+    1 program: ID . ARGS '=' ArGr
+
+    ID  shift, and go to state 3
+
+    ARGS  go to state 4
+
+
+state 2
+
+    0 $accept: program . $end
+
+    $end  shift, and go to state 5
+
+
+state 3
+
+    3 ARGS: ID .
+
+    $default  reduce using rule 3 (ARGS)
+
+
+state 4
+
+    1 program: ID ARGS . '=' ArGr
+    2 ARGS: ARGS . ID
+
+    ID   shift, and go to state 6
+    '='  shift, and go to state 7
+
+
+state 5
+
+    0 $accept: program $end .
+
+    $default  accept
+
+
+state 6
+
+    2 ARGS: ARGS ID .
+
+    $default  reduce using rule 2 (ARGS)
+
+
+state 7
+
+    1 program: ID ARGS '=' . ArGr
+
+    NUM  shift, and go to state 8
+    ID   shift, and go to state 9
+    '('  shift, and go to state 10
+
+    ArGr  go to state 11
+    T     go to state 12
+    F     go to state 13
+
+
+state 8
+
+   10 F: NUM .
+
+    $default  reduce using rule 10 (F)
+
+
+state 9
+
+   11 F: ID .
+
+    $default  reduce using rule 11 (F)
+
+
+state 10
+
+   12 F: '(' . ArGr ')'
+
+    NUM  shift, and go to state 8
+    ID   shift, and go to state 9
+    '('  shift, and go to state 10
+
+    ArGr  go to state 14
+    T     go to state 12
+    F     go to state 13
+
+
+state 11
+
+    1 program: ID ARGS '=' ArGr .
+    4 ArGr: ArGr . '+' T
+    5     | ArGr . '-' T
+
+    '+'  shift, and go to state 15
+    '-'  shift, and go to state 16
+
+    $default  reduce using rule 1 (program)
+
+
+state 12
+
+    6 ArGr: T .
+    7 T: T . '*' F
+    8  | T . '/' F
+
+    '*'  shift, and go to state 17
+    '/'  shift, and go to state 18
+
+    $default  reduce using rule 6 (ArGr)
+
+
+state 13
+
+    9 T: F .
+
+    $default  reduce using rule 9 (T)
+
+
+state 14
+
+    4 ArGr: ArGr . '+' T
+    5     | ArGr . '-' T
+   12 F: '(' ArGr . ')'
+
+    '+'  shift, and go to state 15
+    '-'  shift, and go to state 16
+    ')'  shift, and go to state 19
+
+
+state 15
+
+    4 ArGr: ArGr '+' . T
+
+    NUM  shift, and go to state 8
+    ID   shift, and go to state 9
+    '('  shift, and go to state 10
+
+    T  go to state 20
+    F  go to state 13
+
+
+state 16
+
+    5 ArGr: ArGr '-' . T
+
+    NUM  shift, and go to state 8
+    ID   shift, and go to state 9
+    '('  shift, and go to state 10
+
+    T  go to state 21
+    F  go to state 13
+
+
+state 17
+
+    7 T: T '*' . F
+
+    NUM  shift, and go to state 8
+    ID   shift, and go to state 9
+    '('  shift, and go to state 10
+
+    F  go to state 22
+
+
+state 18
+
+    8 T: T '/' . F
+
+    NUM  shift, and go to state 8
+    ID   shift, and go to state 9
+    '('  shift, and go to state 10
+
+    F  go to state 23
+
+
+state 19
+
+   12 F: '(' ArGr ')' .
+
+    $default  reduce using rule 12 (F)
+
+
+state 20
+
+    4 ArGr: ArGr '+' T .
+    7 T: T . '*' F
+    8  | T . '/' F
+
+    '*'  shift, and go to state 17
+    '/'  shift, and go to state 18
+
+    $default  reduce using rule 4 (ArGr)
+
+
+state 21
+
+    5 ArGr: ArGr '-' T .
+    7 T: T . '*' F
+    8  | T . '/' F
+
+    '*'  shift, and go to state 17
+    '/'  shift, and go to state 18
+
+    $default  reduce using rule 5 (ArGr)
+
+
+state 22
+
+    7 T: T '*' F .
+
+    $default  reduce using rule 7 (T)
+
+
+state 23
+
+    8 T: T '/' F .
+
+    $default  reduce using rule 8 (T)

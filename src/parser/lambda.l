@@ -3,6 +3,9 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
+
+#include "../exp_hierarchy/auto_load.hh"
+
 #include "LambdaScanner.h"
 #include "lambda.tab.h"
 
