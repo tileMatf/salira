@@ -5,10 +5,7 @@
  * 
  */
 
-#include "expression.hh"
-#include "functor.hh"
-#include "salira_types.hh"
-#include "salira_utility.hh"
+#include "auto_load.hh"
 
 int main() {
   Functor::initBaseFunctions();
