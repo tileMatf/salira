@@ -10,7 +10,6 @@
 
 #include "lambda.tab.h"
 
-#include "../exp_hierarchy/auto_load.hh"
 
 namespace Lambda
 {

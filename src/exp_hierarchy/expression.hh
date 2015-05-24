@@ -2,28 +2,26 @@
 #define EXPRESSION_H__
 
 #include <iostream>
-#include <memory>
 #include <vector>
 #include <unordered_map>
 #include <functional>
 #include "SaliraExceptions.hh"
 
 // Forward declaration of Expression so I can write bunch of aliases.
-/* Deklaracija osnovne klase */
 class ExpressionBase;
 /*
  * Declaring map with functions. At the moment its based around expression (or more precise evaluating expression).
  * Need to be modified if functions should build somtething else instead of expression, GCode for example
  */
-
-using Expression = std::shared_ptr<ExpressionBase>;
+using Expression = ExpressionBase*;
+//using Expression = std::shared_ptr<ExpressionBase>;
 using FuncDecl = std::function< Expression ( std::vector<Expression> ) >;
 using FuncMap = std::unordered_map<std::string, FuncDecl>;
 
 /*
  * Base type
  */
-class ExpressionBase : public std::enable_shared_from_this<ExpressionBase> {
+class ExpressionBase{
 private:
   bool _is_constant;  
 public:

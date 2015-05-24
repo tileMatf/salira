@@ -35,9 +35,13 @@ private:
 public:
   Functor(std::string id, std::initializer_list<Expression> list);
   
-  void addToArguments(Expression t){
-    _arguments.push_back(t);
-  }
+  // Adding additional argument to arguments
+  // Intention: So functor can be modified through parsing expression, translation for parsing purposes
+  inline void addToArguments(Expression t){ _arguments.push_back(t); }
+  
+  // Setter and getter for identifier
+  inline void setIdentifier(std::string s) {_identifier = s;}
+  inline std::string identifier() {return _identifier;}
   
   void changeArgument(int index, Expression t){
 	if(index > _arguments.size()){

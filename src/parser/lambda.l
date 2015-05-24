@@ -5,6 +5,9 @@
 #include <stdlib.h>
 
 #include "../exp_hierarchy/auto_load.hh"
+#include "../exp_hierarchy/expression.hh"
+#include "location.hh"
+	#include "position.hh"
 
 #include "LambdaScanner.h"
 #include "lambda.tab.h"

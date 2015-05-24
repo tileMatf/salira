@@ -1,73 +1,73 @@
-/* A Bison parser, made by GNU Bison 2.5.  */
+// A Bison parser, made by GNU Bison 3.0.2.
 
-/* Skeleton implementation for Bison LALR(1) parsers in C++
-   
-      Copyright (C) 2002-2011 Free Software Foundation, Inc.
-   
-   This program is free software: you can redistribute it and/or modify
-   it under the terms of the GNU General Public License as published by
-   the Free Software Foundation, either version 3 of the License, or
-   (at your option) any later version.
-   
-   This program is distributed in the hope that it will be useful,
-   but WITHOUT ANY WARRANTY; without even the implied warranty of
-   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-   GNU General Public License for more details.
-   
-   You should have received a copy of the GNU General Public License
-   along with this program.  If not, see <http://www.gnu.org/licenses/>.  */
+// Skeleton implementation for Bison LALR(1) parsers in C++
 
-/* As a special exception, you may create a larger work that contains
-   part or all of the Bison parser skeleton and distribute that work
-   under terms of your choice, so long as that work isn't itself a
-   parser generator using the skeleton or a modified version thereof
-   as a parser skeleton.  Alternatively, if you modify or redistribute
-   the parser skeleton itself, you may (at your option) remove this
-   special exception, which will cause the skeleton and the resulting
-   Bison output files to be licensed under the GNU General Public
-   License without this special exception.
-   
-   This special exception was added by the Free Software Foundation in
-   version 2.2 of Bison.  */
+// Copyright (C) 2002-2013 Free Software Foundation, Inc.
 
+// This program is free software: you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
 
-/* First part of user declarations.  */
+// This program is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+
+// You should have received a copy of the GNU General Public License
+// along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+// As a special exception, you may create a larger work that contains
+// part or all of the Bison parser skeleton and distribute that work
+// under terms of your choice, so long as that work isn't itself a
+// parser generator using the skeleton or a modified version thereof
+// as a parser skeleton.  Alternatively, if you modify or redistribute
+// the parser skeleton itself, you may (at your option) remove this
+// special exception, which will cause the skeleton and the resulting
+// Bison output files to be licensed under the GNU General Public
+// License without this special exception.
+
+// This special exception was added by the Free Software Foundation in
+// version 2.2 of Bison.
 
 
-/* Line 293 of lalr1.cc  */
-#line 39 "lambda.tab.c"
+// First part of user declarations.
 
+#line 37 "lambda.tab.c" // lalr1.cc:399
+
+# ifndef YY_NULLPTR
+#  if defined __cplusplus && 201103L <= __cplusplus
+#   define YY_NULLPTR nullptr
+#  else
+#   define YY_NULLPTR 0
+#  endif
+# endif
 
 #include "lambda.tab.h"
 
-/* User implementation prologue.  */
+// User implementation prologue.
 
+#line 51 "lambda.tab.c" // lalr1.cc:407
+// Unqualified %code blocks.
+#line 23 "lambda.y" // lalr1.cc:408
 
-/* Line 299 of lalr1.cc  */
-#line 48 "lambda.tab.c"
-/* Unqualified %code blocks.  */
-
-/* Line 300 of lalr1.cc  */
-#line 19 "lambda.y"
-
-
+	
 	#include "../exp_hierarchy/auto_load.hh"
 
 	std::vector<Expression> arguments{};
 	std::unordered_map< std::string, int > variables{};
+	int counter = 0;
 	static int yylex(Lambda::BisonParser::semantic_type *yylval, Lambda::FlexScanner &scanner);
 	
 	  
 
+#line 65 "lambda.tab.c" // lalr1.cc:408
 
-
-/* Line 300 of lalr1.cc  */
-#line 66 "lambda.tab.c"
 
 #ifndef YY_
 # if defined YYENABLE_NLS && YYENABLE_NLS
 #  if ENABLE_NLS
-#   include <libintl.h> /* FIXME: INFRINGES ON USER NAME SPACE */
+#   include <libintl.h> // FIXME: INFRINGES ON USER NAME SPACE.
 #   define YY_(msgid) dgettext ("bison-runtime", msgid)
 #  endif
 # endif
@@ -76,81 +76,59 @@
 # endif
 #endif
 
-/* YYLLOC_DEFAULT -- Set CURRENT to span from RHS[1] to RHS[N].
-   If N is 0, then set CURRENT to the empty location which ends
-   the previous symbol: RHS[0] (always defined).  */
 
-#define YYRHSLOC(Rhs, K) ((Rhs)[K])
-#ifndef YYLLOC_DEFAULT
-# define YYLLOC_DEFAULT(Current, Rhs, N)                               \
- do                                                                    \
-   if (N)                                                              \
-     {                                                                 \
-       (Current).begin = YYRHSLOC (Rhs, 1).begin;                      \
-       (Current).end   = YYRHSLOC (Rhs, N).end;                        \
-     }                                                                 \
-   else                                                                \
-     {                                                                 \
-       (Current).begin = (Current).end = YYRHSLOC (Rhs, 0).end;        \
-     }                                                                 \
- while (false)
-#endif
 
-/* Suppress unused-variable warnings by "using" E.  */
-#define YYUSE(e) ((void) (e))
+// Suppress unused-variable warnings by "using" E.
+#define YYUSE(E) ((void) (E))
 
-/* Enable debugging if requested.  */
+// Enable debugging if requested.
 #if YYDEBUG
 
-/* A pseudo ostream that takes yydebug_ into account.  */
+// A pseudo ostream that takes yydebug_ into account.
 # define YYCDEBUG if (yydebug_) (*yycdebug_)
 
-# define YY_SYMBOL_PRINT(Title, Type, Value, Location)	\
-do {							\
-  if (yydebug_)						\
-    {							\
-      *yycdebug_ << Title << ' ';			\
-      yy_symbol_print_ ((Type), (Value), (Location));	\
-      *yycdebug_ << std::endl;				\
-    }							\
-} while (false)
+# define YY_SYMBOL_PRINT(Title, Symbol)         \
+  do {                                          \
+    if (yydebug_)                               \
+    {                                           \
+      *yycdebug_ << Title << ' ';               \
+      yy_print_ (*yycdebug_, Symbol);           \
+      *yycdebug_ << std::endl;                  \
+    }                                           \
+  } while (false)
 
-# define YY_REDUCE_PRINT(Rule)		\
-do {					\
-  if (yydebug_)				\
-    yy_reduce_print_ (Rule);		\
-} while (false)
+# define YY_REDUCE_PRINT(Rule)          \
+  do {                                  \
+    if (yydebug_)                       \
+      yy_reduce_print_ (Rule);          \
+  } while (false)
 
-# define YY_STACK_PRINT()		\
-do {					\
-  if (yydebug_)				\
-    yystack_print_ ();			\
-} while (false)
+# define YY_STACK_PRINT()               \
+  do {                                  \
+    if (yydebug_)                       \
+      yystack_print_ ();                \
+  } while (false)
 
-#else /* !YYDEBUG */
+#else // !YYDEBUG
 
 # define YYCDEBUG if (false) std::cerr
-# define YY_SYMBOL_PRINT(Title, Type, Value, Location)
-# define YY_REDUCE_PRINT(Rule)
-# define YY_STACK_PRINT()
+# define YY_SYMBOL_PRINT(Title, Symbol)  YYUSE(Symbol)
+# define YY_REDUCE_PRINT(Rule)           static_cast<void>(0)
+# define YY_STACK_PRINT()                static_cast<void>(0)
 
-#endif /* !YYDEBUG */
+#endif // !YYDEBUG
 
-#define yyerrok		(yyerrstatus_ = 0)
-#define yyclearin	(yychar = yyempty_)
+#define yyerrok         (yyerrstatus_ = 0)
+#define yyclearin       (yyempty = true)
 
-#define YYACCEPT	goto yyacceptlab
-#define YYABORT		goto yyabortlab
-#define YYERROR		goto yyerrorlab
+#define YYACCEPT        goto yyacceptlab
+#define YYABORT         goto yyabortlab
+#define YYERROR         goto yyerrorlab
 #define YYRECOVERING()  (!!yyerrstatus_)
 
-
-/* Line 382 of lalr1.cc  */
-#line 3 "lambda.y"
+#line 3 "lambda.y" // lalr1.cc:474
 namespace Lambda {
-
-/* Line 382 of lalr1.cc  */
-#line 154 "lambda.tab.c"
+#line 132 "lambda.tab.c" // lalr1.cc:474
 
   /// Build a parser object.
   BisonParser::BisonParser (Lambda::FlexScanner &scanner_yyarg)
@@ -160,68 +138,206 @@ namespace Lambda {
       yycdebug_ (&std::cerr),
 #endif
       scanner (scanner_yyarg)
+  {}
+
+  BisonParser::~BisonParser ()
+  {}
+
+
+  /*---------------.
+  | Symbol types.  |
+  `---------------*/
+
+  inline
+  BisonParser::syntax_error::syntax_error (const std::string& m)
+    : std::runtime_error (m)
+  {}
+
+  // basic_symbol.
+  template <typename Base>
+  inline
+  BisonParser::basic_symbol<Base>::basic_symbol ()
+    : value ()
+  {}
+
+  template <typename Base>
+  inline
+  BisonParser::basic_symbol<Base>::basic_symbol (const basic_symbol& other)
+    : Base (other)
+    , value ()
+  {
+    value = other.value;
+  }
+
+
+  template <typename Base>
+  inline
+  BisonParser::basic_symbol<Base>::basic_symbol (typename Base::kind_type t, const semantic_type& v)
+    : Base (t)
+    , value (v)
+  {}
+
+
+  /// Constructor for valueless symbols.
+  template <typename Base>
+  inline
+  BisonParser::basic_symbol<Base>::basic_symbol (typename Base::kind_type t)
+    : Base (t)
+    , value ()
+  {}
+
+  template <typename Base>
+  inline
+  BisonParser::basic_symbol<Base>::~basic_symbol ()
   {
   }
 
-  BisonParser::~BisonParser ()
+  template <typename Base>
+  inline
+  void
+  BisonParser::basic_symbol<Base>::move (basic_symbol& s)
   {
+    super_type::move(s);
+    value = s.value;
+  }
+
+  // by_type.
+  inline
+  BisonParser::by_type::by_type ()
+     : type (empty)
+  {}
+
+  inline
+  BisonParser::by_type::by_type (const by_type& other)
+    : type (other.type)
+  {}
+
+  inline
+  BisonParser::by_type::by_type (token_type t)
+    : type (yytranslate_ (t))
+  {}
+
+  inline
+  void
+  BisonParser::by_type::move (by_type& that)
+  {
+    type = that.type;
+    that.type = empty;
+  }
+
+  inline
+  int
+  BisonParser::by_type::type_get () const
+  {
+    return type;
+  }
+
+
+  // by_state.
+  inline
+  BisonParser::by_state::by_state ()
+    : state (empty)
+  {}
+
+  inline
+  BisonParser::by_state::by_state (const by_state& other)
+    : state (other.state)
+  {}
+
+  inline
+  void
+  BisonParser::by_state::move (by_state& that)
+  {
+    state = that.state;
+    that.state = empty;
+  }
+
+  inline
+  BisonParser::by_state::by_state (state_type s)
+    : state (s)
+  {}
+
+  inline
+  BisonParser::symbol_number_type
+  BisonParser::by_state::type_get () const
+  {
+    return state == empty ? 0 : yystos_[state];
+  }
+
+  inline
+  BisonParser::stack_symbol_type::stack_symbol_type ()
+  {}
+
+
+  inline
+  BisonParser::stack_symbol_type::stack_symbol_type (state_type s, symbol_type& that)
+    : super_type (s)
+  {
+    value = that.value;
+    // that is emptied.
+    that.type = empty;
+  }
+
+  inline
+  BisonParser::stack_symbol_type&
+  BisonParser::stack_symbol_type::operator= (const stack_symbol_type& that)
+  {
+    state = that.state;
+    value = that.value;
+    return *this;
+  }
+
+
+  template <typename Base>
+  inline
+  void
+  BisonParser::yy_destroy_ (const char* yymsg, basic_symbol<Base>& yysym) const
+  {
+    if (yymsg)
+      YY_SYMBOL_PRINT (yymsg, yysym);
+
+    // User destructor.
+    YYUSE (yysym.type_get ());
   }
 
 #if YYDEBUG
-  /*--------------------------------.
-  | Print this symbol on YYOUTPUT.  |
-  `--------------------------------*/
-
-  inline void
-  BisonParser::yy_symbol_value_print_ (int yytype,
-			   const semantic_type* yyvaluep, const location_type* yylocationp)
-  {
-    YYUSE (yylocationp);
-    YYUSE (yyvaluep);
-    switch (yytype)
-      {
-         default:
-	  break;
-      }
-  }
-
-
+  template <typename Base>
   void
-  BisonParser::yy_symbol_print_ (int yytype,
-			   const semantic_type* yyvaluep, const location_type* yylocationp)
+  BisonParser::yy_print_ (std::ostream& yyo,
+                                     const basic_symbol<Base>& yysym) const
   {
-    *yycdebug_ << (yytype < yyntokens_ ? "token" : "nterm")
-	       << ' ' << yytname_[yytype] << " ("
-	       << *yylocationp << ": ";
-    yy_symbol_value_print_ (yytype, yyvaluep, yylocationp);
-    *yycdebug_ << ')';
+    std::ostream& yyoutput = yyo;
+    YYUSE (yyoutput);
+    symbol_number_type yytype = yysym.type_get ();
+    yyo << (yytype < yyntokens_ ? "token" : "nterm")
+        << ' ' << yytname_[yytype] << " (";
+    YYUSE (yytype);
+    yyo << ')';
   }
 #endif
 
+  inline
   void
-  BisonParser::yydestruct_ (const char* yymsg,
-			   int yytype, semantic_type* yyvaluep, location_type* yylocationp)
+  BisonParser::yypush_ (const char* m, state_type s, symbol_type& sym)
   {
-    YYUSE (yylocationp);
-    YYUSE (yymsg);
-    YYUSE (yyvaluep);
-
-    YY_SYMBOL_PRINT (yymsg, yytype, yyvaluep, yylocationp);
-
-    switch (yytype)
-      {
-  
-	default:
-	  break;
-      }
+    stack_symbol_type t (s, sym);
+    yypush_ (m, t);
   }
 
+  inline
+  void
+  BisonParser::yypush_ (const char* m, stack_symbol_type& s)
+  {
+    if (m)
+      YY_SYMBOL_PRINT (m, s);
+    yystack_.push (s);
+  }
+
+  inline
   void
   BisonParser::yypop_ (unsigned int n)
   {
-    yystate_stack_.pop (n);
-    yysemantic_stack_.pop (n);
-    yylocation_stack_.pop (n);
+    yystack_.pop (n);
   }
 
 #if YYDEBUG
@@ -249,7 +365,17 @@ namespace Lambda {
   {
     yydebug_ = l;
   }
-#endif
+#endif // YYDEBUG
+
+  inline BisonParser::state_type
+  BisonParser::yy_lr_goto_state_ (state_type yystate, int yysym)
+  {
+    int yyr = yypgoto_[yysym - yyntokens_] + yystate;
+    if (0 <= yyr && yyr <= yylast_ && yycheck_[yyr] == yystate)
+      return yytable_[yyr];
+    else
+      return yydefgoto_[yysym - yyntokens_];
+  }
 
   inline bool
   BisonParser::yy_pact_value_is_default_ (int yyvalue)
@@ -266,123 +392,105 @@ namespace Lambda {
   int
   BisonParser::parse ()
   {
-    /// Lookahead and lookahead in internal form.
-    int yychar = yyempty_;
-    int yytoken = 0;
+    /// Whether yyla contains a lookahead.
+    bool yyempty = true;
 
-    /* State.  */
+    // State.
     int yyn;
+    /// Length of the RHS of the rule being reduced.
     int yylen = 0;
-    int yystate = 0;
 
-    /* Error handling.  */
+    // Error handling.
     int yynerrs_ = 0;
     int yyerrstatus_ = 0;
 
-    /// Semantic value of the lookahead.
-    semantic_type yylval;
-    /// Location of the lookahead.
-    location_type yylloc;
-    /// The locations where the error started and ended.
-    location_type yyerror_range[3];
+    /// The lookahead symbol.
+    symbol_type yyla;
 
-    /// $$.
-    semantic_type yyval;
-    /// @$.
-    location_type yyloc;
-
+    /// The return value of parse ().
     int yyresult;
 
+    // FIXME: This shoud be completely indented.  It is not yet to
+    // avoid gratuitous conflicts when merging into the master branch.
+    try
+      {
     YYCDEBUG << "Starting parse" << std::endl;
 
 
-    /* Initialize the stacks.  The initial state will be pushed in
+    /* Initialize the stack.  The initial state will be set in
        yynewstate, since the latter expects the semantical and the
        location values to have been already stored, initialize these
        stacks with a primary value.  */
-    yystate_stack_ = state_stack_type (0);
-    yysemantic_stack_ = semantic_stack_type (0);
-    yylocation_stack_ = location_stack_type (0);
-    yysemantic_stack_.push (yylval);
-    yylocation_stack_.push (yylloc);
+    yystack_.clear ();
+    yypush_ (YY_NULLPTR, 0, yyla);
 
-    /* New state.  */
+    // A new symbol was pushed on the stack.
   yynewstate:
-    yystate_stack_.push (yystate);
-    YYCDEBUG << "Entering state " << yystate << std::endl;
+    YYCDEBUG << "Entering state " << yystack_[0].state << std::endl;
 
-    /* Accept?  */
-    if (yystate == yyfinal_)
+    // Accept?
+    if (yystack_[0].state == yyfinal_)
       goto yyacceptlab;
 
     goto yybackup;
 
-    /* Backup.  */
+    // Backup.
   yybackup:
 
-    /* Try to take a decision without lookahead.  */
-    yyn = yypact_[yystate];
+    // Try to take a decision without lookahead.
+    yyn = yypact_[yystack_[0].state];
     if (yy_pact_value_is_default_ (yyn))
       goto yydefault;
 
-    /* Read a lookahead token.  */
-    if (yychar == yyempty_)
+    // Read a lookahead token.
+    if (yyempty)
       {
-	YYCDEBUG << "Reading a token: ";
-	yychar = yylex (&yylval, scanner);
+        YYCDEBUG << "Reading a token: ";
+        try
+          {
+            yyla.type = yytranslate_ (yylex (&yyla.value, scanner));
+          }
+        catch (const syntax_error& yyexc)
+          {
+            error (yyexc);
+            goto yyerrlab1;
+          }
+        yyempty = false;
       }
+    YY_SYMBOL_PRINT ("Next token is", yyla);
 
-
-    /* Convert token to internal form.  */
-    if (yychar <= yyeof_)
-      {
-	yychar = yytoken = yyeof_;
-	YYCDEBUG << "Now at end of input." << std::endl;
-      }
-    else
-      {
-	yytoken = yytranslate_ (yychar);
-	YY_SYMBOL_PRINT ("Next token is", yytoken, &yylval, &yylloc);
-      }
-
-    /* If the proper action on seeing token YYTOKEN is to reduce or to
-       detect an error, take that action.  */
-    yyn += yytoken;
-    if (yyn < 0 || yylast_ < yyn || yycheck_[yyn] != yytoken)
+    /* If the proper action on seeing token YYLA.TYPE is to reduce or
+       to detect an error, take that action.  */
+    yyn += yyla.type_get ();
+    if (yyn < 0 || yylast_ < yyn || yycheck_[yyn] != yyla.type_get ())
       goto yydefault;
 
-    /* Reduce or error.  */
+    // Reduce or error.
     yyn = yytable_[yyn];
     if (yyn <= 0)
       {
-	if (yy_table_value_is_error_ (yyn))
-	  goto yyerrlab;
-	yyn = -yyn;
-	goto yyreduce;
+        if (yy_table_value_is_error_ (yyn))
+          goto yyerrlab;
+        yyn = -yyn;
+        goto yyreduce;
       }
 
-    /* Shift the lookahead token.  */
-    YY_SYMBOL_PRINT ("Shifting", yytoken, &yylval, &yylloc);
+    // Discard the token being shifted.
+    yyempty = true;
 
-    /* Discard the token being shifted.  */
-    yychar = yyempty_;
-
-    yysemantic_stack_.push (yylval);
-    yylocation_stack_.push (yylloc);
-
-    /* Count tokens shifted since error; after three, turn off error
-       status.  */
+    // Count tokens shifted since error; after three, turn off error status.
     if (yyerrstatus_)
       --yyerrstatus_;
 
-    yystate = yyn;
+    // Shift the lookahead token.
+    yypush_ ("Shifting", yyn, yyla);
     goto yynewstate;
 
   /*-----------------------------------------------------------.
   | yydefault -- do the default action for the current state.  |
   `-----------------------------------------------------------*/
   yydefault:
-    yyn = yydefact_[yystate];
+    yyn = yydefact_[yystack_[0].state];
     if (yyn == 0)
       goto yyerrlab;
     goto yyreduce;
@@ -392,228 +500,204 @@ namespace Lambda {
   `-----------------------------*/
   yyreduce:
     yylen = yyr2_[yyn];
-    /* If YYLEN is nonzero, implement the default value of the action:
-       `$$ = $1'.  Otherwise, use the top of the stack.
-
-       Otherwise, the following line sets YYVAL to garbage.
-       This behavior is undocumented and Bison
-       users should not rely upon it.  */
-    if (yylen)
-      yyval = yysemantic_stack_[yylen - 1];
-    else
-      yyval = yysemantic_stack_[0];
-
     {
-      slice<location_type, location_stack_type> slice (yylocation_stack_, yylen);
-      YYLLOC_DEFAULT (yyloc, slice, yylen);
-    }
-    YY_REDUCE_PRINT (yyn);
-    switch (yyn)
-      {
-	  case 2:
+      stack_symbol_type yylhs;
+      yylhs.state = yy_lr_goto_state_(yystack_[yylen].state, yyr1_[yyn]);
+      /* If YYLEN is nonzero, implement the default value of the
+         action: '$$ = $1'.  Otherwise, use the top of the stack.
 
-/* Line 690 of lalr1.cc  */
-#line 44 "lambda.y"
+         Otherwise, the following line sets YYLHS.VALUE to garbage.
+         This behavior is undocumented and Bison users should not rely
+         upon it.  */
+      if (yylen)
+        yylhs.value = yystack_[yylen - 1].value;
+      else
+        yylhs.value = yystack_[0].value;
+
+
+      // Perform the reduction.
+      YY_REDUCE_PRINT (yyn);
+      try
+        {
+          switch (yyn)
+            {
+  case 2:
+#line 50 "lambda.y" // lalr1.cc:847
     {std::cout << " USAO " << std::endl; 
 			      for(auto i  : arguments)
 				  {
-				      std::cout << ((SaliraInt*)i.get())->value() << std::endl;
+				      std::cout << ((SaliraInt*)i)->value() << std::endl;
 				  }
-			      SaliraUtility::insertFunctionInPool((yysemantic_stack_[(4) - (1)].str), (yysemantic_stack_[(4) - (4)].Expression));
+			//NOTE: Need to  be called at the begining of program to load all basic functions
+			      Functor::initBaseFunctions();
+			      SaliraUtility::insertFunctionInPool((yystack_[3].value.str), (yystack_[0].value.e));
+			      // testing
+			      std::vector<Expression> test;
+			      test.push_back(new SaliraInt(6));
+			      test.push_back(new SaliraInt(12));
+			      SaliraInt* temp =(SaliraInt*) (yystack_[0].value.e)->eval(test);
+			      std::cout << "Rez" <<  temp->value() << std::endl;
 }
+#line 542 "lambda.tab.c" // lalr1.cc:847
     break;
 
   case 3:
-
-/* Line 690 of lalr1.cc  */
-#line 52 "lambda.y"
+#line 66 "lambda.y" // lalr1.cc:847
     {std::cout << " Args ID " << std::endl;	
 		 
-		if(variables.find((yysemantic_stack_[(2) - (2)].str)) == variables.end()){
-		  variables[(yysemantic_stack_[(2) - (2)].str)] = variables.size();
+		if(variables.find((yystack_[0].value.str)) == variables.end()){
+		  variables[(yystack_[0].value.str)] = counter;
+		  counter++;
 		}
 }
+#line 554 "lambda.tab.c" // lalr1.cc:847
     break;
 
   case 4:
-
-/* Line 690 of lalr1.cc  */
-#line 69 "lambda.y"
+#line 84 "lambda.y" // lalr1.cc:847
     {	
       std::cout << " ID " << std::endl; 
-      if(variables.find((yysemantic_stack_[(1) - (1)].str)) == variables.end()){
-	 variables[(yysemantic_stack_[(1) - (1)].str)] = variables.size();
+      if(variables.find((yystack_[0].value.str)) == variables.end()){
+	 variables[(yystack_[0].value.str)] = counter;
+	 counter++;
 	}
 }
+#line 566 "lambda.tab.c" // lalr1.cc:847
     break;
 
   case 5:
-
-/* Line 690 of lalr1.cc  */
-#line 76 "lambda.y"
+#line 92 "lambda.y" // lalr1.cc:847
     { 
 	std::cout << "PLUS" << std::endl;
-	(yyval.Expression) = Expression(new Functor("plus",{(yysemantic_stack_[(3) - (1)].Expression),(yysemantic_stack_[(3) - (3)].Expression)}));}
+	(yylhs.value.e) = new Functor("plus",{(yystack_[2].value.e),(yystack_[0].value.e)});}
+#line 574 "lambda.tab.c" // lalr1.cc:847
     break;
 
   case 6:
-
-/* Line 690 of lalr1.cc  */
-#line 79 "lambda.y"
+#line 95 "lambda.y" // lalr1.cc:847
     { 
 	std::cout << " MINUS " << std::endl;
-	(yyval.Expression) = Expression(new Functor("minus",{(yysemantic_stack_[(3) - (1)].Expression),(yysemantic_stack_[(3) - (3)].Expression)}));}
+	(yylhs.value.e) = new Functor("minus",{(yystack_[2].value.e),(yystack_[0].value.e)});}
+#line 582 "lambda.tab.c" // lalr1.cc:847
     break;
 
   case 7:
-
-/* Line 690 of lalr1.cc  */
-#line 82 "lambda.y"
+#line 98 "lambda.y" // lalr1.cc:847
     { 
       std::cout << " T " << std::endl;
-      (yyval.Expression) = (yysemantic_stack_[(1) - (1)].Expression);
+      (yylhs.value.e) = (yystack_[0].value.e);
 }
+#line 591 "lambda.tab.c" // lalr1.cc:847
     break;
 
   case 8:
-
-/* Line 690 of lalr1.cc  */
-#line 87 "lambda.y"
+#line 103 "lambda.y" // lalr1.cc:847
     { 
 	std::cout << " PUTA " << std::endl;
-	(yyval.Expression) = Expression(new Functor("mult",{(yysemantic_stack_[(3) - (1)].Expression),(yysemantic_stack_[(3) - (3)].Expression)}));}
+	(yylhs.value.e) = new Functor("mult",{(yystack_[2].value.e),(yystack_[0].value.e)});}
+#line 599 "lambda.tab.c" // lalr1.cc:847
     break;
 
   case 9:
-
-/* Line 690 of lalr1.cc  */
-#line 90 "lambda.y"
+#line 106 "lambda.y" // lalr1.cc:847
     { 
 	std::cout << " PODELJENO " << std::endl;
-	(yyval.Expression) = Expression(new Functor("div",{(yysemantic_stack_[(3) - (1)].Expression),(yysemantic_stack_[(3) - (3)].Expression)}));
+	(yylhs.value.e) = new Functor("div",{(yystack_[2].value.e),(yystack_[0].value.e)});
 }
+#line 608 "lambda.tab.c" // lalr1.cc:847
     break;
 
   case 10:
-
-/* Line 690 of lalr1.cc  */
-#line 94 "lambda.y"
+#line 110 "lambda.y" // lalr1.cc:847
     { 
       std::cout << " F " << std::endl;
-      (yyval.Expression) = (yysemantic_stack_[(1) - (1)].Expression);
+      (yylhs.value.e) = (yystack_[0].value.e);
 }
+#line 617 "lambda.tab.c" // lalr1.cc:847
     break;
 
   case 11:
-
-/* Line 690 of lalr1.cc  */
-#line 99 "lambda.y"
+#line 115 "lambda.y" // lalr1.cc:847
     { 
-	  std::cout << " BROJ " <<  std::to_string((yysemantic_stack_[(1) - (1)].num)) << std::endl;
-	  (yyval.Expression) = Expression(new SaliraInt((yysemantic_stack_[(1) - (1)].num)));
+	  std::cout << " BROJ " <<  std::to_string((yystack_[0].value.num)) << std::endl;
+	  (yylhs.value.e) = new SaliraInt((yystack_[0].value.num));
 }
+#line 626 "lambda.tab.c" // lalr1.cc:847
     break;
 
   case 12:
-
-/* Line 690 of lalr1.cc  */
-#line 103 "lambda.y"
+#line 119 "lambda.y" // lalr1.cc:847
     { 
-	std::cout << " ID " << (yysemantic_stack_[(1) - (1)].str) << std::endl;
+	std::cout << " ID " << (yystack_[0].value.str) << std::endl;
 	
-	if(variables.find((yysemantic_stack_[(1) - (1)].str)) == variables.end()){
-	  throw SaliraExeption("Variable not exists in declaration of function arguments.");
+	if(variables.find((yystack_[0].value.str)) == variables.end()){
+	  throw SaliraException("Variable not exists in declaration of function arguments.");
 	}
-	(yyval.Expression) = Expression(new Token((yysemantic_stack_[(1) - (1)].str)));
+	(yylhs.value.e) = new Token(variables[(yystack_[0].value.str)]);
 	
 }
+#line 640 "lambda.tab.c" // lalr1.cc:847
     break;
 
   case 13:
-
-/* Line 690 of lalr1.cc  */
-#line 112 "lambda.y"
+#line 128 "lambda.y" // lalr1.cc:847
     { 	
 		  std::cout << " ZAGRADE " << std::endl;
-		  (yyval.Expression) = (yysemantic_stack_[(3) - (2)].Expression); 
+		  (yylhs.value.e) = (yystack_[1].value.e); 
 		  }
+#line 649 "lambda.tab.c" // lalr1.cc:847
     break;
 
 
+#line 653 "lambda.tab.c" // lalr1.cc:847
+            default:
+              break;
+            }
+        }
+      catch (const syntax_error& yyexc)
+        {
+          error (yyexc);
+          YYERROR;
+        }
+      YY_SYMBOL_PRINT ("-> $$ =", yylhs);
+      yypop_ (yylen);
+      yylen = 0;
+      YY_STACK_PRINT ();
 
-/* Line 690 of lalr1.cc  */
-#line 546 "lambda.tab.c"
-	default:
-          break;
-      }
-    /* User semantic actions sometimes alter yychar, and that requires
-       that yytoken be updated with the new translation.  We take the
-       approach of translating immediately before every use of yytoken.
-       One alternative is translating here after every semantic action,
-       but that translation would be missed if the semantic action
-       invokes YYABORT, YYACCEPT, or YYERROR immediately after altering
-       yychar.  In the case of YYABORT or YYACCEPT, an incorrect
-       destructor might then be invoked immediately.  In the case of
-       YYERROR, subsequent parser actions might lead to an incorrect
-       destructor call or verbose syntax error message before the
-       lookahead is translated.  */
-    YY_SYMBOL_PRINT ("-> $$ =", yyr1_[yyn], &yyval, &yyloc);
-
-    yypop_ (yylen);
-    yylen = 0;
-    YY_STACK_PRINT ();
-
-    yysemantic_stack_.push (yyval);
-    yylocation_stack_.push (yyloc);
-
-    /* Shift the result of the reduction.  */
-    yyn = yyr1_[yyn];
-    yystate = yypgoto_[yyn - yyntokens_] + yystate_stack_[0];
-    if (0 <= yystate && yystate <= yylast_
-	&& yycheck_[yystate] == yystate_stack_[0])
-      yystate = yytable_[yystate];
-    else
-      yystate = yydefgoto_[yyn - yyntokens_];
+      // Shift the result of the reduction.
+      yypush_ (YY_NULLPTR, yylhs);
+    }
     goto yynewstate;
 
-  /*------------------------------------.
-  | yyerrlab -- here on detecting error |
-  `------------------------------------*/
+  /*--------------------------------------.
+  | yyerrlab -- here on detecting error.  |
+  `--------------------------------------*/
   yyerrlab:
-    /* Make sure we have latest lookahead translation.  See comments at
-       user semantic actions for why this is necessary.  */
-    yytoken = yytranslate_ (yychar);
-
-    /* If not already recovering from an error, report this error.  */
+    // If not already recovering from an error, report this error.
     if (!yyerrstatus_)
       {
-	++yynerrs_;
-	if (yychar == yyempty_)
-	  yytoken = yyempty_;
-	error (yylloc, yysyntax_error_ (yystate, yytoken));
+        ++yynerrs_;
+        error (yysyntax_error_ (yystack_[0].state,
+                                           yyempty ? yyempty_ : yyla.type_get ()));
       }
 
-    yyerror_range[1] = yylloc;
+
     if (yyerrstatus_ == 3)
       {
-	/* If just tried and failed to reuse lookahead token after an
-	 error, discard it.  */
+        /* If just tried and failed to reuse lookahead token after an
+           error, discard it.  */
 
-	if (yychar <= yyeof_)
-	  {
-	  /* Return failure if at end of input.  */
-	  if (yychar == yyeof_)
-	    YYABORT;
-	  }
-	else
-	  {
-	    yydestruct_ ("Error: discarding", yytoken, &yylval, &yylloc);
-	    yychar = yyempty_;
-	  }
+        // Return failure if at end of input.
+        if (yyla.type_get () == yyeof_)
+          YYABORT;
+        else if (!yyempty)
+          {
+            yy_destroy_ ("Error: discarding", yyla);
+            yyempty = true;
+          }
       }
 
-    /* Else will try to reuse lookahead token after shifting the error
-       token.  */
+    // Else will try to reuse lookahead token after shifting the error token.
     goto yyerrlab1;
 
 
@@ -627,236 +711,192 @@ namespace Lambda {
        code.  */
     if (false)
       goto yyerrorlab;
-
-    yyerror_range[1] = yylocation_stack_[yylen - 1];
-    /* Do not reclaim the symbols of the rule which action triggered
+    /* Do not reclaim the symbols of the rule whose action triggered
        this YYERROR.  */
     yypop_ (yylen);
     yylen = 0;
-    yystate = yystate_stack_[0];
     goto yyerrlab1;
 
   /*-------------------------------------------------------------.
   | yyerrlab1 -- common code for both syntax error and YYERROR.  |
   `-------------------------------------------------------------*/
   yyerrlab1:
-    yyerrstatus_ = 3;	/* Each real token shifted decrements this.  */
+    yyerrstatus_ = 3;   // Each real token shifted decrements this.
+    {
+      stack_symbol_type error_token;
+      for (;;)
+        {
+          yyn = yypact_[yystack_[0].state];
+          if (!yy_pact_value_is_default_ (yyn))
+            {
+              yyn += yyterror_;
+              if (0 <= yyn && yyn <= yylast_ && yycheck_[yyn] == yyterror_)
+                {
+                  yyn = yytable_[yyn];
+                  if (0 < yyn)
+                    break;
+                }
+            }
 
-    for (;;)
-      {
-	yyn = yypact_[yystate];
-	if (!yy_pact_value_is_default_ (yyn))
-	{
-	  yyn += yyterror_;
-	  if (0 <= yyn && yyn <= yylast_ && yycheck_[yyn] == yyterror_)
-	    {
-	      yyn = yytable_[yyn];
-	      if (0 < yyn)
-		break;
-	    }
-	}
+          // Pop the current state because it cannot handle the error token.
+          if (yystack_.size () == 1)
+            YYABORT;
 
-	/* Pop the current state because it cannot handle the error token.  */
-	if (yystate_stack_.height () == 1)
-	YYABORT;
+          yy_destroy_ ("Error: popping", yystack_[0]);
+          yypop_ ();
+          YY_STACK_PRINT ();
+        }
 
-	yyerror_range[1] = yylocation_stack_[0];
-	yydestruct_ ("Error: popping",
-		     yystos_[yystate],
-		     &yysemantic_stack_[0], &yylocation_stack_[0]);
-	yypop_ ();
-	yystate = yystate_stack_[0];
-	YY_STACK_PRINT ();
-      }
 
-    yyerror_range[2] = yylloc;
-    // Using YYLLOC is tempting, but would change the location of
-    // the lookahead.  YYLOC is available though.
-    YYLLOC_DEFAULT (yyloc, yyerror_range, 2);
-    yysemantic_stack_.push (yylval);
-    yylocation_stack_.push (yyloc);
-
-    /* Shift the error token.  */
-    YY_SYMBOL_PRINT ("Shifting", yystos_[yyn],
-		     &yysemantic_stack_[0], &yylocation_stack_[0]);
-
-    yystate = yyn;
+      // Shift the error token.
+      error_token.state = yyn;
+      yypush_ ("Shifting", error_token);
+    }
     goto yynewstate;
 
-    /* Accept.  */
+    // Accept.
   yyacceptlab:
     yyresult = 0;
     goto yyreturn;
 
-    /* Abort.  */
+    // Abort.
   yyabortlab:
     yyresult = 1;
     goto yyreturn;
 
   yyreturn:
-    if (yychar != yyempty_)
-      {
-        /* Make sure we have latest lookahead translation.  See comments
-           at user semantic actions for why this is necessary.  */
-        yytoken = yytranslate_ (yychar);
-        yydestruct_ ("Cleanup: discarding lookahead", yytoken, &yylval,
-                     &yylloc);
-      }
+    if (!yyempty)
+      yy_destroy_ ("Cleanup: discarding lookahead", yyla);
 
-    /* Do not reclaim the symbols of the rule which action triggered
+    /* Do not reclaim the symbols of the rule whose action triggered
        this YYABORT or YYACCEPT.  */
     yypop_ (yylen);
-    while (yystate_stack_.height () != 1)
+    while (1 < yystack_.size ())
       {
-	yydestruct_ ("Cleanup: popping",
-		   yystos_[yystate_stack_[0]],
-		   &yysemantic_stack_[0],
-		   &yylocation_stack_[0]);
-	yypop_ ();
+        yy_destroy_ ("Cleanup: popping", yystack_[0]);
+        yypop_ ();
       }
 
     return yyresult;
   }
+    catch (...)
+      {
+        YYCDEBUG << "Exception caught: cleaning lookahead and stack"
+                 << std::endl;
+        // Do not try to display the values of the reclaimed symbols,
+        // as their printer might throw an exception.
+        if (!yyempty)
+          yy_destroy_ (YY_NULLPTR, yyla);
+
+        while (1 < yystack_.size ())
+          {
+            yy_destroy_ (YY_NULLPTR, yystack_[0]);
+            yypop_ ();
+          }
+        throw;
+      }
+  }
+
+  void
+  BisonParser::error (const syntax_error& yyexc)
+  {
+    error (yyexc.what());
+  }
 
   // Generate an error message.
   std::string
-  BisonParser::yysyntax_error_ (int, int)
+  BisonParser::yysyntax_error_ (state_type, symbol_number_type) const
   {
     return YY_("syntax error");
   }
 
 
-  /* YYPACT[STATE-NUM] -- Index in YYTABLE of the portion describing
-     STATE-NUM.  */
   const signed char BisonParser::yypact_ninf_ = -10;
+
+  const signed char BisonParser::yytable_ninf_ = -1;
+
   const signed char
   BisonParser::yypact_[] =
   {
-         3,     8,    16,   -10,    -2,   -10,   -10,    -3,   -10,   -10,
+       3,     8,    16,   -10,    -2,   -10,   -10,    -3,   -10,   -10,
       -3,    -7,    -4,   -10,    -9,    -3,    -3,    -3,    -3,   -10,
       -4,    -4,   -10,   -10
   };
 
-  /* YYDEFACT[S] -- default reduction number in state S.  Performed when
-     YYTABLE doesn't specify something else to do.  Zero means the
-     default is an error.  */
   const unsigned char
   BisonParser::yydefact_[] =
   {
-         0,     0,     0,     4,     0,     1,     3,     0,    11,    12,
+       0,     0,     0,     4,     0,     1,     3,     0,    11,    12,
        0,     2,     7,    10,     0,     0,     0,     0,     0,    13,
        5,     6,     8,     9
   };
 
-  /* YYPGOTO[NTERM-NUM].  */
   const signed char
   BisonParser::yypgoto_[] =
   {
-       -10,   -10,   -10,     9,    -1,     0
+     -10,   -10,   -10,     9,    -1,     0
   };
 
-  /* YYDEFGOTO[NTERM-NUM].  */
   const signed char
   BisonParser::yydefgoto_[] =
   {
-        -1,     2,     4,    11,    12,    13
+      -1,     2,     4,    11,    12,    13
   };
 
-  /* YYTABLE[YYPACT[STATE-NUM]].  What to do in state STATE-NUM.  If
-     positive, shift that token.  If negative, reduce the rule which
-     number is the opposite.  If YYTABLE_NINF_, syntax error.  */
-  const signed char BisonParser::yytable_ninf_ = -1;
   const unsigned char
   BisonParser::yytable_[] =
   {
-         8,     9,     6,    15,    16,    15,    16,     1,    19,     7,
+       8,     9,     6,    15,    16,    15,    16,     1,    19,     7,
       17,    18,     3,    10,    20,    21,     5,    22,    23,    14
   };
 
-  /* YYCHECK.  */
   const unsigned char
   BisonParser::yycheck_[] =
   {
-         3,     4,     4,    12,    13,    12,    13,     4,    17,    11,
+       3,     4,     4,    12,    13,    12,    13,     4,    17,    11,
       14,    15,     4,    16,    15,    16,     0,    17,    18,    10
   };
 
-  /* STOS_[STATE-NUM] -- The (internal number of the) accessing
-     symbol of state STATE-NUM.  */
   const unsigned char
   BisonParser::yystos_[] =
   {
-         0,     4,    19,     4,    20,     0,     4,    11,     3,     4,
+       0,     4,    19,     4,    20,     0,     4,    11,     3,     4,
       16,    21,    22,    23,    21,    12,    13,    14,    15,    17,
       22,    22,    23,    23
   };
 
-#if YYDEBUG
-  /* TOKEN_NUMBER_[YYLEX-NUM] -- Internal symbol number corresponding
-     to YYLEX-NUM.  */
-  const unsigned short int
-  BisonParser::yytoken_number_[] =
-  {
-         0,   256,   257,   258,   259,   260,   261,   262,   263,   264,
-     265,    61,    43,    45,    42,    47,    40,    41
-  };
-#endif
-
-  /* YYR1[YYN] -- Symbol number of symbol that rule YYN derives.  */
   const unsigned char
   BisonParser::yyr1_[] =
   {
-         0,    18,    19,    20,    20,    21,    21,    21,    22,    22,
+       0,    18,    19,    20,    20,    21,    21,    21,    22,    22,
       22,    23,    23,    23
   };
 
-  /* YYR2[YYN] -- Number of symbols composing right hand side of rule YYN.  */
   const unsigned char
   BisonParser::yyr2_[] =
   {
-         0,     2,     4,     2,     1,     3,     3,     1,     3,     3,
+       0,     2,     4,     2,     1,     3,     3,     1,     3,     3,
        1,     1,     1,     3
   };
 
-#if YYDEBUG || YYERROR_VERBOSE || YYTOKEN_TABLE
-  /* YYTNAME[SYMBOL-NUM] -- String name of the symbol SYMBOL-NUM.
-     First, the terminals, then, starting at \a yyntokens_, nonterminals.  */
+
+#if YYDEBUG
+  // YYTNAME[SYMBOL-NUM] -- String name of the symbol SYMBOL-NUM.
+  // First, the terminals, then, starting at \a yyntokens_, nonterminals.
   const char*
   const BisonParser::yytname_[] =
   {
-    "$end", "error", "$undefined", "NUM", "ID", "COMMENT", "LET", "IN",
+  "$end", "error", "$undefined", "NUM", "ID", "COMMENT", "LET", "IN",
   "MAX", "MIN", "NEG", "'='", "'+'", "'-'", "'*'", "'/'", "'('", "')'",
-  "$accept", "program", "ARGS", "ArGr", "T", "F", 0
-  };
-#endif
-
-#if YYDEBUG
-  /* YYRHS -- A `-1'-separated list of the rules' RHS.  */
-  const BisonParser::rhs_number_type
-  BisonParser::yyrhs_[] =
-  {
-        19,     0,    -1,     4,    20,    11,    21,    -1,    20,     4,
-      -1,     4,    -1,    21,    12,    22,    -1,    21,    13,    22,
-      -1,    22,    -1,    22,    14,    23,    -1,    22,    15,    23,
-      -1,    23,    -1,     3,    -1,     4,    -1,    16,    21,    17,
-      -1
+  "$accept", "program", "ARGS", "ArGr", "T", "F", YY_NULLPTR
   };
 
-  /* YYPRHS[YYN] -- Index of the first RHS symbol of rule number YYN in
-     YYRHS.  */
-  const unsigned char
-  BisonParser::yyprhs_[] =
-  {
-         0,     0,     3,     8,    11,    13,    17,    21,    23,    27,
-      31,    33,    35,    37
-  };
 
-  /* YYRLINE[YYN] -- Source line where rule number YYN was defined.  */
   const unsigned char
   BisonParser::yyrline_[] =
   {
-         0,    44,    44,    52,    69,    76,    79,    82,    87,    90,
-      94,    99,   103,   112
+       0,    50,    50,    66,    84,    92,    95,    98,   103,   106,
+     110,   115,   119,   128
   };
 
   // Print the state stack on the debug stream.
@@ -864,9 +904,11 @@ namespace Lambda {
   BisonParser::yystack_print_ ()
   {
     *yycdebug_ << "Stack now";
-    for (state_stack_type::const_iterator i = yystate_stack_.begin ();
-	 i != yystate_stack_.end (); ++i)
-      *yycdebug_ << ' ' << *i;
+    for (stack_type::const_iterator
+           i = yystack_.begin (),
+           i_end = yystack_.end ();
+         i != i_end; ++i)
+      *yycdebug_ << ' ' << i->state;
     *yycdebug_ << std::endl;
   }
 
@@ -876,19 +918,18 @@ namespace Lambda {
   {
     unsigned int yylno = yyrline_[yyrule];
     int yynrhs = yyr2_[yyrule];
-    /* Print the symbols being reduced, and their result.  */
+    // Print the symbols being reduced, and their result.
     *yycdebug_ << "Reducing stack by rule " << yyrule - 1
-	       << " (line " << yylno << "):" << std::endl;
-    /* The symbols being reduced.  */
+               << " (line " << yylno << "):" << std::endl;
+    // The symbols being reduced.
     for (int yyi = 0; yyi < yynrhs; yyi++)
       YY_SYMBOL_PRINT ("   $" << yyi + 1 << " =",
-		       yyrhs_[yyprhs_[yyrule] + yyi],
-		       &(yysemantic_stack_[(yynrhs) - (yyi + 1)]),
-		       &(yylocation_stack_[(yynrhs) - (yyi + 1)]));
+                       yystack_[(yynrhs) - (yyi + 1)]);
   }
 #endif // YYDEBUG
 
-  /* YYTRANSLATE(YYLEX) -- Bison symbol number corresponding to YYLEX.  */
+  // Symbol number corresponding to token number t.
+  inline
   BisonParser::token_number_type
   BisonParser::yytranslate_ (int t)
   {
@@ -896,7 +937,7 @@ namespace Lambda {
     const token_number_type
     translate_table[] =
     {
-           0,     2,     2,     2,     2,     2,     2,     2,     2,     2,
+     0,     2,     2,     2,     2,     2,     2,     2,     2,     2,
        2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
        2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
        2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
@@ -924,38 +965,24 @@ namespace Lambda {
        2,     2,     2,     2,     2,     2,     1,     2,     3,     4,
        5,     6,     7,     8,     9,    10
     };
-    if ((unsigned int) t <= yyuser_token_number_max_)
+    const unsigned int user_token_number_max_ = 265;
+    const token_number_type undef_token_ = 2;
+
+    if (static_cast<int>(t) <= yyeof_)
+      return yyeof_;
+    else if (static_cast<unsigned int> (t) <= user_token_number_max_)
       return translate_table[t];
     else
-      return yyundef_token_;
+      return undef_token_;
   }
 
-  const int BisonParser::yyeof_ = 0;
-  const int BisonParser::yylast_ = 19;
-  const int BisonParser::yynnts_ = 6;
-  const int BisonParser::yyempty_ = -2;
-  const int BisonParser::yyfinal_ = 5;
-  const int BisonParser::yyterror_ = 1;
-  const int BisonParser::yyerrcode_ = 256;
-  const int BisonParser::yyntokens_ = 18;
-
-  const unsigned int BisonParser::yyuser_token_number_max_ = 265;
-  const BisonParser::token_number_type BisonParser::yyundef_token_ = 2;
-
-
-/* Line 1136 of lalr1.cc  */
-#line 3 "lambda.y"
+#line 3 "lambda.y" // lalr1.cc:1155
 } // Lambda
-
-/* Line 1136 of lalr1.cc  */
-#line 952 "lambda.tab.c"
-
-
-/* Line 1138 of lalr1.cc  */
-#line 117 "lambda.y"
+#line 982 "lambda.tab.c" // lalr1.cc:1155
+#line 133 "lambda.y" // lalr1.cc:1156
 
 
-void Lambda::BisonParser::error(const Lambda::BisonParser::location_type &loc, const std::string &s)
+void Lambda::BisonParser::error(const std::string &s)
 {
 	std::cerr << "Error: " << s << std::endl;
 }
@@ -967,5 +994,4 @@ static int yylex(Lambda::BisonParser::semantic_type *yylval, Lambda::FlexScanner
 {
 	return scanner.yylex(yylval);
 }
-
 

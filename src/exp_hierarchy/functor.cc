@@ -21,7 +21,7 @@ bool Functor::isFunctionDefined(std::string identifier){
 FuncDecl Functor::getFunc(std::string identifier) throw(){
     // Basic check if function is defined.
     if(!Functor::isFunctionDefined(identifier)){
-      throw SaliraException("Function doesn't exist!");
+      throw SaliraException("Function doesn't exist! Id: = " + identifier);
     }
     else{
       return Functor::functions[identifier];
@@ -46,28 +46,28 @@ bool Functor::initBaseFunctions(){
   // plus
   FuncDecl plus = [](std::vector<Expression> values){ return Expression(
 							new SaliraInt(
-							  ((SaliraInt*)values[0].get())->value() + ((SaliraInt*)values[1].get())->value()
+							  ((SaliraInt*)values[0])->value() + ((SaliraInt*)values[1])->value()
 							    )
 							);};
   Functor::insertFunc("plus", plus);
   // minus
   FuncDecl minus = [](std::vector<Expression> values){ return Expression(
 							new SaliraInt(
-							  ((SaliraInt*)values[0].get())->value() - ((SaliraInt*)values[1].get())->value()
+							  ((SaliraInt*)values[0])->value() - ((SaliraInt*)values[1])->value()
 							    )
 							);};
   Functor::insertFunc("minus", minus);
   // Multiplication
   FuncDecl mult = [](std::vector<Expression> values){ return Expression(
 							new SaliraInt(
-							  ((SaliraInt*)values[0].get())->value() * ((SaliraInt*)values[1].get())->value()
+							  ((SaliraInt*)values[0])->value() * ((SaliraInt*)values[1])->value()
 							    )
 							);};
   Functor::insertFunc("mult", mult);
   // Division
   FuncDecl div = [](std::vector<Expression> values){ return Expression(
 							new SaliraInt(
-							  ((SaliraInt*)values[0].get())->value() / ((SaliraInt*)values[1].get())->value()
+							  ((SaliraInt*)values[0])->value() / ((SaliraInt*)values[1])->value()
 							    )
 							);};
   Functor::insertFunc("div", mult);

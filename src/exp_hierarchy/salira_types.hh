@@ -33,13 +33,13 @@ public:
   
   // Eval
   virtual Expression eval(const std::vector<Expression>& values) const {
-    return Expression(new SaliraInt(_value));
+    return new SaliraInt(_value);
   }
 };
 
 /*
  * Dummy class which will represent arguments in function. More precisely it represent places where arguments
- * should be placed inside of Expression tree.  
+ * should be placed inside of Expressiovn tree.  
  */
 
 class Token : public ExpressionBase {
@@ -49,7 +49,11 @@ public:
   virtual bool isToken() const { return true; }
   virtual bool isConstant() const { return false; }
   virtual Expression eval(const std::vector<Expression>& values) const{ 
-    return values[_placement];
+    // NOTE: Possible problem, not sure yet
+    // Inside of recursive iteration one of tokens can be another function, problem is giving aditional 
+    // arguments for that function. Possibility of different values vector which next line couldn't solve
+    // Again not sure, its 2:46am
+    return values[_placement]->eval(values);
   }
   Token(int place) : _placement(place), ExpressionBase(false) {}
 };

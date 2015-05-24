@@ -67,7 +67,7 @@ F (23)
     on left: 10 11 12, on right: 7 8 9
 
 
-state 0
+State 0
 
     0 $accept: . program $end
 
@@ -76,7 +76,7 @@ state 0
     program  go to state 2
 
 
-state 1
+State 1
 
     1 program: ID . ARGS '=' ArGr
 
@@ -85,21 +85,21 @@ state 1
     ARGS  go to state 4
 
 
-state 2
+State 2
 
     0 $accept: program . $end
 
     $end  shift, and go to state 5
 
 
-state 3
+State 3
 
     3 ARGS: ID .
 
     $default  reduce using rule 3 (ARGS)
 
 
-state 4
+State 4
 
     1 program: ID ARGS . '=' ArGr
     2 ARGS: ARGS . ID
@@ -108,21 +108,21 @@ state 4
     '='  shift, and go to state 7
 
 
-state 5
+State 5
 
     0 $accept: program $end .
 
     $default  accept
 
 
-state 6
+State 6
 
     2 ARGS: ARGS ID .
 
     $default  reduce using rule 2 (ARGS)
 
 
-state 7
+State 7
 
     1 program: ID ARGS '=' . ArGr
 
@@ -135,21 +135,21 @@ state 7
     F     go to state 13
 
 
-state 8
+State 8
 
    10 F: NUM .
 
     $default  reduce using rule 10 (F)
 
 
-state 9
+State 9
 
    11 F: ID .
 
     $default  reduce using rule 11 (F)
 
 
-state 10
+State 10
 
    12 F: '(' . ArGr ')'
 
@@ -162,7 +162,7 @@ state 10
     F     go to state 13
 
 
-state 11
+State 11
 
     1 program: ID ARGS '=' ArGr .
     4 ArGr: ArGr . '+' T
@@ -174,7 +174,7 @@ state 11
     $default  reduce using rule 1 (program)
 
 
-state 12
+State 12
 
     6 ArGr: T .
     7 T: T . '*' F
@@ -186,14 +186,14 @@ state 12
     $default  reduce using rule 6 (ArGr)
 
 
-state 13
+State 13
 
     9 T: F .
 
     $default  reduce using rule 9 (T)
 
 
-state 14
+State 14
 
     4 ArGr: ArGr . '+' T
     5     | ArGr . '-' T
@@ -204,7 +204,7 @@ state 14
     ')'  shift, and go to state 19
 
 
-state 15
+State 15
 
     4 ArGr: ArGr '+' . T
 
@@ -216,7 +216,7 @@ state 15
     F  go to state 13
 
 
-state 16
+State 16
 
     5 ArGr: ArGr '-' . T
 
@@ -228,7 +228,7 @@ state 16
     F  go to state 13
 
 
-state 17
+State 17
 
     7 T: T '*' . F
 
@@ -239,7 +239,7 @@ state 17
     F  go to state 22
 
 
-state 18
+State 18
 
     8 T: T '/' . F
 
@@ -250,14 +250,14 @@ state 18
     F  go to state 23
 
 
-state 19
+State 19
 
    12 F: '(' ArGr ')' .
 
     $default  reduce using rule 12 (F)
 
 
-state 20
+State 20
 
     4 ArGr: ArGr '+' T .
     7 T: T . '*' F
@@ -269,7 +269,7 @@ state 20
     $default  reduce using rule 4 (ArGr)
 
 
-state 21
+State 21
 
     5 ArGr: ArGr '-' T .
     7 T: T . '*' F
@@ -281,14 +281,14 @@ state 21
     $default  reduce using rule 5 (ArGr)
 
 
-state 22
+State 22
 
     7 T: T '*' F .
 
     $default  reduce using rule 7 (T)
 
 
-state 23
+State 23
 
     8 T: T '/' F .
 
