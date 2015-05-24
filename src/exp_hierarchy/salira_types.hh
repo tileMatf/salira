@@ -59,7 +59,7 @@ private:
   Type _type_of_elements;
   std::vector<Expression> _elements;
 public:
-  SaliraList()
+  SaliraList(Type type) : _type_of_elements(type) {}
   inline virtual bool isToken() const {return false;}
   inline virtual bool isConstant() const {return false;}
     
