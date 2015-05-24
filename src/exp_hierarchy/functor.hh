@@ -49,10 +49,20 @@ public:
 	}
 	_arguments[index] = t;
   }
+  
+  
+  virtual void print() const;
   // Check functions
   inline virtual bool isToken() const { return false; }
   inline virtual bool isConstant() const { return true; }
   virtual Expression eval(const std::vector<Expression>& values) const;
+  virtual Type getType() const {return S_FUNCTOR;};
+  virtual ~Functor() {
+    // Deleting memory from arguments
+    for (auto item : _arguments){
+      delete item;
+    }
+  }
 };
 
 

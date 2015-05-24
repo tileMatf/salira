@@ -23,6 +23,7 @@ using FuncMap = std::unordered_map<std::string, FuncDecl>;
  */
 class ExpressionBase{
 private:
+  enum Type {S_INT, S_DOUBLE, S_FUNCTOR, S_TOKEN}
   bool _is_constant;  
 public:
   ExpressionBase(bool t = false){
@@ -30,9 +31,11 @@ public:
   }
   inline virtual bool isConstant() const = 0;
   inline virtual bool isToken() const = 0;
+  virtual void print() const = 0;
+  virtual Type getType() const = 0;
   virtual Expression eval(const std::vector<Expression>& values)const = 0;
   
-  
+  virtual ~Expression() {}
 };
 
 #endif // EXPRESSION_H__

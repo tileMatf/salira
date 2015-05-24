@@ -74,6 +74,10 @@ bool Functor::initBaseFunctions(){
   
 }
 
+// Printing on console functor, at least, identifier for now.
+void Functor::print() const {
+  std::cout << " " << _identifier << " ";
+}
 
 // API
 // Problem: Need to check if arguments need to evaluate
