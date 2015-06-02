@@ -16,26 +16,30 @@ class ExpressionBase;
 using Expression = ExpressionBase*;
 //using Expression = std::shared_ptr<ExpressionBase>;
 using FuncDecl = std::function< Expression ( std::vector<Expression> ) >;
-using FuncMap = std::unordered_map<std::string, FuncDecl>;
+
 
 /*
- * Base type
+ * Base type, 
  */
 class ExpressionBase{
 private:
-  enum Type {S_INT, S_DOUBLE, S_FUNCTOR, S_TOKEN}
-  bool _is_constant;  
+  // Types T_INT, T_DOUBLE, T_LIST represent Token type;
+  bool _is_constant;   
 public:
-  ExpressionBase(bool t = false){
-    _is_constant = t;
+  enum Type {S_INT, S_DOUBLE, S_FUNCTOR, S_TOKEN, T_INT, T_DOUBLE, T_LIST};
+  ExpressionBase(bool t = false):_is_constant(t){
+    
   }
-  inline virtual bool isConstant() const = 0;
-  inline virtual bool isToken() const = 0;
-  virtual void print() const = 0;
+  virtual bool isConstant() const = 0;
+  virtual bool isToken() const = 0;
+  virtual std::string print() const = 0;
   virtual Type getType() const = 0;
   virtual Expression eval(const std::vector<Expression>& values)const = 0;
   
-  virtual ~Expression() {}
+  virtual ~ExpressionBase() {}
 };
+
+
+
 
 #endif // EXPRESSION_H__

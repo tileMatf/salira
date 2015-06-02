@@ -6,37 +6,15 @@
  */
 
 #include "auto_load.hh"
-#include "salira_dev.hh"
 
 int main() {
   Functor::initBaseFunctions();
-  Expression p = new Token(0,ExpressionBase::S_INT);
+  Expression p = new Token(0,ExpressionBase::T_INT);
+  Expression p1 =new Token(1,ExpressionBase::T_INT);
   std::vector<Expression> _args;
-  std::vector<Expression> tint;
-  tint.push_back(p);
-  // 1
-  Expression m1 = new SaliraInt(1);
-  _args.push_back(m1);
-  // end of recursion, pattern match
-  SaliraUtility::insertFunctionInPool("f", m1, _args);
+  _args.push_back(p);
+  _args.push_back(p1);
   
-  //recursive declaration
-  Expression min = new Functor("minus", {p, m1});
-  Expression fp = new Functor("f",{min});
-  Expression f = new Functor("plus",{p,fp});
-  SaliraUtility::insertFunctionInPool("f", f, tint);
-  Expression testInput = new SaliraInt(5);
-  _args.clear();
-  _args.push_back(testInput);
-  SaliraDev::MapPrint();
-  std::cout << " Test : " << ((SaliraInt*)f->eval(_args))->value() << std::endl;
-  
-  /*
-  // insert f 1 = 1
-  SaliraUtility::insertFunctionInPool("f", m1, _args);
-  
-  // insert f n = n + f (n-1)
-  Expression f = new Functor("plus",{p})
   
   Expression pt1 = new SaliraInt(7);
   Expression pt2 = new SaliraInt(5);
@@ -55,8 +33,7 @@ int main() {
   
   result = e->eval(test1);
   std::cout << ((SaliraInt*)result)->value() << std::endl;
-  */
-//SaliraDev::MapPrint();
+  
   std::cout << "Test" << std::endl;
   return 0;
 }

@@ -3,6 +3,8 @@
 
 #include "expression.hh"
 #include "salira_types.hh"
+#include "metafunc.hh"
+#include "salira_log.hh"
 
 /*
  * Functor, class for representating functions.
@@ -14,21 +16,30 @@
  * TODO: Implement argument number check
  * TODO: Implement polymorph 
  * 
+ * NOTE: Need to enhance mechanism so it can support pattern matching, polymorphism and type conversion.
+ * Central func pool need to have more  informations and think way how can pattern matching be realized easily. 
+ * And also most critical part, how to ensure that newly made Expressions will be part of that. 
+ * 
  */
+// 
+using FuncMap = std::unordered_map<std::string, MetaFunc>;
+
 class Functor : public ExpressionBase {
-private:
+friend class SalirDev;
+public:
   static FuncMap functions;
 public:
+  
   // Operation which will be used often, so it is promoted to method, in case if  
   // mechanism is changed.
   static bool isFunctionDefined(std::string identifier);
   // Inserting new function
-  static bool insertFunc(std::string identifier, FuncDecl f);
+  static bool insertFunc(std::string identifier, FuncDecl f, std::vector<Expression> args);
   // Initialize basic functions. Filling FuncMap with functions. 
   // NOTE: Similar mechanism can be used for including another .hs file.
   static bool initBaseFunctions();
   // Reaching for function from map.
-  static FuncDecl getFunc(std::string identifier) throw();
+  static FuncDecl getFunc(std::string identifier, std::vector<Expression> args) throw();
 private:
   std::string _identifier;
   std::vector<Expression> _arguments;
@@ -51,7 +62,7 @@ public:
   }
   
   
-  virtual void print() const;
+  virtual std::string print() const;
   // Check functions
   inline virtual bool isToken() const { return false; }
   inline virtual bool isConstant() const { return true; }

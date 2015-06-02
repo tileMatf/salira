@@ -18,23 +18,30 @@ bool Functor::isFunctionDefined(std::string identifier){
     return Functor::functions.find(identifier) == Functor::functions.end() ? false : true; 
   }
   
-FuncDecl Functor::getFunc(std::string identifier) throw(){
+FuncDecl Functor::getFunc(std::string identifier, std::vector<Expression> args) throw(){
     // Basic check if function is defined.
+    SaliraLog::log(identifier);
+    for(auto item : args){
+	  SaliraLog::log("\t"+item->print());
+    }
+
     if(!Functor::isFunctionDefined(identifier)){
       throw SaliraException("Function doesn't exist! Id: = " + identifier);
     }
     else{
-      return Functor::functions[identifier];
+      return Functor::functions[identifier].find(args);
     }
 }
 
-bool Functor::insertFunc(std::string identifier, FuncDecl f){
+bool Functor::insertFunc(std::string identifier, FuncDecl f, std::vector<Expression> args){
     if(Functor::isFunctionDefined(identifier)){
-      // Possibility to throw exception.
+      Functor::functions[identifier].addDeclaration(args,f);
       return false;
     }
     else {
-      Functor::functions.insert(std::pair<std::string, FuncDecl>(identifier, f));
+      MetaFunc t{};
+      t.addDeclaration(args, f);
+      Functor::functions.insert(std::pair<std::string, MetaFunc>(identifier, t));
       return true;
     }
 }
@@ -49,34 +56,46 @@ bool Functor::initBaseFunctions(){
 							  ((SaliraInt*)values[0])->value() + ((SaliraInt*)values[1])->value()
 							    )
 							);};
-  Functor::insertFunc("plus", plus);
+  std::vector<Expression> tempp;
+  tempp.push_back(new Token(0, ExpressionBase::T_INT));
+  tempp.push_back(new Token(1, ExpressionBase::T_INT));
+  Functor::insertFunc("plus", plus, tempp);
   // minus
   FuncDecl minus = [](std::vector<Expression> values){ return Expression(
 							new SaliraInt(
 							  ((SaliraInt*)values[0])->value() - ((SaliraInt*)values[1])->value()
 							    )
 							);};
-  Functor::insertFunc("minus", minus);
+  std::vector<Expression> tempm;
+  tempm.push_back(new Token(0, ExpressionBase::T_INT));
+  tempm.push_back(new Token(1, ExpressionBase::T_INT));
+  Functor::insertFunc("minus", minus, tempm);
   // Multiplication
   FuncDecl mult = [](std::vector<Expression> values){ return Expression(
 							new SaliraInt(
 							  ((SaliraInt*)values[0])->value() * ((SaliraInt*)values[1])->value()
 							    )
 							);};
-  Functor::insertFunc("mult", mult);
+  std::vector<Expression> tempmu;
+  tempmu.push_back(new Token(0, ExpressionBase::T_INT));
+  tempmu.push_back(new Token(1, ExpressionBase::T_INT));
+  Functor::insertFunc("mult", mult, tempmu);
   // Division
   FuncDecl div = [](std::vector<Expression> values){ return Expression(
 							new SaliraInt(
 							  ((SaliraInt*)values[0])->value() / ((SaliraInt*)values[1])->value()
 							    )
 							);};
-  Functor::insertFunc("div", mult);
+  std::vector<Expression> tempd;
+  tempd.push_back(new Token(0, ExpressionBase::T_INT));
+  tempd.push_back(new Token(1, ExpressionBase::T_INT));  
+  Functor::insertFunc("div", mult, tempd);
   
 }
 
 // Printing on console functor, at least, identifier for now.
-void Functor::print() const {
-  std::cout << " " << _identifier << " ";
+std::string Functor::print() const {
+  return std::string("Functor: ") + _identifier;
 }
 
 // API
@@ -86,5 +105,5 @@ Expression Functor::eval(const std::vector<Expression>& values)const {
     for(auto item : _arguments){
       mid_result.push_back(item->eval(values));
     }
-    return Functor::getFunc(_identifier)(mid_result);
+    return Functor::getFunc(_identifier, values)(mid_result);
   }

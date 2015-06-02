@@ -31,14 +31,20 @@ public:
   }
   
   // Wrapper for easier insertion. 
-  static void insertFunctionInPool(std::string identifier, Expression e){
-    Functor::insertFunc(identifier, SaliraUtility::makeLambda(e));
+  static void insertFunctionInPool(std::string identifier, Expression e, std::vector<Expression> args){
+    Functor::insertFunc(identifier, SaliraUtility::makeLambda(e), args);
   }
-  
   
 // Write extractors, basically need to write utilities which will extract values from 
 // Expression. Only purpose is to make API more usefull and shorter.
   static int extractValueInt(){}
+  
+// 
+  /*
+  static Expression recurent(std::string identifier, std::vector<Expression> args){
+    return Functor::getFunction(identifier)(args);
+  }
+  */
 };
 
 
