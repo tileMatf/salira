@@ -4,7 +4,7 @@
 #include "expression.hh"
 #include "salira_types.hh"
 #include "SaliraExceptions.hh"
-
+#include "salira_log.hh"
 /*
  * Class for enabling type checking. It consists addiotionall data for functors.
  * Intention is to encapsulate more than one functor which have more than one implementation (Pattern Matching)

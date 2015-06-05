@@ -54,6 +54,10 @@ FuncDecl MetaFunc::find(std::vector<Expression> args) throw(){
       }
       // or return targeted functor declaration.
       else{
+	SaliraLog::log("Matched!");
+	for(auto item : args){
+	  SaliraLog::log("\t" + item->print());
+	}
 	return item.f;
       }
     }

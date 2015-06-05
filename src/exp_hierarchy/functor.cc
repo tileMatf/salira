@@ -20,11 +20,6 @@ bool Functor::isFunctionDefined(std::string identifier){
   
 FuncDecl Functor::getFunc(std::string identifier, std::vector<Expression> args) throw(){
     // Basic check if function is defined.
-    SaliraLog::log(identifier);
-    for(auto item : args){
-	  SaliraLog::log("\t"+item->print());
-    }
-
     if(!Functor::isFunctionDefined(identifier)){
       throw SaliraException("Function doesn't exist! Id: = " + identifier);
     }
@@ -105,5 +100,11 @@ Expression Functor::eval(const std::vector<Expression>& values)const {
     for(auto item : _arguments){
       mid_result.push_back(item->eval(values));
     }
-    return Functor::getFunc(_identifier, values)(mid_result);
+    SaliraLog::log(_identifier);
+    SaliraLog::log("Evaluated args: ");
+    for (auto item : mid_result){
+      SaliraLog::log("\t" + item->print());
+    }
+    
+    return Functor::getFunc(_identifier, mid_result)(mid_result);
   }

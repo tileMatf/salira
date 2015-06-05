@@ -16,7 +16,8 @@ int main() {
   tint.push_back(p);
   // 1
   Expression m1 = new SaliraInt(1);
-  _args.push_back(m1);
+  Expression m2 = new SaliraInt(1);
+  _args.push_back(m2);
   // end of recursion, pattern match
   SaliraUtility::insertFunctionInPool("f", m1, _args);
   
