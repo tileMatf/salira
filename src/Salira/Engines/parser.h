@@ -11,7 +11,7 @@ private:
     Parser();
 public:
     static Parser& Instance();
-    void Parse(QList<QString> input, QList<GCommand>* gCommands);
+    bool Parse(QList<QString> input, QList<GCommand>* output);
 };
 
 #endif // PARSER_H

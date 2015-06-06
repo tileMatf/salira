@@ -11,6 +11,7 @@ using namespace std;
 
 static QString fileName;
 static QList<GCommand> gCommands;
+static QList<VAXCommand> vaxCommands;
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -28,6 +29,9 @@ void MainWindow::FillGCodeEditor()
 {
     ui -> txtEditorGCode->clear();
 
+    if(gCommands.size() == 0)
+        return;
+
     foreach (GCommand command, gCommands)
         ui->txtEditorGCode->append(command.Value);
 
@@ -35,9 +39,23 @@ void MainWindow::FillGCodeEditor()
     ui->btnClear->setEnabled(true);
 }
 
+void MainWindow::FillVAXCodeEditor()
+{
+    ui -> txtEditorVAXCode->clear();
+
+    if(vaxCommands.size() == 0)
+        return;
+
+    foreach (VAXCommand command, vaxCommands)
+        ui->txtEditorVAXCode->append(command.Value);
+
+    ui->btnPlay->setEnabled(true);
+    ui->btnNext->setEnabled(true);
+}
+
 void MainWindow::on_btnOpen_clicked()
 {
-    fileName = QFileDialog::getOpenFileName(this, tr("Open File"), "", tr("Files (.)"));
+    fileName = QFileDialog::getOpenFileName (this, tr("Open File"), fileName, tr("Files (.)"));
 
     if(fileName.length() > 0)
     {
@@ -51,8 +69,8 @@ void MainWindow::on_btnOpen_clicked()
                 buffer.push_back(in.readLine());
             file.close();
 
-            Parser::Instance().Parse(buffer, &gCommands);
-            FillGCodeEditor();
+            if(Parser::Instance().Parse(buffer, &gCommands))
+                FillGCodeEditor();
         }
     }
 
@@ -61,6 +79,7 @@ void MainWindow::on_btnOpen_clicked()
 void MainWindow::on_btnClear_clicked()
 {
     ui->txtEditorGCode->clear();
+    ui->txtEditorVAXCode->clear();
     ui->btnTranslate->setEnabled(false);
 }
 
@@ -74,11 +93,11 @@ void MainWindow::on_txtEditorGCode_textChanged()
 
 void MainWindow::on_btnTranslate_clicked()
 {
-    //odavde se pozove Translate
-    //dobijeni rezultat se prebaci u txtEditorVAX
-    //za sada prebacimo cist text i enable dugmica za play i ostalo
+    if(Translator::Instance().Translate(gCommands, &vaxCommands))
+    {
+        ui->txtEditorVAXCode->clear();
+    }
 
-    ui->txtEditorVAXCode->clear();
     ui->txtEditorVAXCode->append(ui->txtEditorGCode->toPlainText());
 
     ui->btnTranslate->setEnabled(false);

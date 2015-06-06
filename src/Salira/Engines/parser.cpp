@@ -4,7 +4,6 @@ static Parser *instance = nullptr;
 
 Parser::Parser()
 {
-
 }
 
 Parser& Parser::Instance()
@@ -13,10 +12,17 @@ Parser& Parser::Instance()
     return instance;
 }
 
-void Parser::Parse(QList<QString> input, QList<GCommand>* gCommands)
+bool Parser::Parse(QList<QString> input, QList<GCommand>* output)
 {
-    gCommands->clear();
+    output->clear();
     foreach (QString line, input)
-        gCommands->push_back(GCommand(line));
+    {
+        GCommand command = GCommand(line);
+        if(!command.Valid)
+            return false;
+        output->push_back(command);
+    }
+
+    return true;
 }
 

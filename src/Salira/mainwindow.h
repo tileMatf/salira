@@ -15,6 +15,7 @@ public:
     explicit MainWindow(QWidget *parent = 0);
     ~MainWindow();
     void FillGCodeEditor();
+    void FillVAXCodeEditor();
 
 private slots:
     void on_btnOpen_clicked();

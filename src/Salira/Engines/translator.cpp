@@ -10,8 +10,17 @@ Translator& Translator::Instance()
     return instance;
 }
 
-QList<VAXCommand> Translator::Translate(QList<GCommand> input)
+bool Translator::Translate(QList<GCommand> input, QList<VAXCommand>* output)
 {
-    return QList<VAXCommand>();
+    output->clear();
+    foreach (GCommand gCommand, input)
+    {
+        VAXCommand command = VAXCommand(gCommand.Value);
+        if(!command.Valid)
+            return false;
+        output->push_back(command);
+    }
+
+    return true;
 }
 

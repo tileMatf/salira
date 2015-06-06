@@ -13,7 +13,7 @@ private:
     Translator();
 public:
     static Translator& Instance();
-    QList<VAXCommand> Translate(QList<GCommand> input);
+    bool Translate(QList<GCommand> input, QList<VAXCommand>* output);
 };
 
 #endif // TRANSLATE_H

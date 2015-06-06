@@ -1,14 +1,17 @@
 #include "gcommand.h"
 
 GCommand::GCommand(QString value)
-    :Value(value)
+    :Value(value), Valid(false)
 {
     //videti kako ovde parsirati
+    //eventualno dodati metodu ToString, a value da bude bas komanda
+    //ako je sve okej
+    this->Valid = true;
 }
 
-GCommand::GCommand(QString value, QList<GArgument> args)
-    :Value(value), Args(args)
+GCommand::~GCommand()
 {
+
 }
 
 GArgumentString::GArgumentString(QString value)
@@ -16,8 +19,16 @@ GArgumentString::GArgumentString(QString value)
 {
 }
 
+GArgumentString::~GArgumentString()
+{
+}
+
 GArgumentInt::GArgumentInt(int value)
     :Value(value)
+{
+}
+
+GArgumentInt::~GArgumentInt()
 {
 }
 

@@ -11,9 +11,10 @@ class GCommand
 {
 public:
     GCommand(QString value);
-    GCommand(QString value, QList<GArgument> args);
+    ~GCommand();
     QString Value;
     QList<GArgument> Args;
+    bool Valid;
 };
 
 class GArgument
