@@ -41,11 +41,11 @@
 		strcpy(yylval->str, yytext);
 		return Lambda::BisonParser::token::ID;
 		}
-[+-]?[0-9]+(\.[0-9]+)? { 
+[0-9]+(\.[0-9]+)? { 
 			yylval->num = atoi(yytext);
 			return Lambda::BisonParser::token::NUM; 
   			}
-[+*\\/%:><=.,!"'()\[\]-] { return *yytext;}
+[+*\\/%:><=.,!"';()\[\]-] { return *yytext;}
 [ \t\n]+ {}
 . {  }
 "'"[^']"'" {

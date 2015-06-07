@@ -51,9 +51,8 @@
 	}
 	
 	
-	
 
-#line 57 "lambda.tab.h" // lalr1.cc:372
+#line 56 "lambda.tab.h" // lalr1.cc:372
 
 
 # include <vector>
@@ -124,7 +123,7 @@
 
 #line 3 "lambda.y" // lalr1.cc:372
 namespace Lambda {
-#line 128 "lambda.tab.h" // lalr1.cc:372
+#line 127 "lambda.tab.h" // lalr1.cc:372
 
 
 
@@ -138,13 +137,13 @@ namespace Lambda {
     /// Symbol semantic values.
     union semantic_type
     {
-    #line 36 "lambda.y" // lalr1.cc:372
+    #line 35 "lambda.y" // lalr1.cc:372
 
 	int num;
 	char* str;
 	Expression e;
 
-#line 148 "lambda.tab.h" // lalr1.cc:372
+#line 147 "lambda.tab.h" // lalr1.cc:372
     };
 #else
     typedef YYSTYPE semantic_type;
@@ -336,7 +335,7 @@ namespace Lambda {
   // YYTABLE[YYPACT[STATE-NUM]] -- What to do in state STATE-NUM.  If
   // positive, shift that token.  If negative, reduce the rule whose
   // number is the opposite.  If YYTABLE_NINF, syntax error.
-  static const unsigned char yytable_[];
+  static const signed char yytable_[];
 
   static const unsigned char yycheck_[];
 
@@ -450,13 +449,13 @@ namespace Lambda {
     enum
     {
       yyeof_ = 0,
-      yylast_ = 19,     ///< Last index in yytable_.
-      yynnts_ = 6,  ///< Number of nonterminal symbols.
+      yylast_ = 41,     ///< Last index in yytable_.
+      yynnts_ = 7,  ///< Number of nonterminal symbols.
       yyempty_ = -2,
-      yyfinal_ = 5, ///< Termination state number.
+      yyfinal_ = 11, ///< Termination state number.
       yyterror_ = 1,
       yyerrcode_ = 256,
-      yyntokens_ = 18  ///< Number of tokens.
+      yyntokens_ = 19  ///< Number of tokens.
     };
 
 
@@ -467,7 +466,7 @@ namespace Lambda {
 
 #line 3 "lambda.y" // lalr1.cc:372
 } // Lambda
-#line 471 "lambda.tab.h" // lalr1.cc:372
+#line 470 "lambda.tab.h" // lalr1.cc:372
 
 
 

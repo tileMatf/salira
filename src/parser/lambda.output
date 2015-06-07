@@ -8,41 +8,53 @@ Terminals unused in grammar
    NEG
 
 
+State 4 conflicts: 4 reduce/reduce
+State 5 conflicts: 4 reduce/reduce
+
+
 Grammar
 
     0 $accept: program $end
 
-    1 program: ID ARGS '=' ArGr
+    1 program: program line ';'
+    2        | line ';'
 
-    2 ARGS: ARGS ID
-    3     | ID
+    3 line: ID ARGS '=' ArGr
 
-    4 ArGr: ArGr '+' T
-    5     | ArGr '-' T
-    6     | T
+    4 ARGS: ARGS ID
+    5     | ARGS NUM
+    6     | NUM
+    7     | ID
+    8     | ArGr
 
-    7 T: T '*' F
-    8  | T '/' F
-    9  | F
+    9 ArGr: ArGr '+' T
+   10     | ArGr '-' T
+   11     | T
 
-   10 F: NUM
-   11  | ID
-   12  | '(' ArGr ')'
+   12 T: T '*' F
+   13  | T '/' F
+   14  | F
+
+   15 F: NUM
+   16  | ID '(' ARGS ')'
+   17  | ID
+   18  | '(' ArGr ')'
 
 
 Terminals, with rules where they appear
 
 $end (0) 0
-'(' (40) 12
-')' (41) 12
-'*' (42) 7
-'+' (43) 4
-'-' (45) 5
-'/' (47) 8
-'=' (61) 1
+'(' (40) 16 18
+')' (41) 16 18
+'*' (42) 12
+'+' (43) 9
+'-' (45) 10
+'/' (47) 13
+';' (59) 1 2
+'=' (61) 3
 error (256)
-NUM (258) 10
-ID (259) 1 2 3 11
+NUM (258) 5 6 15
+ID (259) 3 4 7 16 17
 COMMENT (260)
 LET (261)
 IN (262)
@@ -53,18 +65,20 @@ NEG (265)
 
 Nonterminals, with rules where they appear
 
-$accept (18)
+$accept (19)
     on left: 0
-program (19)
-    on left: 1, on right: 0
-ARGS (20)
-    on left: 2 3, on right: 1 2
-ArGr (21)
-    on left: 4 5 6, on right: 1 4 5 12
-T (22)
-    on left: 7 8 9, on right: 4 5 6 7 8
-F (23)
-    on left: 10 11 12, on right: 7 8 9
+program (20)
+    on left: 1 2, on right: 0 1
+line (21)
+    on left: 3, on right: 1 2
+ARGS (22)
+    on left: 4 5 6 7 8, on right: 3 4 5 16
+ArGr (23)
+    on left: 9 10 11, on right: 3 8 9 10 18
+T (24)
+    on left: 12 13 14, on right: 9 10 11 12 13
+F (25)
+    on left: 15 16 17 18, on right: 12 13 14
 
 
 State 0
@@ -74,222 +88,352 @@ State 0
     ID  shift, and go to state 1
 
     program  go to state 2
+    line     go to state 3
 
 
 State 1
 
-    1 program: ID . ARGS '=' ArGr
+    3 line: ID . ARGS '=' ArGr
 
-    ID  shift, and go to state 3
+    NUM  shift, and go to state 4
+    ID   shift, and go to state 5
+    '('  shift, and go to state 6
 
-    ARGS  go to state 4
+    ARGS  go to state 7
+    ArGr  go to state 8
+    T     go to state 9
+    F     go to state 10
 
 
 State 2
 
     0 $accept: program . $end
+    1 program: program . line ';'
 
-    $end  shift, and go to state 5
+    $end  shift, and go to state 11
+    ID    shift, and go to state 1
+
+    line  go to state 12
 
 
 State 3
 
-    3 ARGS: ID .
+    2 program: line . ';'
 
-    $default  reduce using rule 3 (ARGS)
+    ';'  shift, and go to state 13
 
 
 State 4
 
-    1 program: ID ARGS . '=' ArGr
-    2 ARGS: ARGS . ID
+    6 ARGS: NUM .
+   15 F: NUM .
 
-    ID   shift, and go to state 6
-    '='  shift, and go to state 7
+    NUM       reduce using rule 6 (ARGS)
+    NUM       [reduce using rule 15 (F)]
+    ID        reduce using rule 6 (ARGS)
+    ID        [reduce using rule 15 (F)]
+    '='       reduce using rule 6 (ARGS)
+    '='       [reduce using rule 15 (F)]
+    '+'       reduce using rule 15 (F)
+    '-'       reduce using rule 15 (F)
+    '*'       reduce using rule 15 (F)
+    '/'       reduce using rule 15 (F)
+    ')'       reduce using rule 6 (ARGS)
+    ')'       [reduce using rule 15 (F)]
+    $default  reduce using rule 6 (ARGS)
 
 
 State 5
+
+    7 ARGS: ID .
+   16 F: ID . '(' ARGS ')'
+   17  | ID .
+
+    '('  shift, and go to state 14
+
+    NUM       reduce using rule 7 (ARGS)
+    NUM       [reduce using rule 17 (F)]
+    ID        reduce using rule 7 (ARGS)
+    ID        [reduce using rule 17 (F)]
+    '='       reduce using rule 7 (ARGS)
+    '='       [reduce using rule 17 (F)]
+    '+'       reduce using rule 17 (F)
+    '-'       reduce using rule 17 (F)
+    '*'       reduce using rule 17 (F)
+    '/'       reduce using rule 17 (F)
+    ')'       reduce using rule 7 (ARGS)
+    ')'       [reduce using rule 17 (F)]
+    $default  reduce using rule 7 (ARGS)
+
+
+State 6
+
+   18 F: '(' . ArGr ')'
+
+    NUM  shift, and go to state 15
+    ID   shift, and go to state 16
+    '('  shift, and go to state 6
+
+    ArGr  go to state 17
+    T     go to state 9
+    F     go to state 10
+
+
+State 7
+
+    3 line: ID ARGS . '=' ArGr
+    4 ARGS: ARGS . ID
+    5     | ARGS . NUM
+
+    NUM  shift, and go to state 18
+    ID   shift, and go to state 19
+    '='  shift, and go to state 20
+
+
+State 8
+
+    8 ARGS: ArGr .
+    9 ArGr: ArGr . '+' T
+   10     | ArGr . '-' T
+
+    '+'  shift, and go to state 21
+    '-'  shift, and go to state 22
+
+    $default  reduce using rule 8 (ARGS)
+
+
+State 9
+
+   11 ArGr: T .
+   12 T: T . '*' F
+   13  | T . '/' F
+
+    '*'  shift, and go to state 23
+    '/'  shift, and go to state 24
+
+    $default  reduce using rule 11 (ArGr)
+
+
+State 10
+
+   14 T: F .
+
+    $default  reduce using rule 14 (T)
+
+
+State 11
 
     0 $accept: program $end .
 
     $default  accept
 
 
-State 6
-
-    2 ARGS: ARGS ID .
-
-    $default  reduce using rule 2 (ARGS)
-
-
-State 7
-
-    1 program: ID ARGS '=' . ArGr
-
-    NUM  shift, and go to state 8
-    ID   shift, and go to state 9
-    '('  shift, and go to state 10
-
-    ArGr  go to state 11
-    T     go to state 12
-    F     go to state 13
-
-
-State 8
-
-   10 F: NUM .
-
-    $default  reduce using rule 10 (F)
-
-
-State 9
-
-   11 F: ID .
-
-    $default  reduce using rule 11 (F)
-
-
-State 10
-
-   12 F: '(' . ArGr ')'
-
-    NUM  shift, and go to state 8
-    ID   shift, and go to state 9
-    '('  shift, and go to state 10
-
-    ArGr  go to state 14
-    T     go to state 12
-    F     go to state 13
-
-
-State 11
-
-    1 program: ID ARGS '=' ArGr .
-    4 ArGr: ArGr . '+' T
-    5     | ArGr . '-' T
-
-    '+'  shift, and go to state 15
-    '-'  shift, and go to state 16
-
-    $default  reduce using rule 1 (program)
-
-
 State 12
 
-    6 ArGr: T .
-    7 T: T . '*' F
-    8  | T . '/' F
+    1 program: program line . ';'
 
-    '*'  shift, and go to state 17
-    '/'  shift, and go to state 18
-
-    $default  reduce using rule 6 (ArGr)
+    ';'  shift, and go to state 25
 
 
 State 13
 
-    9 T: F .
+    2 program: line ';' .
 
-    $default  reduce using rule 9 (T)
+    $default  reduce using rule 2 (program)
 
 
 State 14
 
-    4 ArGr: ArGr . '+' T
-    5     | ArGr . '-' T
-   12 F: '(' ArGr . ')'
+   16 F: ID '(' . ARGS ')'
 
-    '+'  shift, and go to state 15
-    '-'  shift, and go to state 16
-    ')'  shift, and go to state 19
+    NUM  shift, and go to state 4
+    ID   shift, and go to state 5
+    '('  shift, and go to state 6
+
+    ARGS  go to state 26
+    ArGr  go to state 8
+    T     go to state 9
+    F     go to state 10
 
 
 State 15
 
-    4 ArGr: ArGr '+' . T
+   15 F: NUM .
 
-    NUM  shift, and go to state 8
-    ID   shift, and go to state 9
-    '('  shift, and go to state 10
-
-    T  go to state 20
-    F  go to state 13
+    $default  reduce using rule 15 (F)
 
 
 State 16
 
-    5 ArGr: ArGr '-' . T
+   16 F: ID . '(' ARGS ')'
+   17  | ID .
 
-    NUM  shift, and go to state 8
-    ID   shift, and go to state 9
-    '('  shift, and go to state 10
+    '('  shift, and go to state 14
 
-    T  go to state 21
-    F  go to state 13
+    $default  reduce using rule 17 (F)
 
 
 State 17
 
-    7 T: T '*' . F
+    9 ArGr: ArGr . '+' T
+   10     | ArGr . '-' T
+   18 F: '(' ArGr . ')'
 
-    NUM  shift, and go to state 8
-    ID   shift, and go to state 9
-    '('  shift, and go to state 10
-
-    F  go to state 22
+    '+'  shift, and go to state 21
+    '-'  shift, and go to state 22
+    ')'  shift, and go to state 27
 
 
 State 18
 
-    8 T: T '/' . F
+    5 ARGS: ARGS NUM .
 
-    NUM  shift, and go to state 8
-    ID   shift, and go to state 9
-    '('  shift, and go to state 10
-
-    F  go to state 23
+    $default  reduce using rule 5 (ARGS)
 
 
 State 19
 
-   12 F: '(' ArGr ')' .
+    4 ARGS: ARGS ID .
 
-    $default  reduce using rule 12 (F)
+    $default  reduce using rule 4 (ARGS)
 
 
 State 20
 
-    4 ArGr: ArGr '+' T .
-    7 T: T . '*' F
-    8  | T . '/' F
+    3 line: ID ARGS '=' . ArGr
 
-    '*'  shift, and go to state 17
-    '/'  shift, and go to state 18
+    NUM  shift, and go to state 15
+    ID   shift, and go to state 16
+    '('  shift, and go to state 6
 
-    $default  reduce using rule 4 (ArGr)
+    ArGr  go to state 28
+    T     go to state 9
+    F     go to state 10
 
 
 State 21
 
-    5 ArGr: ArGr '-' T .
-    7 T: T . '*' F
-    8  | T . '/' F
+    9 ArGr: ArGr '+' . T
 
-    '*'  shift, and go to state 17
-    '/'  shift, and go to state 18
+    NUM  shift, and go to state 15
+    ID   shift, and go to state 16
+    '('  shift, and go to state 6
 
-    $default  reduce using rule 5 (ArGr)
+    T  go to state 29
+    F  go to state 10
 
 
 State 22
 
-    7 T: T '*' F .
+   10 ArGr: ArGr '-' . T
 
-    $default  reduce using rule 7 (T)
+    NUM  shift, and go to state 15
+    ID   shift, and go to state 16
+    '('  shift, and go to state 6
+
+    T  go to state 30
+    F  go to state 10
 
 
 State 23
 
-    8 T: T '/' F .
+   12 T: T '*' . F
 
-    $default  reduce using rule 8 (T)
+    NUM  shift, and go to state 15
+    ID   shift, and go to state 16
+    '('  shift, and go to state 6
+
+    F  go to state 31
+
+
+State 24
+
+   13 T: T '/' . F
+
+    NUM  shift, and go to state 15
+    ID   shift, and go to state 16
+    '('  shift, and go to state 6
+
+    F  go to state 32
+
+
+State 25
+
+    1 program: program line ';' .
+
+    $default  reduce using rule 1 (program)
+
+
+State 26
+
+    4 ARGS: ARGS . ID
+    5     | ARGS . NUM
+   16 F: ID '(' ARGS . ')'
+
+    NUM  shift, and go to state 18
+    ID   shift, and go to state 19
+    ')'  shift, and go to state 33
+
+
+State 27
+
+   18 F: '(' ArGr ')' .
+
+    $default  reduce using rule 18 (F)
+
+
+State 28
+
+    3 line: ID ARGS '=' ArGr .
+    9 ArGr: ArGr . '+' T
+   10     | ArGr . '-' T
+
+    '+'  shift, and go to state 21
+    '-'  shift, and go to state 22
+
+    $default  reduce using rule 3 (line)
+
+
+State 29
+
+    9 ArGr: ArGr '+' T .
+   12 T: T . '*' F
+   13  | T . '/' F
+
+    '*'  shift, and go to state 23
+    '/'  shift, and go to state 24
+
+    $default  reduce using rule 9 (ArGr)
+
+
+State 30
+
+   10 ArGr: ArGr '-' T .
+   12 T: T . '*' F
+   13  | T . '/' F
+
+    '*'  shift, and go to state 23
+    '/'  shift, and go to state 24
+
+    $default  reduce using rule 10 (ArGr)
+
+
+State 31
+
+   12 T: T '*' F .
+
+    $default  reduce using rule 12 (T)
+
+
+State 32
+
+   13 T: T '/' F .
+
+    $default  reduce using rule 13 (T)
+
+
+State 33
+
+   16 F: ID '(' ARGS ')' .
+
+    $default  reduce using rule 16 (F)

@@ -7,6 +7,8 @@ Functor::Functor(std::string id, std::initializer_list<Expression> list)
 	_arguments.push_back(item);
       }
 }
+Functor::Functor(std::string id, std::vector<Expression> args)
+: _identifier(id), ExpressionBase(false),  _arguments(args) {}
 
 // Static interface
 
@@ -44,7 +46,8 @@ bool Functor::insertFunc(std::string identifier, FuncDecl f, std::vector<Express
 bool Functor::initBaseFunctions(){  
   // NOTE: Think about moving this into type's class, it should definetly make more sense and be
   // more readable.
-  
+  if(Functor::functions.size() != 0)
+    return true;
   // plus
   FuncDecl plus = [](std::vector<Expression> values){ return Expression(
 							new SaliraInt(
@@ -105,6 +108,6 @@ Expression Functor::eval(const std::vector<Expression>& values)const {
     for (auto item : mid_result){
       SaliraLog::log("\t" + item->print());
     }
-    
+    SaliraLog::log("Name " + _identifier);
     return Functor::getFunc(_identifier, mid_result)(mid_result);
   }

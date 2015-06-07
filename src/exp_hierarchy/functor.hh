@@ -45,6 +45,7 @@ private:
   std::vector<Expression> _arguments;
 public:
   Functor(std::string id, std::initializer_list<Expression> list);
+  Functor(std::string id, std::vector<Expression> args);
   
   // Adding additional argument to arguments
   // Intention: So functor can be modified through parsing expression, translation for parsing purposes
