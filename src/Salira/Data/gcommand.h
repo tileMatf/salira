@@ -2,6 +2,7 @@
 #define GCOMMAND_H
 #include <QString>
 #include <QList>
+#include <QStringList>
 
 class GArgument;
 class GArgumentInt;
