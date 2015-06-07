@@ -31,6 +31,7 @@ public:
 
 class GArgumentInt : public GArgument
 {
+public:
     GArgumentInt(int value);
     ~GArgumentInt();
     int Value;
