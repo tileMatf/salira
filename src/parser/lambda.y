@@ -11,7 +11,9 @@
 	#include "location.hh"
 	#include "position.hh"
 	#include "../exp_hierarchy/auto_load.hh"
-	// Declare Scanner class
+	
+	// Forward-declare the Scanner class; the Parser needs to be assigned a 
+	// Scanner, but the Scanner can't be declared without the Parser
 	namespace Lambda {
 		class FlexScanner;
 	}
@@ -23,45 +25,89 @@
 	
 	#include "../exp_hierarchy/auto_load.hh"
 
-			  
+	// Arguments of function		  
 	std::vector<Expression> arguments{};
+	
+	// Variables map and their position in arguments order
 	std::unordered_map< std::string, int > variables{};
+	
+	// Position of current variable in arguments order
 	int counter = 0;
+	
+	// Prototype for the yylex function
 	static int yylex(Lambda::BisonParser::semantic_type *yylval, Lambda::FlexScanner &scanner);
 			      
 }
 
+// Yylval can have one of these types
 %union
 {
-	int num;
+	int intNum;
+	double doubleNum;
 	char* str;
 	Expression e;
 }
 
-%token <num> NUM_T
-%token <str> ID COMMENT
+// Defining types for each token
+%token <intNum> INT_NUM
+%token <doubleNum> DOUBLE_NUM
+%token <str> ID COMMENT ID_F
 %token LET IN MAX MIN NEG 
-%type <e> ArGr ARGS
-%type <e> T
-%type <e> F
+%type <e> EXP ARGS 
+// Defining priority and associativity
+
 %left '+' '-'
 %left '*'
 %left UMINUS
 %left '/'
+%left '(' ')'
+%left '='
+
+/*
+* 
+*  Grammar:
+* 
+* 
+* PROGRAM :: PROGRAM LINE ;
+*          | LINE ;
+*
+* LINE :: ID_F ARGS = EXP
+* 	  | COMMENT
+*
+*  ---------- it would be nice if we put some comma between arguments ------------------
+* ARGS :: ARGS ARG
+* 	  | ARG
+*
+* ARG :: ID
+* 	| INT_NUM
+* 	| DOUBLE_NUM
+* 	| EXP
+*
+* EXP :: EXP + EXP
+* 	| EXP - EXP
+* 	| EXP * EXP
+* 	| EXP / EXP
+* 	TODO: these arguments have to be separated from arguments in function declaration because in function declaration we add arguments in list
+* 	of arguments and here we just check if number od arguments is consistent and if their names exists in list
+* 	| ID_F ( ARGS ) 
+* 	| ID
+* 	| INT_NUM
+* 	| DOUBLE_NUM
+* 	| ( EXP )
+*
+*
+*/
+
 %%
-program : program line ';'
-| line ';'
+PROGRAM : PROGRAM LINE ';'
+| LINE ';'
 ;
-line : ID ARGS '=' ArGr  {
+LINE : ID_F ARGS '=' EXP  {
 			      //NOTE: Need to  be called at the begining of program to load all basic functions
 			      Functor::initBaseFunctions();
 	
 			      std::cout << " USAO " << std::endl; 
 			    
-			     /* std::vector<Expression> test1;
-			      for(unsigned i = 0, ie = arguments.size() ; i < ie; i++)
-				  test1.push_back(new Token(i, ExpressionBase::S_INT));
-			      */
 			      std::cout << $1 << std::endl;
 			      std::cout << arguments.size() << std::endl;
 			      std::cout << "args " << std::endl;
@@ -90,6 +136,9 @@ line : ID ARGS '=' ArGr  {
 			      variables.clear();
 			      counter = 0;
 }
+| COMMENT {
+	std::cout << "Comment: " << $1 << std::endl;
+  }
 ;
 ARGS : ARGS ID  {
 		std::cout << " Args ID " << std::endl;	
@@ -101,36 +150,82 @@ ARGS : ARGS ID  {
 		
 		arguments.push_back(new Token(variables[$2],ExpressionBase::S_INT ));	
 }
-| 
-ARGS NUM {
-	    std::cout << " Args NUM" << std::endl; 
-	    arguments.push_back(Expression(new SaliraInt($2)));
-	    
-}
-| NUM {
-	    std::cout << " NUM " << std::endl; 
-	    arguments.push_back(Expression(new SaliraInt($1)));
-}
-|
-ID {	
-      std::cout << " ID " << std::endl; 
+| ID {	
+      std::cout << " ID " << $1<< std::endl; 
       if(variables.find($1) == variables.end()){
 	 variables[$1] = counter;
 	 counter++;
 	}
 	arguments.push_back(new Token(variables[$1],ExpressionBase::S_INT ));
 }
-| ArGr {
-    $$ = $1;
+| ARGS INT_NUM {
+	    std::cout << " Args NUM" << std::endl; 
+	    arguments.push_back(Expression(new SaliraInt($2)));
+	    
+}
+| INT_NUM {
+	    std::cout << " NUM " << std::endl; 
+	    arguments.push_back(Expression(new SaliraInt($1)));
+}
+/*
+ TODO: 
+| ARGS DOUBLE_NUM {}
+| DOUBLE_NUM {}
+| ARGS EXP {} 
+*/
+| EXP {
+      $$ = $1;
 }
 ;
-ArGr : ArGr '+' T { 
+EXP : EXP '+' EXP { 
 	std::cout << "PLUS" << std::endl;
-	$$ = new Functor("plus",{$1,$3});}
-| ArGr '-' T { 
+	$$ = new Functor("plus",{$1,$3});
+	}
+| EXP '-' EXP { 
 	std::cout << " MINUS " << std::endl;
-	$$ = new Functor("minus",{$1,$3});}
-| T { 
+	$$ = new Functor("minus",{$1,$3});
+	}
+| EXP '*' EXP {
+	std::cout << " PUTA " << std::endl;
+	$$ = new Functor("mult",{$1,$3});
+	}
+| EXP '/' EXP { 
+	std::cout << " PODELJENO " << std::endl;
+	$$ = new Functor("div",{$1,$3});
+} 
+| INT_NUM  { 
+	  std::cout << " BROJ " <<  std::to_string($1) << std::endl;
+	  $$ = new SaliraInt($1);
+}
+/*
+| DOUBLE_NUM {}
+*/
+| ID_F '(' ARGS ')' {
+	  $$ = new Functor($1,{$3});
+}
+| ID {
+	std::cout << " ID " << $1 << std::endl;
+	
+	if(variables.find($1) == variables.end()){
+	  throw SaliraException("Variable not exists in declaration of function arguments.");
+	}
+	
+	// NOTE: Second argument is artificial, todo -> type checking
+	$$ = new Token(variables[$1], ExpressionBase::S_INT);
+}
+| '(' EXP ')'   { 	
+		  std::cout << " ZAGRADE " << std::endl;
+		  $$ = $2;
+		  }
+;
+/*
+* | MAX {}
+* | MIN {}
+* | NEG {}
+*/
+/*  '-' EXP %prec UMINUS
+*/
+/*| T { 
       std::cout << " T " << std::endl;
       $$ = $1;
 } 
@@ -170,9 +265,10 @@ F: NUM  {
 		  std::cout << " ZAGRADE " << std::endl;
 		  $$ = $2;
 		  }
-;
+;*/
 %%
 
+// We have to implement the error function
 void Lambda::BisonParser::error(const std::string &s)
 {
 	std::cerr << "Error: " << s << std::endl;

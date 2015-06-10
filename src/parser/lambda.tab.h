@@ -45,14 +45,16 @@
 	#include "location.hh"
 	#include "position.hh"
 	#include "../exp_hierarchy/auto_load.hh"
-	// Declare Scanner class
+	
+	// Forward-declare the Scanner class; the Parser needs to be assigned a 
+	// Scanner, but the Scanner can't be declared without the Parser
 	namespace Lambda {
 		class FlexScanner;
 	}
 	
 	
 
-#line 56 "lambda.tab.h" // lalr1.cc:372
+#line 58 "lambda.tab.h" // lalr1.cc:372
 
 
 # include <vector>
@@ -123,7 +125,7 @@
 
 #line 3 "lambda.y" // lalr1.cc:372
 namespace Lambda {
-#line 127 "lambda.tab.h" // lalr1.cc:372
+#line 129 "lambda.tab.h" // lalr1.cc:372
 
 
 
@@ -137,13 +139,14 @@ namespace Lambda {
     /// Symbol semantic values.
     union semantic_type
     {
-    #line 35 "lambda.y" // lalr1.cc:372
+    #line 44 "lambda.y" // lalr1.cc:372
 
-	int num;
+	int intNum;
+	double doubleNum;
 	char* str;
 	Expression e;
 
-#line 147 "lambda.tab.h" // lalr1.cc:372
+#line 150 "lambda.tab.h" // lalr1.cc:372
     };
 #else
     typedef YYSTYPE semantic_type;
@@ -160,14 +163,17 @@ namespace Lambda {
     {
       enum yytokentype
       {
-        NUM = 258,
-        ID = 259,
-        COMMENT = 260,
-        LET = 261,
-        IN = 262,
-        MAX = 263,
-        MIN = 264,
-        NEG = 265
+        INT_NUM = 258,
+        DOUBLE_NUM = 259,
+        ID = 260,
+        COMMENT = 261,
+        ID_F = 262,
+        LET = 263,
+        IN = 264,
+        MAX = 265,
+        MIN = 266,
+        NEG = 267,
+        UMINUS = 268
       };
     };
 
@@ -337,7 +343,7 @@ namespace Lambda {
   // number is the opposite.  If YYTABLE_NINF, syntax error.
   static const signed char yytable_[];
 
-  static const unsigned char yycheck_[];
+  static const signed char yycheck_[];
 
   // YYSTOS[STATE-NUM] -- The (internal number of the) accessing
   // symbol of state STATE-NUM.
@@ -449,13 +455,13 @@ namespace Lambda {
     enum
     {
       yyeof_ = 0,
-      yylast_ = 41,     ///< Last index in yytable_.
-      yynnts_ = 7,  ///< Number of nonterminal symbols.
+      yylast_ = 53,     ///< Last index in yytable_.
+      yynnts_ = 5,  ///< Number of nonterminal symbols.
       yyempty_ = -2,
       yyfinal_ = 11, ///< Termination state number.
       yyterror_ = 1,
       yyerrcode_ = 256,
-      yyntokens_ = 19  ///< Number of tokens.
+      yyntokens_ = 22  ///< Number of tokens.
     };
 
 
@@ -466,7 +472,7 @@ namespace Lambda {
 
 #line 3 "lambda.y" // lalr1.cc:372
 } // Lambda
-#line 470 "lambda.tab.h" // lalr1.cc:372
+#line 476 "lambda.tab.h" // lalr1.cc:372
 
 
 

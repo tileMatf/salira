@@ -21,53 +21,68 @@
 "MAX" { return Lambda::BisonParser::token::MAX;}
 "MIN" { return Lambda::BisonParser::token::MIN; }
 "NEG" { return Lambda::BisonParser::token::NEG;}
-"--"[^-]+[\n] {	
+"--"[^-]+[\n] {
+		// One line comment
+		
 		yylval->str = (char*) malloc(strlen(yytext) + 1);
 		if(yylval->str == NULL)
 		{
-			std::cerr << "Neuspela alokacija" << std::endl;		
+			std::cerr << "Allocation failure" << std::endl;		
 			exit(EXIT_FAILURE);
 		}
+		// Copy to yylval
 		strcpy(yylval->str, yytext);
+		
 		return Lambda::BisonParser::token::COMMENT;
 		}
-[a-z][a-zA-Z0-9_]* { 	
+[A-Z][a-zA-Z0-9_]* { // ID_F: starts with big letter and optional big or small letters or numbers after (F1, Ga2, ...)
 		yylval->str = (char*) malloc(strlen(yytext) + 1);
 		if(yylval->str == NULL)
 		{
-			std::cerr << "Neuspela alokacija" << std::endl;		
+			std::cerr << "Allocation failure" << std::endl;		
 			exit(EXIT_FAILURE);
 		}
+		// Copy to yylval
 		strcpy(yylval->str, yytext);
+		
+		return Lambda::BisonParser::token::ID_F;
+		}
+[a-z][a-zA-Z0-9_]* { 
+		// ID: starts with small letter and optional big or small letters or numbers after (x1, minCal, iQ1,...)
+		yylval->str = (char*) malloc(strlen(yytext) + 1);
+		if(yylval->str == NULL)
+		{
+			std::cerr << "Allocation failure" << std::endl;		
+			exit(EXIT_FAILURE);
+		}
+		// Copy to yylval
+		strcpy(yylval->str, yytext);
+		
 		return Lambda::BisonParser::token::ID;
 		}
-[0-9]+(\.[0-9]+)? { 
-			yylval->num = atoi(yytext);
-			return Lambda::BisonParser::token::NUM; 
-  			}
-[+*\\/%:><=.,!"';()\[\]-] { return *yytext;}
-[ \t\n]+ {}
-. {  }
-"'"[^']"'" {
-	   /* yylval.str = malloc(strlen(yytext) - 1);
-	    if(yylval.str == NULL)
-	    {
-	      fprintf(stderr, "Lexer error - malloc. ");
-	      exit(EXIT_FAILURE);
-	    }
-	    strncpy(yylval.str,yytext+1,strlen(yytext)-2);
-	    yylval.str[strlen(yytext)-2]='\0';
-	    return CHAR;*/
-}
-"\""[^"]+"\"" { 
-		/* yylval.str = malloc(strlen(yytext) - 1);
-		if(yylval.str == NULL)
-		{
-		  fprintf(stderr, "Lexer error - malloc. ");
-		  exit(EXIT_FAILURE);
+[0-9]+ { 	// Int numeric
+  
+		// Copy to yylval
+		yylval->intNum = atoi(yytext);
+		return Lambda::BisonParser::token::INT_NUM; 
 		}
-		strncpy(yylval.str,yytext+1,strlen(yytext)-2);
-		yylval.str[strlen(yytext)-2]='\0';
-		return STRING;*/
-		} 
+[0-9]+(\.[0-9]+)? { 
+			// Double numeric
+			
+			// Copy to yylval
+			yylval->doubleNum = atof(yytext);
+			return Lambda::BisonParser::token::DOUBLE_NUM; 
+  			}
+
+[+*\\/%:><=.,!"';()\[\]-] { 
+			// One character
+			// return ASCII value
+			return *yytext;
+			}
+[ \t\n]+ { // Ignore whitespaces 
+	}
+. {  
+      // Error
+      std::cerr << "ERROR: Unrecognized character(s) -> " << yytext << std::endl;
+}
 %%

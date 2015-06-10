@@ -1,5 +1,6 @@
 #pragma once
 #include "../exp_hierarchy/auto_load.hh"
+
 namespace Lambda
 {
 	class Parser

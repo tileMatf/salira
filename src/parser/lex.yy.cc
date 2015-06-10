@@ -350,12 +350,12 @@ struct yy_trans_info
 	flex_int32_t yy_verify;
 	flex_int32_t yy_nxt;
 	};
-static yyconst flex_int16_t yy_accept[39] =
+static yyconst flex_int16_t yy_accept[35] =
     {   0,
-        0,    0,   15,   11,   10,   10,    9,    9,    9,    9,
-        8,   11,   11,    7,    7,    7,   10,    0,    0,    0,
-        0,    8,    0,    0,    0,    7,    2,    7,   13,   12,
-        0,    8,    3,    4,    5,    1,    6,    0
+        0,    0,   15,   13,   12,   12,   11,   11,    9,    7,
+        7,    7,    8,    8,    8,   12,    0,    0,    9,    7,
+        7,    7,    7,    8,    2,    8,    0,   10,    3,    4,
+        5,    1,    6,    0
     } ;
 
 static yyconst flex_int32_t yy_ec[256] =
@@ -363,17 +363,17 @@ static yyconst flex_int32_t yy_ec[256] =
         1,    1,    1,    1,    1,    1,    1,    1,    2,    3,
         1,    1,    1,    1,    1,    1,    1,    1,    1,    1,
         1,    1,    1,    1,    1,    1,    1,    1,    1,    1,
-        1,    2,    4,    5,    1,    1,    4,    1,    6,    4,
-        4,    4,    4,    4,    7,    8,    4,    9,    9,    9,
-        9,    9,    9,    9,    9,    9,    9,    4,    4,    4,
-        4,    4,    1,    1,   10,   11,   11,   11,   12,   11,
-       13,   11,   14,   11,   11,   11,   15,   16,   11,   11,
-       11,   11,   11,   11,   11,   11,   11,   17,   11,   11,
-        4,    4,    4,    1,   11,    1,   18,   18,   18,   18,
+        1,    2,    4,    4,    1,    1,    4,    1,    4,    4,
+        4,    4,    4,    4,    5,    6,    4,    7,    7,    7,
+        7,    7,    7,    7,    7,    7,    7,    4,    4,    4,
+        4,    4,    1,    1,    8,    9,    9,    9,   10,    9,
+       11,    9,   12,    9,    9,    9,   13,   14,    9,    9,
+        9,    9,    9,    9,    9,    9,    9,   15,    9,    9,
+        4,    4,    4,    1,   16,    1,   17,   17,   17,   17,
 
-       19,   18,   18,   18,   20,   18,   18,   21,   18,   22,
-       18,   18,   18,   18,   18,   23,   18,   18,   18,   18,
-       18,   18,    1,    1,    1,    1,    1,    1,    1,    1,
+       18,   17,   17,   17,   19,   17,   17,   20,   17,   21,
+       17,   17,   17,   17,   17,   22,   17,   17,   17,   17,
+       17,   17,    1,    1,    1,    1,    1,    1,    1,    1,
         1,    1,    1,    1,    1,    1,    1,    1,    1,    1,
         1,    1,    1,    1,    1,    1,    1,    1,    1,    1,
         1,    1,    1,    1,    1,    1,    1,    1,    1,    1,
@@ -390,55 +390,51 @@ static yyconst flex_int32_t yy_ec[256] =
         1,    1,    1,    1,    1
     } ;
 
-static yyconst flex_int32_t yy_meta[24] =
+static yyconst flex_int32_t yy_meta[23] =
     {   0,
-        1,    1,    1,    1,    2,    3,    4,    1,    5,    5,
-        5,    5,    5,    5,    5,    5,    5,    5,    5,    5,
-        5,    5,    5
+        1,    1,    1,    1,    2,    1,    3,    3,    3,    3,
+        3,    3,    3,    3,    3,    3,    3,    3,    3,    3,
+        3,    3
     } ;
 
-static yyconst flex_int16_t yy_base[43] =
+static yyconst flex_int16_t yy_base[38] =
     {   0,
-        0,    0,   63,   64,   22,   24,   64,    0,    0,   55,
-       20,   20,   49,    0,   38,   40,   29,   53,   51,    0,
-       47,   27,   38,   38,   40,    0,    0,   29,   64,   64,
-       47,   35,   64,   64,   64,    0,   35,   64,   36,   41,
-       28,   46
+        0,    0,   51,   52,   21,   23,   52,   45,   21,    0,
+       21,   39,    0,   27,   29,   28,    0,   39,   28,    0,
+       30,   30,   32,    0,    0,   20,   38,   33,    0,    0,
+        0,    0,   36,   52,   34,   29,   35
     } ;
 
-static yyconst flex_int16_t yy_def[43] =
+static yyconst flex_int16_t yy_def[38] =
     {   0,
-       38,    1,   38,   38,   38,   38,   38,   39,   40,   38,
-       38,   38,   38,   41,   41,   41,   38,   39,   38,   42,
-       38,   38,   38,   38,   38,   41,   41,   41,   38,   38,
-       42,   38,   38,   38,   38,   41,   42,    0,   38,   38,
-       38,   38
+       34,    1,   34,   34,   34,   34,   34,   34,   34,   35,
+       35,   35,   36,   36,   36,   34,   37,   34,   34,   35,
+       35,   35,   35,   36,   36,   36,   37,   34,   35,   35,
+       35,   36,   37,    0,   34,   34,   34
     } ;
 
-static yyconst flex_int16_t yy_nxt[88] =
+static yyconst flex_int16_t yy_nxt[75] =
     {   0,
-        4,    5,    6,    7,    8,    9,   10,    7,   11,    4,
-        4,    4,    4,    4,   12,   13,    4,   14,   14,   15,
-       16,   14,   14,   17,   17,   17,   17,   21,   22,   23,
-       17,   17,   26,   24,   21,   22,   18,   37,   18,   18,
-       18,   19,   19,   32,   19,   19,   31,   31,   31,   37,
-       31,   36,   35,   34,   33,   32,   30,   29,   28,   27,
-       25,   20,   38,    3,   38,   38,   38,   38,   38,   38,
-       38,   38,   38,   38,   38,   38,   38,   38,   38,   38,
-       38,   38,   38,   38,   38,   38,   38
+        4,    5,    6,    7,    8,    7,    9,   10,   10,   10,
+       10,   10,   11,   12,   10,    4,   13,   13,   14,   15,
+       13,   13,   16,   16,   16,   16,   18,   19,   21,   16,
+       16,   24,   22,   18,   19,   27,   20,   27,   33,   28,
+       33,   32,   31,   30,   29,   28,   26,   25,   23,   17,
+       34,    3,   34,   34,   34,   34,   34,   34,   34,   34,
+       34,   34,   34,   34,   34,   34,   34,   34,   34,   34,
+       34,   34,   34,   34
     } ;
 
-static yyconst flex_int16_t yy_chk[88] =
+static yyconst flex_int16_t yy_chk[75] =
     {   0,
         1,    1,    1,    1,    1,    1,    1,    1,    1,    1,
         1,    1,    1,    1,    1,    1,    1,    1,    1,    1,
-        1,    1,    1,    5,    5,    6,    6,   11,   11,   12,
-       17,   17,   41,   12,   22,   22,   39,   37,   39,   39,
-       39,   40,   40,   32,   40,   40,   42,   42,   42,   31,
-       42,   28,   25,   24,   23,   21,   19,   18,   16,   15,
-       13,   10,    3,   38,   38,   38,   38,   38,   38,   38,
-       38,   38,   38,   38,   38,   38,   38,   38,   38,   38,
-       38,   38,   38,   38,   38,   38,   38
+        1,    1,    5,    5,    6,    6,    9,    9,   11,   16,
+       16,   36,   11,   19,   19,   37,   35,   37,   33,   28,
+       27,   26,   23,   22,   21,   18,   15,   14,   12,    8,
+        3,   34,   34,   34,   34,   34,   34,   34,   34,   34,
+       34,   34,   34,   34,   34,   34,   34,   34,   34,   34,
+       34,   34,   34,   34
     } ;
 
 /* The intent behind this definition is that it'll catch
@@ -462,7 +458,7 @@ static yyconst flex_int16_t yy_chk[88] =
 #include "LambdaScanner.h"
 #include "lambda.tab.h"
 
-#line 466 "lex.yy.cc"
+#line 462 "lex.yy.cc"
 
 #define INITIAL 0
 
@@ -596,7 +592,7 @@ YY_DECL
 	{
 #line 18 "lambda.l"
 
-#line 600 "lex.yy.cc"
+#line 596 "lex.yy.cc"
 
 	while ( 1 )		/* loops until end-of-file is reached */
 		{
@@ -623,13 +619,13 @@ yy_match:
 			while ( yy_chk[yy_base[yy_current_state] + yy_c] != yy_current_state )
 				{
 				yy_current_state = (int) yy_def[yy_current_state];
-				if ( yy_current_state >= 39 )
+				if ( yy_current_state >= 35 )
 					yy_c = yy_meta[(unsigned int) yy_c];
 				}
 			yy_current_state = yy_nxt[yy_base[yy_current_state] + (unsigned int) yy_c];
 			++yy_cp;
 			}
-		while ( yy_base[yy_current_state] != 64 );
+		while ( yy_base[yy_current_state] != 52 );
 
 yy_find_action:
 		yy_act = yy_accept[yy_current_state];
@@ -682,93 +678,105 @@ case 6:
 /* rule 6 can match eol */
 YY_RULE_SETUP
 #line 24 "lambda.l"
-{	
+{
+		// One line comment
+		
 		yylval->str = (char*) malloc(strlen(yytext) + 1);
 		if(yylval->str == NULL)
 		{
-			std::cerr << "Neuspela alokacija" << std::endl;		
+			std::cerr << "Allocation failure" << std::endl;		
 			exit(EXIT_FAILURE);
 		}
+		// Copy to yylval
 		strcpy(yylval->str, yytext);
+		
 		return Lambda::BisonParser::token::COMMENT;
 		}
 	YY_BREAK
 case 7:
 YY_RULE_SETUP
-#line 34 "lambda.l"
-{ 	
+#line 38 "lambda.l"
+{ // ID_F: starts with big letter and optional big or small letters or numbers after (F1, Ga2, ...)
 		yylval->str = (char*) malloc(strlen(yytext) + 1);
 		if(yylval->str == NULL)
 		{
-			std::cerr << "Neuspela alokacija" << std::endl;		
+			std::cerr << "Allocation failure" << std::endl;		
 			exit(EXIT_FAILURE);
 		}
+		// Copy to yylval
 		strcpy(yylval->str, yytext);
-		return Lambda::BisonParser::token::ID;
+		
+		return Lambda::BisonParser::token::ID_F;
 		}
 	YY_BREAK
 case 8:
 YY_RULE_SETUP
-#line 44 "lambda.l"
+#line 50 "lambda.l"
 { 
-			yylval->num = atoi(yytext);
-			return Lambda::BisonParser::token::NUM; 
-  			}
+		// ID: starts with small letter and optional big or small letters or numbers after (x1, minCal, iQ1,...)
+		yylval->str = (char*) malloc(strlen(yytext) + 1);
+		if(yylval->str == NULL)
+		{
+			std::cerr << "Allocation failure" << std::endl;		
+			exit(EXIT_FAILURE);
+		}
+		// Copy to yylval
+		strcpy(yylval->str, yytext);
+		
+		return Lambda::BisonParser::token::ID;
+		}
 	YY_BREAK
 case 9:
 YY_RULE_SETUP
-#line 48 "lambda.l"
-{ return *yytext;}
+#line 63 "lambda.l"
+{ 	// Int numeric
+  
+		// Copy to yylval
+		yylval->intNum = atoi(yytext);
+		return Lambda::BisonParser::token::INT_NUM; 
+		}
 	YY_BREAK
 case 10:
-/* rule 10 can match eol */
 YY_RULE_SETUP
-#line 49 "lambda.l"
-{}
+#line 69 "lambda.l"
+{ 
+			// Double numeric
+			
+			// Copy to yylval
+			yylval->doubleNum = atof(yytext);
+			return Lambda::BisonParser::token::DOUBLE_NUM; 
+  			}
 	YY_BREAK
 case 11:
 YY_RULE_SETUP
-#line 50 "lambda.l"
-{  }
+#line 77 "lambda.l"
+{ 
+			// One character
+			// return ASCII value
+			return *yytext;
+			}
 	YY_BREAK
 case 12:
 /* rule 12 can match eol */
 YY_RULE_SETUP
-#line 51 "lambda.l"
-{
-	   /* yylval.str = malloc(strlen(yytext) - 1);
-	    if(yylval.str == NULL)
-	    {
-	      fprintf(stderr, "Lexer error - malloc. ");
-	      exit(EXIT_FAILURE);
-	    }
-	    strncpy(yylval.str,yytext+1,strlen(yytext)-2);
-	    yylval.str[strlen(yytext)-2]='\0';
-	    return CHAR;*/
-}
+#line 82 "lambda.l"
+{ // Ignore whitespaces 
+	}
 	YY_BREAK
 case 13:
-/* rule 13 can match eol */
 YY_RULE_SETUP
-#line 62 "lambda.l"
-{ 
-		/* yylval.str = malloc(strlen(yytext) - 1);
-		if(yylval.str == NULL)
-		{
-		  fprintf(stderr, "Lexer error - malloc. ");
-		  exit(EXIT_FAILURE);
-		}
-		strncpy(yylval.str,yytext+1,strlen(yytext)-2);
-		yylval.str[strlen(yytext)-2]='\0';
-		return STRING;*/
-		} 
+#line 84 "lambda.l"
+{  
+      // Error
+      std::cerr << "ERROR: Unrecognized character(s) -> " << yytext << std::endl;
+}
 	YY_BREAK
 case 14:
 YY_RULE_SETUP
-#line 73 "lambda.l"
+#line 88 "lambda.l"
 YY_FATAL_ERROR( "flex scanner jammed" );
 	YY_BREAK
-#line 772 "lex.yy.cc"
+#line 780 "lex.yy.cc"
 case YY_STATE_EOF(INITIAL):
 	yyterminate();
 
@@ -1150,7 +1158,7 @@ int yyFlexLexer::yy_get_next_buffer()
 		while ( yy_chk[yy_base[yy_current_state] + yy_c] != yy_current_state )
 			{
 			yy_current_state = (int) yy_def[yy_current_state];
-			if ( yy_current_state >= 39 )
+			if ( yy_current_state >= 35 )
 				yy_c = yy_meta[(unsigned int) yy_c];
 			}
 		yy_current_state = yy_nxt[yy_base[yy_current_state] + (unsigned int) yy_c];
@@ -1178,11 +1186,11 @@ int yyFlexLexer::yy_get_next_buffer()
 	while ( yy_chk[yy_base[yy_current_state] + yy_c] != yy_current_state )
 		{
 		yy_current_state = (int) yy_def[yy_current_state];
-		if ( yy_current_state >= 39 )
+		if ( yy_current_state >= 35 )
 			yy_c = yy_meta[(unsigned int) yy_c];
 		}
 	yy_current_state = yy_nxt[yy_base[yy_current_state] + (unsigned int) yy_c];
-	yy_is_jam = (yy_current_state == 38);
+	yy_is_jam = (yy_current_state == 34);
 
 		return yy_is_jam ? 0 : yy_current_state;
 }
@@ -1667,7 +1675,7 @@ void yyfree (void * ptr )
 
 #define YYTABLES_NAME "yytables"
 
-#line 72 "lambda.l"
+#line 87 "lambda.l"
 
 
 

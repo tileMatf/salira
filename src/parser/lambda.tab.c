@@ -49,19 +49,25 @@
 
 #line 51 "lambda.tab.c" // lalr1.cc:407
 // Unqualified %code blocks.
-#line 22 "lambda.y" // lalr1.cc:408
+#line 24 "lambda.y" // lalr1.cc:408
 
 	
 	#include "../exp_hierarchy/auto_load.hh"
 
-			  
+	// Arguments of function		  
 	std::vector<Expression> arguments{};
+	
+	// Variables map and their position in arguments order
 	std::unordered_map< std::string, int > variables{};
+	
+	// Position of current variable in arguments order
 	int counter = 0;
+	
+	// Prototype for the yylex function
 	static int yylex(Lambda::BisonParser::semantic_type *yylval, Lambda::FlexScanner &scanner);
 			      
 
-#line 65 "lambda.tab.c" // lalr1.cc:408
+#line 71 "lambda.tab.c" // lalr1.cc:408
 
 
 #ifndef YY_
@@ -128,7 +134,7 @@
 
 #line 3 "lambda.y" // lalr1.cc:474
 namespace Lambda {
-#line 132 "lambda.tab.c" // lalr1.cc:474
+#line 138 "lambda.tab.c" // lalr1.cc:474
 
   /// Build a parser object.
   BisonParser::BisonParser (Lambda::FlexScanner &scanner_yyarg)
@@ -522,7 +528,7 @@ namespace Lambda {
           switch (yyn)
             {
   case 4:
-#line 52 "lambda.y" // lalr1.cc:847
+#line 103 "lambda.y" // lalr1.cc:847
     {
 			      //NOTE: Need to  be called at the begining of program to load all basic functions
 			      Functor::initBaseFunctions();
@@ -561,11 +567,19 @@ namespace Lambda {
 			      variables.clear();
 			      counter = 0;
 }
-#line 565 "lambda.tab.c" // lalr1.cc:847
+#line 571 "lambda.tab.c" // lalr1.cc:847
     break;
 
   case 5:
-#line 91 "lambda.y" // lalr1.cc:847
+#line 141 "lambda.y" // lalr1.cc:847
+    {
+	std::cout << "Comment: " << (yystack_[0].value.str) << std::endl;
+  }
+#line 579 "lambda.tab.c" // lalr1.cc:847
+    break;
+
+  case 6:
+#line 145 "lambda.y" // lalr1.cc:847
     {
 		std::cout << " Args ID " << std::endl;	
 	 
@@ -576,122 +590,105 @@ namespace Lambda {
 		
 		arguments.push_back(new Token(variables[(yystack_[0].value.str)],ExpressionBase::S_INT ));	
 }
-#line 580 "lambda.tab.c" // lalr1.cc:847
-    break;
-
-  case 6:
-#line 102 "lambda.y" // lalr1.cc:847
-    {
-	    std::cout << " Args NUM" << std::endl; 
-	    arguments.push_back(Expression(new SaliraInt((yystack_[0].value.num))));
-	    
-}
-#line 590 "lambda.tab.c" // lalr1.cc:847
+#line 594 "lambda.tab.c" // lalr1.cc:847
     break;
 
   case 7:
-#line 107 "lambda.y" // lalr1.cc:847
-    {
-	    std::cout << " NUM " << std::endl; 
-	    arguments.push_back(Expression(new SaliraInt((yystack_[0].value.num))));
-}
-#line 599 "lambda.tab.c" // lalr1.cc:847
-    break;
-
-  case 8:
-#line 112 "lambda.y" // lalr1.cc:847
+#line 155 "lambda.y" // lalr1.cc:847
     {	
-      std::cout << " ID " << std::endl; 
+      std::cout << " ID " << (yystack_[0].value.str)<< std::endl; 
       if(variables.find((yystack_[0].value.str)) == variables.end()){
 	 variables[(yystack_[0].value.str)] = counter;
 	 counter++;
 	}
 	arguments.push_back(new Token(variables[(yystack_[0].value.str)],ExpressionBase::S_INT ));
 }
-#line 612 "lambda.tab.c" // lalr1.cc:847
+#line 607 "lambda.tab.c" // lalr1.cc:847
+    break;
+
+  case 8:
+#line 163 "lambda.y" // lalr1.cc:847
+    {
+	    std::cout << " Args NUM" << std::endl; 
+	    arguments.push_back(Expression(new SaliraInt((yystack_[0].value.intNum))));
+	    
+}
+#line 617 "lambda.tab.c" // lalr1.cc:847
     break;
 
   case 9:
-#line 120 "lambda.y" // lalr1.cc:847
+#line 168 "lambda.y" // lalr1.cc:847
     {
-    (yylhs.value.e) = (yystack_[0].value.e);
+	    std::cout << " NUM " << std::endl; 
+	    arguments.push_back(Expression(new SaliraInt((yystack_[0].value.intNum))));
 }
-#line 620 "lambda.tab.c" // lalr1.cc:847
+#line 626 "lambda.tab.c" // lalr1.cc:847
     break;
 
   case 10:
-#line 124 "lambda.y" // lalr1.cc:847
-    { 
-	std::cout << "PLUS" << std::endl;
-	(yylhs.value.e) = new Functor("plus",{(yystack_[2].value.e),(yystack_[0].value.e)});}
-#line 628 "lambda.tab.c" // lalr1.cc:847
+#line 178 "lambda.y" // lalr1.cc:847
+    {
+      (yylhs.value.e) = (yystack_[0].value.e);
+}
+#line 634 "lambda.tab.c" // lalr1.cc:847
     break;
 
   case 11:
-#line 127 "lambda.y" // lalr1.cc:847
+#line 182 "lambda.y" // lalr1.cc:847
     { 
-	std::cout << " MINUS " << std::endl;
-	(yylhs.value.e) = new Functor("minus",{(yystack_[2].value.e),(yystack_[0].value.e)});}
-#line 636 "lambda.tab.c" // lalr1.cc:847
+	std::cout << "PLUS" << std::endl;
+	(yylhs.value.e) = new Functor("plus",{(yystack_[2].value.e),(yystack_[0].value.e)});
+	}
+#line 643 "lambda.tab.c" // lalr1.cc:847
     break;
 
   case 12:
-#line 130 "lambda.y" // lalr1.cc:847
+#line 186 "lambda.y" // lalr1.cc:847
     { 
-      std::cout << " T " << std::endl;
-      (yylhs.value.e) = (yystack_[0].value.e);
-}
-#line 645 "lambda.tab.c" // lalr1.cc:847
+	std::cout << " MINUS " << std::endl;
+	(yylhs.value.e) = new Functor("minus",{(yystack_[2].value.e),(yystack_[0].value.e)});
+	}
+#line 652 "lambda.tab.c" // lalr1.cc:847
     break;
 
   case 13:
-#line 135 "lambda.y" // lalr1.cc:847
-    { 
+#line 190 "lambda.y" // lalr1.cc:847
+    {
 	std::cout << " PUTA " << std::endl;
-	(yylhs.value.e) = new Functor("mult",{(yystack_[2].value.e),(yystack_[0].value.e)});}
-#line 653 "lambda.tab.c" // lalr1.cc:847
+	(yylhs.value.e) = new Functor("mult",{(yystack_[2].value.e),(yystack_[0].value.e)});
+	}
+#line 661 "lambda.tab.c" // lalr1.cc:847
     break;
 
   case 14:
-#line 138 "lambda.y" // lalr1.cc:847
+#line 194 "lambda.y" // lalr1.cc:847
     { 
 	std::cout << " PODELJENO " << std::endl;
 	(yylhs.value.e) = new Functor("div",{(yystack_[2].value.e),(yystack_[0].value.e)});
 }
-#line 662 "lambda.tab.c" // lalr1.cc:847
+#line 670 "lambda.tab.c" // lalr1.cc:847
     break;
 
   case 15:
-#line 142 "lambda.y" // lalr1.cc:847
+#line 198 "lambda.y" // lalr1.cc:847
     { 
-      std::cout << " F " << std::endl;
-      (yylhs.value.e) = (yystack_[0].value.e);
+	  std::cout << " BROJ " <<  std::to_string((yystack_[0].value.intNum)) << std::endl;
+	  (yylhs.value.e) = new SaliraInt((yystack_[0].value.intNum));
 }
-#line 671 "lambda.tab.c" // lalr1.cc:847
+#line 679 "lambda.tab.c" // lalr1.cc:847
     break;
 
   case 16:
-#line 147 "lambda.y" // lalr1.cc:847
-    { 
-	  std::cout << " BROJ " <<  std::to_string((yystack_[0].value.num)) << std::endl;
-	  (yylhs.value.e) = new SaliraInt((yystack_[0].value.num));
+#line 205 "lambda.y" // lalr1.cc:847
+    {
+	  (yylhs.value.e) = new Functor((yystack_[3].value.str),{(yystack_[1].value.e)});
 }
-#line 680 "lambda.tab.c" // lalr1.cc:847
+#line 687 "lambda.tab.c" // lalr1.cc:847
     break;
 
   case 17:
-#line 151 "lambda.y" // lalr1.cc:847
+#line 208 "lambda.y" // lalr1.cc:847
     {
-	
-	  (yylhs.value.e) = new Functor((yystack_[3].value.str),{(yystack_[1].value.e)});
-}
-#line 689 "lambda.tab.c" // lalr1.cc:847
-    break;
-
-  case 18:
-#line 155 "lambda.y" // lalr1.cc:847
-    {
-       
 	std::cout << " ID " << (yystack_[0].value.str) << std::endl;
 	
 	if(variables.find((yystack_[0].value.str)) == variables.end()){
@@ -701,20 +698,20 @@ namespace Lambda {
 	// NOTE: Second argument is artificial, todo -> type checking
 	(yylhs.value.e) = new Token(variables[(yystack_[0].value.str)], ExpressionBase::S_INT);
 }
-#line 705 "lambda.tab.c" // lalr1.cc:847
+#line 702 "lambda.tab.c" // lalr1.cc:847
     break;
 
-  case 19:
-#line 166 "lambda.y" // lalr1.cc:847
+  case 18:
+#line 218 "lambda.y" // lalr1.cc:847
     { 	
 		  std::cout << " ZAGRADE " << std::endl;
 		  (yylhs.value.e) = (yystack_[1].value.e);
 		  }
-#line 714 "lambda.tab.c" // lalr1.cc:847
+#line 711 "lambda.tab.c" // lalr1.cc:847
     break;
 
 
-#line 718 "lambda.tab.c" // lalr1.cc:847
+#line 715 "lambda.tab.c" // lalr1.cc:847
             default:
               break;
             }
@@ -876,81 +873,83 @@ namespace Lambda {
   }
 
 
-  const signed char BisonParser::yypact_ninf_ = -6;
+  const signed char BisonParser::yypact_ninf_ = -18;
 
-  const signed char BisonParser::yytable_ninf_ = -19;
+  const signed char BisonParser::yytable_ninf_ = -18;
 
   const signed char
   BisonParser::yypact_[] =
   {
-       6,    -1,     7,    27,    19,    14,     1,     5,    10,    -2,
-      -6,    -6,    30,    -6,    -1,    -6,    -5,     8,    -6,    -6,
-       1,     1,     1,     1,     1,    -6,    -3,    -6,    10,    -2,
-      -2,    -6,    -6,    -6
+      21,   -18,     7,    24,   -17,    26,    31,   -13,     8,    -3,
+      36,   -18,    -5,   -18,     7,   -18,   -18,    19,   -18,   -18,
+       8,     8,     8,     8,     8,   -18,     4,   -18,    36,   -14,
+     -14,    -9,   -18,   -18
   };
 
   const unsigned char
   BisonParser::yydefact_[] =
   {
-       0,     0,     0,     0,     7,     8,     0,     0,     9,    12,
-      15,     1,     0,     3,     0,    16,    18,     0,     6,     5,
-       0,     0,     0,     0,     0,     2,     0,    19,     4,    10,
-      11,    13,    14,    17
+       0,     5,     0,     0,     0,     9,     7,     0,     0,     0,
+      10,     1,     0,     3,     0,    15,    17,     0,     8,     6,
+       0,     0,     0,     0,     0,     2,     0,    18,     4,    11,
+      12,    13,    14,    16
   };
 
   const signed char
   BisonParser::yypgoto_[] =
   {
-      -6,    -6,    17,    11,     0,    15,    16
+     -18,   -18,    32,    15,    -2
   };
 
   const signed char
   BisonParser::yydefgoto_[] =
   {
-      -1,     2,     3,     7,     8,     9,    10
+      -1,     3,     4,     9,    10
   };
 
   const signed char
   BisonParser::yytable_[] =
   {
-      18,    19,     4,     5,    15,    16,    17,    11,    18,    19,
-       1,     1,    14,    23,    24,    33,     6,    20,     6,    12,
-      28,    21,    22,    21,    22,    26,    27,   -18,   -18,   -18,
-     -18,    14,   -16,   -16,   -16,   -16,    29,    30,    13,    31,
-      32,    25
+      18,    23,    19,    24,    13,    14,    17,    18,    24,    19,
+       5,    15,     6,    16,     7,     7,    25,    20,    28,    29,
+      30,    31,    32,    33,    11,     8,     8,     1,     2,    26,
+       1,     2,    21,    22,    23,    12,    24,     0,    27,   -15,
+     -15,   -15,     0,   -15,   -17,   -17,   -17,     0,   -17,    21,
+      22,    23,     0,    24
   };
 
-  const unsigned char
+  const signed char
   BisonParser::yycheck_[] =
   {
-       3,     4,     3,     4,     3,     4,     6,     0,     3,     4,
-       4,     4,    17,    15,    16,    18,    17,    12,    17,     2,
-      20,    13,    14,    13,    14,    14,    18,    13,    14,    15,
-      16,    17,    13,    14,    15,    16,    21,    22,    11,    23,
-      24,    11
+       3,    15,     5,    17,    21,    18,     8,     3,    17,     5,
+       3,     3,     5,     5,     7,     7,    21,    20,    20,    21,
+      22,    23,    24,    19,     0,    18,    18,     6,     7,    14,
+       6,     7,    13,    14,    15,     3,    17,    -1,    19,    13,
+      14,    15,    -1,    17,    13,    14,    15,    -1,    17,    13,
+      14,    15,    -1,    17
   };
 
   const unsigned char
   BisonParser::yystos_[] =
   {
-       0,     4,    20,    21,     3,     4,    17,    22,    23,    24,
-      25,     0,    21,    11,    17,     3,     4,    23,     3,     4,
-      12,    13,    14,    15,    16,    11,    22,    18,    23,    24,
-      24,    25,    25,    18
+       0,     6,     7,    23,    24,     3,     5,     7,    18,    25,
+      26,     0,    24,    21,    18,     3,     5,    26,     3,     5,
+      20,    13,    14,    15,    17,    21,    25,    19,    26,    26,
+      26,    26,    26,    19
   };
 
   const unsigned char
   BisonParser::yyr1_[] =
   {
-       0,    19,    20,    20,    21,    22,    22,    22,    22,    22,
-      23,    23,    23,    24,    24,    24,    25,    25,    25,    25
+       0,    22,    23,    23,    24,    24,    25,    25,    25,    25,
+      25,    26,    26,    26,    26,    26,    26,    26,    26
   };
 
   const unsigned char
   BisonParser::yyr2_[] =
   {
-       0,     2,     3,     2,     4,     2,     2,     1,     1,     1,
-       3,     3,     1,     3,     3,     1,     1,     4,     1,     3
+       0,     2,     3,     2,     4,     1,     2,     1,     2,     1,
+       1,     3,     3,     3,     3,     1,     4,     1,     3
   };
 
 
@@ -960,17 +959,18 @@ namespace Lambda {
   const char*
   const BisonParser::yytname_[] =
   {
-  "$end", "error", "$undefined", "NUM", "ID", "COMMENT", "LET", "IN",
-  "MAX", "MIN", "NEG", "';'", "'='", "'+'", "'-'", "'*'", "'/'", "'('",
-  "')'", "$accept", "program", "line", "ARGS", "ArGr", "T", "F", YY_NULLPTR
+  "$end", "error", "$undefined", "INT_NUM", "DOUBLE_NUM", "ID", "COMMENT",
+  "ID_F", "LET", "IN", "MAX", "MIN", "NEG", "'+'", "'-'", "'*'", "UMINUS",
+  "'/'", "'('", "')'", "'='", "';'", "$accept", "PROGRAM", "LINE", "ARGS",
+  "EXP", YY_NULLPTR
   };
 
 
   const unsigned char
   BisonParser::yyrline_[] =
   {
-       0,    49,    49,    50,    52,    91,   102,   107,   112,   120,
-     124,   127,   130,   135,   138,   142,   147,   151,   155,   166
+       0,   100,   100,   101,   103,   141,   145,   155,   163,   168,
+     178,   182,   186,   190,   194,   198,   205,   208,   218
   };
 
   // Print the state stack on the debug stream.
@@ -1015,9 +1015,9 @@ namespace Lambda {
        2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
        2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
        2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
-      17,    18,    15,    13,     2,    14,     2,    16,     2,     2,
-       2,     2,     2,     2,     2,     2,     2,     2,     2,    11,
-       2,    12,     2,     2,     2,     2,     2,     2,     2,     2,
+      18,    19,    15,    13,     2,    14,     2,    17,     2,     2,
+       2,     2,     2,     2,     2,     2,     2,     2,     2,    21,
+       2,    20,     2,     2,     2,     2,     2,     2,     2,     2,
        2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
        2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
        2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
@@ -1037,9 +1037,9 @@ namespace Lambda {
        2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
        2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
        2,     2,     2,     2,     2,     2,     1,     2,     3,     4,
-       5,     6,     7,     8,     9,    10
+       5,     6,     7,     8,     9,    10,    11,    12,    16
     };
-    const unsigned int user_token_number_max_ = 265;
+    const unsigned int user_token_number_max_ = 268;
     const token_number_type undef_token_ = 2;
 
     if (static_cast<int>(t) <= yyeof_)
@@ -1053,9 +1053,10 @@ namespace Lambda {
 #line 3 "lambda.y" // lalr1.cc:1155
 } // Lambda
 #line 1056 "lambda.tab.c" // lalr1.cc:1155
-#line 171 "lambda.y" // lalr1.cc:1156
+#line 271 "lambda.y" // lalr1.cc:1156
 
 
+// We have to implement the error function
 void Lambda::BisonParser::error(const std::string &s)
 {
 	std::cerr << "Error: " << s << std::endl;
