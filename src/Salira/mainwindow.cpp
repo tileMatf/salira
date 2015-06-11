@@ -33,7 +33,7 @@ void MainWindow::FillGCodeEditor()
         return;
 
     foreach (GCommand command, gCommands)
-        ui->txtEditorGCode->append(command.Value);
+        ui->txtEditorGCode->append(command.ToString());
 
     ui->btnTranslate->setEnabled(true);
     ui->btnClear->setEnabled(true);

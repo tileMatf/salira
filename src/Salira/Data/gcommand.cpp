@@ -3,6 +3,12 @@
 GCommand::GCommand(QString value)
     :Value(value), Valid(false)
 {
+    if(value == "") // potrebno je definisati i praznu komandu
+    {
+        Valid = true;
+        return ;
+    }
+
     /*promenljiva koja indikuje da li su argumenti u redu*/
     bool ok;
 
@@ -40,7 +46,7 @@ GCommand::GCommand(QString value)
             return;
         }
 
-        this->Args.push_back(GArgumentInt(arg));
+        this->AddArg(arg);
         this->Value = GCommandParts[0];
         this->Valid = true;
     }
@@ -60,13 +66,14 @@ GCommand::GCommand(QString value)
             return;
         }
 
-        this->Args.push_back(GArgumentString(GCommandParts[1]));
-        this->Args.push_back(GArgumentInt(arg));
+        this->AddArg(GCommandParts[1]);
+        this->AddArg(arg);
         this->Value = GCommandParts[0];
         this->Valid = true;
     }
     else if(!GCommandParts[0].compare("PUSH") || !GCommandParts[0].compare("POP") ||
-            !GCommandParts[0].compare("SLIDE") || !GCommandParts[0].compare("ALLOC"))
+            !GCommandParts[0].compare("SLIDE") || !GCommandParts[0].compare("ALLOC")
+            || !GCommandParts[0].compare("UPDATE"))
     {
         if(GCommandParts.size() != 2)
         {
@@ -82,7 +89,7 @@ GCommand::GCommand(QString value)
             return;
         }
 
-        this->Args.push_back(GArgumentInt(arg));
+        this->AddArg(arg);
         this->Value = GCommandParts[0];
         this->Valid = true;
     }
@@ -114,13 +121,44 @@ GCommand::GCommand(QString value)
             return;
         }
 
-        this->Args.push_back(GArgumentString(GCommandParts[1]));
+        this->AddArg(GCommandParts[1]);
         this->Value = GCommandParts[0];
         this->Valid = true;
     }
 }
 
 GCommand::~GCommand()
+{
+
+}
+
+QString GCommand::ToString()
+{
+    QString retValue;
+
+    if(this->Value.length() > 0)
+    {
+        retValue += this->Value;
+
+        foreach (shared_ptr<GArgument> argument, this->Args)
+            retValue += " " + argument.get()->ToString();
+        retValue += ";";
+    }
+
+    return retValue;
+}
+
+void GCommand::AddArg(QString arg)
+{
+    this->Args.push_back(shared_ptr<GArgument>(new GArgumentString(arg)));
+}
+
+void GCommand::AddArg(int arg)
+{
+    this->Args.push_back(shared_ptr<GArgument>(new GArgumentInt(arg)));
+}
+
+GArgument::~GArgument()
 {
 
 }
@@ -134,6 +172,11 @@ GArgumentString::~GArgumentString()
 {
 }
 
+QString GArgumentString::ToString() const
+{
+    return this->Value;
+}
+
 GArgumentInt::GArgumentInt(int value)
     :Value(value)
 {
@@ -141,5 +184,10 @@ GArgumentInt::GArgumentInt(int value)
 
 GArgumentInt::~GArgumentInt()
 {
+}
+
+QString GArgumentInt::ToString() const
+{
+    return QString::number(this->Value);
 }
 

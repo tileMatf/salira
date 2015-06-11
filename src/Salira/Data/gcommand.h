@@ -3,6 +3,9 @@
 #include <QString>
 #include <QList>
 #include <QStringList>
+#include <memory>
+
+using namespace std;
 
 class GArgument;
 class GArgumentInt;
@@ -14,12 +17,18 @@ public:
     GCommand(QString value);
     ~GCommand();
     QString Value;
-    QList<GArgument> Args;
+    QList<shared_ptr<GArgument>> Args;
     bool Valid;
+    QString ToString();
+    void AddArg(QString arg);
+    void AddArg(int arg);
 };
 
 class GArgument
 {
+public:
+    ~GArgument();
+    virtual QString ToString() const = 0;
 };
 
 class GArgumentString : public GArgument
@@ -28,6 +37,7 @@ public:
     GArgumentString(QString value);
     ~GArgumentString();
     QString Value;
+    QString ToString() const;
 };
 
 class GArgumentInt : public GArgument
@@ -36,6 +46,7 @@ public:
     GArgumentInt(int value);
     ~GArgumentInt();
     int Value;
+    QString ToString() const;
 };
 
 
