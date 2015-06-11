@@ -94,9 +94,7 @@ void MainWindow::on_txtEditorGCode_textChanged()
 void MainWindow::on_btnTranslate_clicked()
 {
     if(Translator::Instance().Translate(gCommands, &vaxCommands))
-    {
         ui->txtEditorVAXCode->clear();
-    }
 
     ui->txtEditorVAXCode->append(ui->txtEditorGCode->toPlainText());
 
