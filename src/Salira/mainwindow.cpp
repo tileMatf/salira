@@ -12,6 +12,7 @@ using namespace std;
 static QString fileName;
 static QList<GCommand> gCommands;
 static QList<VAXCommand> vaxCommands;
+static int currentCommandNumber;
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -32,9 +33,19 @@ void MainWindow::FillGCodeEditor()
     if(gCommands.size() == 0)
         return;
 
+    QString buffer;
+    int i = 0;
     foreach (GCommand command, gCommands)
-        ui->txtEditorGCode->append(command.ToString());
+    {
+        if(i == currentCommandNumber)
+            buffer += "<font color=\"red\">" + command.ToString() + "</font><br>";
+        else
+            buffer += command.ToString() + "<br>";
+        i++;
+    }
 
+
+    ui->txtEditorGCode->setHtml(buffer);
     ui->btnTranslate->setEnabled(true);
     ui->btnClear->setEnabled(true);
 }
@@ -47,7 +58,7 @@ void MainWindow::FillVAXCodeEditor()
         return;
 
     foreach (VAXCommand command, vaxCommands)
-        ui->txtEditorVAXCode->append(command.Value);
+        ui->txtEditorVAXCode->append(command.ToString());
 
     ui->btnPlay->setEnabled(true);
     ui->btnNext->setEnabled(true);
@@ -94,11 +105,30 @@ void MainWindow::on_txtEditorGCode_textChanged()
 void MainWindow::on_btnTranslate_clicked()
 {
     if(Translator::Instance().Translate(gCommands, &vaxCommands))
-        ui->txtEditorVAXCode->clear();
+        FillVAXCodeEditor();
 
-    ui->txtEditorVAXCode->append(ui->txtEditorGCode->toPlainText());
+    currentCommandNumber = 0;
+}
 
-    ui->btnTranslate->setEnabled(false);
-    ui->btnNext->setEnabled(true);
-    ui->btnPlay->setEnabled(true);
+void MainWindow::on_btnPlay_clicked()
+{
+
+}
+
+void MainWindow::on_btnNext_clicked()
+{
+    currentCommandNumber++;
+    this->FillGCodeEditor();
+}
+
+void MainWindow::on_btnPrevious_clicked()
+{
+    currentCommandNumber--;
+    this->FillGCodeEditor();
+}
+
+void MainWindow::on_btnRestart_clicked()
+{
+    currentCommandNumber = 0;
+    this->FillGCodeEditor();
 }

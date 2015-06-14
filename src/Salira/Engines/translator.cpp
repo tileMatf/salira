@@ -15,10 +15,10 @@ bool Translator::Translate(QList<GCommand> input, QList<VAXCommand>* output)
     output->clear();
     foreach (GCommand gCommand, input)
     {
-        VAXCommand command = VAXCommand(gCommand.Value);
-        if(!command.Valid)
+        QList<VAXCommand> vaxCommands;
+        if(!VAXCommand::GetCommands(gCommand, &vaxCommands))
             return false;
-        output->push_back(command);
+        output->append(vaxCommands);
     }
 
     return true;

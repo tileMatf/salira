@@ -26,6 +26,14 @@ private slots:
 
     void on_btnTranslate_clicked();
 
+    void on_btnPlay_clicked();
+
+    void on_btnNext_clicked();
+
+    void on_btnPrevious_clicked();
+
+    void on_btnRestart_clicked();
+
 private:
     Ui::MainWindow *ui;
 };

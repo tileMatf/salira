@@ -132,7 +132,7 @@ GCommand::~GCommand()
 
 }
 
-QString GCommand::ToString()
+QString GCommand::ToString() const
 {
     QString retValue;
 

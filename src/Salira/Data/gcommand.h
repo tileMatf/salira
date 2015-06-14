@@ -19,7 +19,7 @@ public:
     QString Value;
     QList<shared_ptr<GArgument>> Args;
     bool Valid;
-    QString ToString();
+    QString ToString() const;
     void AddArg(QString arg);
     void AddArg(int arg);
 };
