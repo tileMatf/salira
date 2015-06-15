@@ -6,13 +6,15 @@
 #include <QTextStream>
 #include <Engines/translator.h>
 #include <Engines/parser.h>
+#include <Engines/executor.h>
+#include <unistd.h>
+#include<QTime>
 
 using namespace std;
 
 static QString fileName;
 static QList<GCommand> gCommands;
 static QList<VAXCommand> vaxCommands;
-static int currentCommandNumber;
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -34,7 +36,7 @@ void MainWindow::FillGCodeEditor()
         return;
 
     QString buffer;
-    int i = 0;
+    int i = 0, currentCommandNumber = Executor::Instance().currentState.id;
     foreach (GCommand command, gCommands)
     {
         if(i == currentCommandNumber)
@@ -59,9 +61,6 @@ void MainWindow::FillVAXCodeEditor()
 
     foreach (VAXCommand command, vaxCommands)
         ui->txtEditorVAXCode->append(command.ToString());
-
-    ui->btnPlay->setEnabled(true);
-    ui->btnNext->setEnabled(true);
 }
 
 void MainWindow::on_btnOpen_clicked()
@@ -81,7 +80,12 @@ void MainWindow::on_btnOpen_clicked()
             file.close();
 
             if(Parser::Instance().Parse(buffer, &gCommands))
+            {
                 FillGCodeEditor();
+                Executor::Instance().Init(gCommands);
+                ui->btnPlay->setEnabled(true);
+                ui->btnNext->setEnabled(true);
+            }
         }
     }
 
@@ -106,29 +110,74 @@ void MainWindow::on_btnTranslate_clicked()
 {
     if(Translator::Instance().Translate(gCommands, &vaxCommands))
         FillVAXCodeEditor();
-
-    currentCommandNumber = 0;
 }
 
 void MainWindow::on_btnPlay_clicked()
 {
+    while(Executor::Instance().currentState.id < State::maxID)
+    {
+        this->delay(500);
+        Executor::Instance().ExecuteNext();
+        FillGCodeEditor();
+    }
 
+    ui->btnPrevious->setEnabled(true);
+    ui->btnNext->setEnabled(false);
+    ui->btnPlay->setEnabled(false);
+    ui->btnRestart->setEnabled(true);
 }
 
 void MainWindow::on_btnNext_clicked()
 {
-    currentCommandNumber++;
+    Executor::Instance().ExecuteNext();
     this->FillGCodeEditor();
+
+    if(Executor::Instance().currentState.id > 0)
+    {
+        ui->btnPrevious->setEnabled(true);
+        ui->btnRestart->setEnabled(true);
+    }
+    else
+    {
+        ui->btnPrevious->setEnabled(false);
+        ui->btnRestart->setEnabled(false);
+    }
+    ui->btnNext->setEnabled(Executor::Instance().currentState.id < State::maxID);
 }
 
 void MainWindow::on_btnPrevious_clicked()
 {
-    currentCommandNumber--;
+    Executor::Instance().ExecutePrevious();
     this->FillGCodeEditor();
+
+    if(Executor::Instance().currentState.id < State::maxID)
+    {
+        ui->btnNext->setEnabled(true);
+        ui->btnRestart->setEnabled(true);
+    }
+    else
+    {
+        ui->btnNext->setEnabled(false);
+        ui->btnRestart->setEnabled(false);
+    }
+    ui->btnPrevious->setEnabled(Executor::Instance().currentState.id > 0);
 }
 
 void MainWindow::on_btnRestart_clicked()
 {
-    currentCommandNumber = 0;
+    Executor::Instance().Init(gCommands);
     this->FillGCodeEditor();
+
+    ui->btnNext->setEnabled(true);
+    ui->btnPrevious->setEnabled(false);
+    ui->btnRestart->setEnabled(false);
+}
+
+void MainWindow::delay( int millisecondsToWait )
+{
+    QTime dieTime = QTime::currentTime().addMSecs( millisecondsToWait );
+    while( QTime::currentTime() < dieTime )
+    {
+        QCoreApplication::processEvents( QEventLoop::AllEvents, 100 );
+    }
 }

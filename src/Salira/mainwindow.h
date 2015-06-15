@@ -33,7 +33,7 @@ private slots:
     void on_btnPrevious_clicked();
 
     void on_btnRestart_clicked();
-
+    void delay(int miliseconds);
 private:
     Ui::MainWindow *ui;
 };
