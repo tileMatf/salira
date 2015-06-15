@@ -14,10 +14,7 @@ GCommand::GCommand(QString value)
 
     /*provera da li se komanda zavrsava sa ; */
     if(!value.contains(';') || value.indexOf(';') != (value.size()-1))
-    {
-        this->Valid = false;
         return;
-    }
 
     value = value.toUpper();
 
@@ -33,18 +30,12 @@ GCommand::GCommand(QString value)
     if(!GCommandParts[0].compare("PUSHINT")) //Miskovic je u PUSHINT dopustio double kao argument
     {
         if(GCommandParts.size() != 2)
-        {
-            this->Valid = false;
             return;
-        }
 
         int arg = GCommandParts[1].toInt(&ok, 10);
 
         if(!ok)
-        {
-            this->Valid = false;
             return;
-        }
 
         this->AddArg(arg);
         this->Value = GCommandParts[0];
@@ -53,18 +44,12 @@ GCommand::GCommand(QString value)
     else if(!GCommandParts[0].compare("PUSHGLOBAL") || !GCommandParts[0].compare("GLOBSTART"))
     {
         if(GCommandParts.size() != 3 || GCommandParts[1].at(0) != '$' || GCommandParts[1].at(1).isDigit())
-        {
-            this->Valid = false;
             return;
-        }
 
         int arg = GCommandParts[2].toInt(&ok, 10);
 
         if(!ok)
-        {
-            this->Valid = false;
             return;
-        }
 
         this->AddArg(GCommandParts[1]);
         this->AddArg(arg);
@@ -76,18 +61,12 @@ GCommand::GCommand(QString value)
             || !GCommandParts[0].compare("UPDATE"))
     {
         if(GCommandParts.size() != 2)
-        {
-            this->Valid = false;
             return;
-        }
 
         int arg = GCommandParts[1].toInt(&ok, 10);
 
         if(!ok)
-        {
-            this->Valid = false;
             return;
-        }
 
         this->AddArg(arg);
         this->Value = GCommandParts[0];
@@ -104,10 +83,7 @@ GCommand::GCommand(QString value)
             !GCommandParts[0].compare("UNWIND2") || !GCommandParts[0].compare("RETURN"))
     {
         if(GCommandParts.size() != 1)
-        {
-            this->Valid = false;
             return;
-        }
 
         this->Value = GCommandParts[0];
         this->Valid = true;
@@ -116,10 +92,7 @@ GCommand::GCommand(QString value)
             !GCommandParts[0].compare("JFALSE"))
     {
         if(GCommandParts.size() != 2)
-        {
-            this->Valid = false;
             return;
-        }
 
         this->AddArg(GCommandParts[1]);
         this->Value = GCommandParts[0];
