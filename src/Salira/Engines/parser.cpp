@@ -18,7 +18,7 @@ bool Parser::Parse(QList<QString> input, QList<GCommand>* output)
     foreach (QString line, input)
     {
         GCommand command = GCommand(line);
-        if(!command.Valid)
+        if(!command.valid())
             return false;
         output->push_back(command);
     }

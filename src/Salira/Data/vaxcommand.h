@@ -6,15 +6,16 @@ class VAXArgument;
 
 class VAXCommand
 {
+private:
+    bool _valid;
+    QString _value;
+    QList<VAXArgument> _args;
 public:
     VAXCommand(QString command, QString arg1 = "", QString arg2 = "");
     ~VAXCommand();
-    QString Value;
-    QList<VAXArgument> Args;
-    bool Valid;
-    static bool GetCommands(GCommand input, QList<VAXCommand>* output);
-    QString ToString() const;
 
+    QString ToString() const;
+    static bool GetCommands(GCommand input, QList<VAXCommand>* output);
     static bool PushInt(QList<VAXCommand>* output, QString value);
     static bool PushGlobal(QList<VAXCommand>* output, QString value);
     static bool GlobStart(QList<VAXCommand>* output, QString value);
@@ -48,10 +49,12 @@ public:
 
 class VAXArgument
 {
+private:
+    QString _value;
 public:
     VAXArgument(QString value);
     ~VAXArgument();
-    QString Value;
+
     QString ToString() const;
 };
 

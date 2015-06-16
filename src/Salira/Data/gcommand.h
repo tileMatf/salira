@@ -13,12 +13,18 @@ class GArgumentString;
 
 class GCommand
 {
+private:
+    bool _valid;
+    QString _value;
+    QList<GArgument*> _args;
 public:
     GCommand(QString value);
     ~GCommand();
-    QString Value;
-    QList<shared_ptr<GArgument>> Args;
-    bool Valid;
+
+    bool valid();
+    QString value();
+    QList<GArgument*> args();
+
     QString ToString() const;
     void AddArg(QString arg);
     void AddArg(int arg);
@@ -33,19 +39,23 @@ public:
 
 class GArgumentString : public GArgument
 {
+private:
+    QString _value;
 public:
     GArgumentString(QString value);
     ~GArgumentString();
-    QString Value;
+
     QString ToString() const;
 };
 
 class GArgumentInt : public GArgument
 {
+private:
+    int _value;
 public:
     GArgumentInt(int value);
     ~GArgumentInt();
-    int Value;
+
     QString ToString() const;
 };
 

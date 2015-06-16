@@ -1,11 +1,11 @@
 #include "gcommand.h"
 
 GCommand::GCommand(QString value)
-    :Value(value), Valid(false)
+    :_value(value), _valid(false)
 {
-    if(value == "") // potrebno je definisati i praznu komandu
+    if(value == "") //empty command
     {
-        Valid = true;
+        this->_valid = true;
         return ;
     }
 
@@ -38,8 +38,8 @@ GCommand::GCommand(QString value)
             return;
 
         this->AddArg(arg);
-        this->Value = GCommandParts[0];
-        this->Valid = true;
+        this->_value = GCommandParts[0];
+        this->_valid = true;
     }
     else if(!GCommandParts[0].compare("PUSHGLOBAL") || !GCommandParts[0].compare("GLOBSTART"))
     {
@@ -53,8 +53,8 @@ GCommand::GCommand(QString value)
 
         this->AddArg(GCommandParts[1]);
         this->AddArg(arg);
-        this->Value = GCommandParts[0];
-        this->Valid = true;
+        this->_value = GCommandParts[0];
+        this->_valid = true;
     }
     else if(!GCommandParts[0].compare("PUSH") || !GCommandParts[0].compare("POP") ||
             !GCommandParts[0].compare("SLIDE") || !GCommandParts[0].compare("ALLOC")
@@ -69,8 +69,8 @@ GCommand::GCommand(QString value)
             return;
 
         this->AddArg(arg);
-        this->Value = GCommandParts[0];
-        this->Valid = true;
+        this->_value = GCommandParts[0];
+        this->_valid = true;
     }
     else if(!GCommandParts[0].compare("MKAP") || !GCommandParts[0].compare("CONS") ||
             !GCommandParts[0].compare("ADD") || !GCommandParts[0].compare("SUB") ||
@@ -85,8 +85,8 @@ GCommand::GCommand(QString value)
         if(GCommandParts.size() != 1)
             return;
 
-        this->Value = GCommandParts[0];
-        this->Valid = true;
+        this->_value = GCommandParts[0];
+        this->_valid = true;
     }
     else if(!GCommandParts[0].compare("LABEL") || !GCommandParts[0].compare("JUMP") ||
             !GCommandParts[0].compare("JFALSE"))
@@ -95,8 +95,8 @@ GCommand::GCommand(QString value)
             return;
 
         this->AddArg(GCommandParts[1]);
-        this->Value = GCommandParts[0];
-        this->Valid = true;
+        this->_value = GCommandParts[0];
+        this->_valid = true;
     }
 }
 
@@ -105,16 +105,31 @@ GCommand::~GCommand()
 
 }
 
+bool GCommand::valid()
+{
+    return this->_valid;
+}
+
+QString GCommand::value()
+{
+    return this->_value;
+}
+
+QList<GArgument*> GCommand::args()
+{
+    return this->_args;
+}
+
 QString GCommand::ToString() const
 {
     QString retValue;
 
-    if(this->Value.length() > 0)
+    if(this->_value.length() > 0)
     {
-        retValue += this->Value;
+        retValue += this->_value;
 
-        foreach (shared_ptr<GArgument> argument, this->Args)
-            retValue += " " + argument.get()->ToString();
+        foreach (GArgument* argument, this->_args)
+            retValue += " " + argument->ToString();
         retValue += ";";
     }
 
@@ -123,12 +138,12 @@ QString GCommand::ToString() const
 
 void GCommand::AddArg(QString arg)
 {
-    this->Args.push_back(shared_ptr<GArgument>(new GArgumentString(arg)));
+    this->_args.push_back(new GArgumentString(arg));
 }
 
 void GCommand::AddArg(int arg)
 {
-    this->Args.push_back(shared_ptr<GArgument>(new GArgumentInt(arg)));
+    this->_args.push_back(new GArgumentInt(arg));
 }
 
 GArgument::~GArgument()
@@ -137,7 +152,7 @@ GArgument::~GArgument()
 }
 
 GArgumentString::GArgumentString(QString value)
-    :Value(value)
+    :_value(value)
 {
 }
 
@@ -147,11 +162,11 @@ GArgumentString::~GArgumentString()
 
 QString GArgumentString::ToString() const
 {
-    return this->Value;
+    return this->_value;
 }
 
 GArgumentInt::GArgumentInt(int value)
-    :Value(value)
+    :_value(value)
 {
 }
 
@@ -161,6 +176,6 @@ GArgumentInt::~GArgumentInt()
 
 QString GArgumentInt::ToString() const
 {
-    return QString::number(this->Value);
+    return QString::number(this->_value);
 }
 

@@ -10,15 +10,21 @@ class Executor
 {
 private:
     Executor();
-    void Execute();
-    QList<State> states;
+
+    QList<State> _states;
+    State _currentState;
+
+    void Execute(bool forward);
 public:
     static Executor& Instance();
+
+    QList<State> states();
+    State currentState();
+
     void Init(QList<GCommand> commands);
     void ExecuteNext();
     void ExecutePrevious();
     void Reset();
-    State currentState;
 };
 
 #endif // EXECUTOR_H

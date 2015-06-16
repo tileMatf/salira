@@ -15,6 +15,7 @@ using namespace std;
 static QString fileName;
 static QList<GCommand> gCommands;
 static QList<VAXCommand> vaxCommands;
+static bool _stopped;
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -36,7 +37,7 @@ void MainWindow::FillGCodeEditor()
         return;
 
     QString buffer;
-    int i = 0, currentCommandNumber = Executor::Instance().currentState.id;
+    int i = 0, currentCommandNumber = Executor::Instance().currentState().id();
     foreach (GCommand command, gCommands)
     {
         if(i == currentCommandNumber)
@@ -114,17 +115,28 @@ void MainWindow::on_btnTranslate_clicked()
 
 void MainWindow::on_btnPlay_clicked()
 {
-    while(Executor::Instance().currentState.id < State::maxID)
+    _stopped = false;
+    ui->btnStop->setEnabled(true);
+    ui->btnPrevious->setEnabled(false);
+    ui->btnNext->setEnabled(false);
+    ui->btnPlay->setEnabled(false);
+    ui->btnRestart->setEnabled(false);
+
+    while(Executor::Instance().currentState().id() < State::maxID())
     {
+        if(_stopped)
+            break;
         this->delay(500);
         Executor::Instance().ExecuteNext();
         FillGCodeEditor();
     }
 
-    ui->btnPrevious->setEnabled(true);
-    ui->btnNext->setEnabled(false);
-    ui->btnPlay->setEnabled(false);
-    ui->btnRestart->setEnabled(true);
+    int currentID = Executor::Instance().currentState().id();
+    ui->btnPrevious->setEnabled(currentID > 0);
+    ui->btnNext->setEnabled(currentID < State::maxID());
+    ui->btnPlay->setEnabled(currentID < State::maxID());
+    ui->btnRestart->setEnabled(currentID > 0);
+    ui->btnStop->setEnabled(false);
 }
 
 void MainWindow::on_btnNext_clicked()
@@ -132,17 +144,11 @@ void MainWindow::on_btnNext_clicked()
     Executor::Instance().ExecuteNext();
     this->FillGCodeEditor();
 
-    if(Executor::Instance().currentState.id > 0)
-    {
-        ui->btnPrevious->setEnabled(true);
-        ui->btnRestart->setEnabled(true);
-    }
-    else
-    {
-        ui->btnPrevious->setEnabled(false);
-        ui->btnRestart->setEnabled(false);
-    }
-    ui->btnNext->setEnabled(Executor::Instance().currentState.id < State::maxID);
+    int currentID = Executor::Instance().currentState().id();
+    ui->btnPrevious->setEnabled(currentID > 0);
+    ui->btnRestart->setEnabled(currentID > 0);
+    ui->btnNext->setEnabled(currentID < State::maxID());
+    ui->btnPlay->setEnabled(currentID < State::maxID());
 }
 
 void MainWindow::on_btnPrevious_clicked()
@@ -150,17 +156,17 @@ void MainWindow::on_btnPrevious_clicked()
     Executor::Instance().ExecutePrevious();
     this->FillGCodeEditor();
 
-    if(Executor::Instance().currentState.id < State::maxID)
-    {
-        ui->btnNext->setEnabled(true);
-        ui->btnRestart->setEnabled(true);
-    }
-    else
-    {
-        ui->btnNext->setEnabled(false);
-        ui->btnRestart->setEnabled(false);
-    }
-    ui->btnPrevious->setEnabled(Executor::Instance().currentState.id > 0);
+    int currentID = Executor::Instance().currentState().id();
+    ui->btnPrevious->setEnabled(currentID > 0);
+    ui->btnRestart->setEnabled(currentID > 0);
+    ui->btnNext->setEnabled(currentID < State::maxID());
+    ui->btnPlay->setEnabled(currentID < State::maxID());
+}
+
+void MainWindow::on_btnStop_clicked()
+{
+    _stopped = true;
+    ui->btnStop->setEnabled(false);
 }
 
 void MainWindow::on_btnRestart_clicked()
@@ -169,11 +175,12 @@ void MainWindow::on_btnRestart_clicked()
     this->FillGCodeEditor();
 
     ui->btnNext->setEnabled(true);
+    ui->btnPlay->setEnabled(true);
     ui->btnPrevious->setEnabled(false);
     ui->btnRestart->setEnabled(false);
 }
 
-void MainWindow::delay( int millisecondsToWait )
+void MainWindow::delay( int millisecondsToWait)
 {
     QTime dieTime = QTime::currentTime().addMSecs( millisecondsToWait );
     while( QTime::currentTime() < dieTime )

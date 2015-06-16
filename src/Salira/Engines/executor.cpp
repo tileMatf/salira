@@ -12,38 +12,57 @@ Executor& Executor::Instance()
     return instance;
 }
 
+QList<State> Executor::states()
+{
+    return this->_states;
+}
+
+State Executor::currentState()
+{
+    return this->_currentState;
+}
+
 void Executor::Init(QList<GCommand> commands)
 {
     this->Reset();
     foreach (GCommand command, commands)
-        this->states.push_back(State());
-    if(this->states.length() > 0)
-        this->currentState = this->states[0];
+        this->_states.push_back(State(command));
+    if(this->_states.length() > 0)
+        this->_currentState = this->_states[0];
 }
 
-void Executor::Execute()
+void Executor::Execute(bool forward)
 {
-
+    if(forward)
+    {
+        while(_currentState.id() < State::maxID() && this->_states[this->_currentState.id() + 1].command().value() == "")
+            _currentState = this->_states[_currentState.id() + 1];
+    }
+    else
+    {
+        while(_currentState.id() > 0 && this->_states[this->_currentState.id() - 1].command().value() == "")
+            _currentState = this->_states[_currentState.id() - 1];
+    }
 }
 
 void Executor::ExecuteNext()
 {
-    Execute();
-    if(currentState.id < State::maxID)
-        currentState = this->states[currentState.id + 1];
+    this->Execute(true);
+    if(_currentState.id() < State::maxID())
+        _currentState = this->_states[_currentState.id() + 1];
 }
 
 void Executor::ExecutePrevious()
 {
-    Execute();
-    if(currentState.id > 0)
-        currentState = this->states[currentState.id - 1];
+    this->Execute(false);
+    if(_currentState.id() > 0)
+        _currentState = this->_states[_currentState.id() - 1];
 }
 
 void Executor::Reset()
 {
-    states.clear();
-    State::maxID = -1;
+    this->_states.clear();
+    State::setMaxID(-1);
 }
 
 

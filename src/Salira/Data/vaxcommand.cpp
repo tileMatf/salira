@@ -1,132 +1,134 @@
 #include "vaxcommand.h"
 
 VAXCommand::VAXCommand(QString command, QString arg1, QString arg2)
-    :Valid(false)
 {
-    this->Value = command;
+    this->_value = command;
     if(arg1.length() > 0)
-        this->Args.push_back(arg1);
+        this->_args.push_back(arg1);
     if(arg2.length() > 0)
-        this->Args.push_back(arg2);
-    this->Valid = true;
+        this->_args.push_back(arg2);
+    this->_valid = true;
 }
 
 VAXCommand::~VAXCommand()
 {
-}
-
-bool VAXCommand::GetCommands(GCommand input, QList<VAXCommand>* output)
-{
-    if(input.Value == "")
-        return true;
-
-    if(input.Value == "PUSHINT")
-        return PushInt(output, input.Args[0].get()->ToString());
-
-    if(input.Value == "PUSHGLOBAL")
-        return PushGlobal(output, input.Args[0].get()->ToString());
-
-    if(input.Value == "GLOBSTART")
-        return GlobStart(output, input.Args[0].get()->ToString());
-
-    if(input.Value == "PUSH")
-        return Push(output,input.Args[0].get()->ToString());
-
-    if(input.Value == "POP")
-        return Pop(output, input.Args[0].get()->ToString());
-
-    if(input.Value == "SLIDE")
-        return Slide(output, input.Args[0].get()->ToString());
-
-    if(input.Value == "ALLOC")
-        return Alloc(output, (int)input.Args[0].get()->ToString().toInt());
-
-    if(input.Value == "UPDATE")
-        return Update(output, input.Args[0].get()->ToString());
-
-    if(input.Value == "MKAP")
-        return Mkap(output);
-
-    if(input.Value == "CONS")
-        return Cons(output);
-
-    if(input.Value == "ADD")
-        return Add(output);
-
-    if(input.Value == "SUB")
-        return Sub(output);
-
-    if(input.Value == "MUL")
-        return Mul(output);
-
-    if(input.Value == "DIV")
-        return Div(output);
-
-    if(input.Value == "NEG")
-        return Neg(output);
-
-    if(input.Value == "HEAD")
-        return Head(output);
-
-    if(input.Value == "END")
-        return End(output);
-
-    if(input.Value == "BEGIN")
-        return Begin(output);
-
-    if(input.Value == "PRINT")
-        return Print(output);
-
-    if(input.Value == "MIN")
-        return Min(output);
-
-    if(input.Value == "MAX")
-        return Max(output);
-
-    if(input.Value == "EVAL")
-        return Eval(output);
-
-    if(input.Value == "EVAL2")
-        return Eval2(output);
-
-    if(input.Value == "UNWIND")
-        return Unwind(output);
-
-    if(input.Value == "UNWIND2")//treba videti kako radi
-        return Unwind2(output);
-
-    if(input.Value == "RETURN")
-        return Return(output);
-
-    if(input.Value == "LABEL")
-        return Label(output, input.Args[0].get()->ToString());
-
-    if(input.Value == "JUMP")
-        return Jump(output, input.Args[0].get()->ToString());
-
-    if(input.Value == "JFALSE")
-        return JFalse(output, input.Args[0].get()->ToString());
-
-    return false;
+    this->_value = "";
+    this->_args.clear();
+    this->_valid = false;
 }
 
 QString VAXCommand::ToString() const
 {
     QString retValue;
 
-    if(this->Value.length() > 0)
+    if(this->_value.length() > 0)
     {
-        retValue += this->Value;
+        retValue += this->_value;
 
-        if(this->Args.length() > 0)
+        if(this->_args.length() > 0)
             retValue += " ";
 
         int i = 1;
-        foreach (VAXArgument argument, this->Args)
-            retValue += argument.ToString() + (i++ < this->Args.length() ? "," : "");
+        foreach (VAXArgument argument, this->_args)
+            retValue += argument.ToString() + (i++ < this->_args.length() ? "," : "");
     }
 
     return retValue;
+}
+
+bool VAXCommand::GetCommands(GCommand input, QList<VAXCommand>* output)
+{
+    if(input.value() == "")
+        return true;
+
+    if(input.value() == "PUSHINT")
+        return PushInt(output, input.args()[0]->ToString());
+
+    if(input.value() == "PUSHGLOBAL")
+        return PushGlobal(output, input.args()[0]->ToString());
+
+    if(input.value() == "GLOBSTART")
+        return GlobStart(output, input.args()[0]->ToString());
+
+    if(input.value() == "PUSH")
+        return Push(output,input.args()[0]->ToString());
+
+    if(input.value() == "POP")
+        return Pop(output, input.args()[0]->ToString());
+
+    if(input.value() == "SLIDE")
+        return Slide(output, input.args()[0]->ToString());
+
+    if(input.value() == "ALLOC")
+        return Alloc(output, (int)input.args()[0]->ToString().toInt());
+
+    if(input.value() == "UPDATE")
+        return Update(output, input.args()[0]->ToString());
+
+    if(input.value() == "MKAP")
+        return Mkap(output);
+
+    if(input.value() == "CONS")
+        return Cons(output);
+
+    if(input.value() == "ADD")
+        return Add(output);
+
+    if(input.value() == "SUB")
+        return Sub(output);
+
+    if(input.value() == "MUL")
+        return Mul(output);
+
+    if(input.value() == "DIV")
+        return Div(output);
+
+    if(input.value() == "NEG")
+        return Neg(output);
+
+    if(input.value() == "HEAD")
+        return Head(output);
+
+    if(input.value() == "END")
+        return End(output);
+
+    if(input.value() == "BEGIN")
+        return Begin(output);
+
+    if(input.value() == "PRINT")
+        return Print(output);
+
+    if(input.value() == "MIN")
+        return Min(output);
+
+    if(input.value() == "MAX")
+        return Max(output);
+
+    if(input.value() == "EVAL")
+        return Eval(output);
+
+    if(input.value() == "EVAL2")
+        return Eval2(output);
+
+    if(input.value() == "UNWIND")
+        return Unwind(output);
+
+    if(input.value() == "UNWIND2")//treba videti kako radi
+        return Unwind2(output);
+
+    if(input.value() == "RETURN")
+        return Return(output);
+
+    if(input.value() == "LABEL")
+        return Label(output, input.args()[0]->ToString());
+
+    if(input.value() == "JUMP")
+        return Jump(output, input.args()[0]->ToString());
+
+    if(input.value() == "JFALSE")
+        return JFalse(output, input.args()[0]->ToString());
+
+    return false;
 }
 
 bool VAXCommand::PushInt(QList<VAXCommand> *output, QString value)
@@ -488,7 +490,7 @@ bool VAXCommand::JFalse(QList<VAXCommand>* output, QString value)
 }
 
 VAXArgument::VAXArgument(QString value)
-    :Value(value)
+    :_value(value)
 {
 }
 
@@ -498,7 +500,7 @@ VAXArgument::~VAXArgument()
 
 QString VAXArgument::ToString() const
 {
-    return this->Value;
+    return this->_value;
 }
 
 

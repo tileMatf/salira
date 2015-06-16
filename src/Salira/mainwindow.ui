@@ -214,9 +214,9 @@
     </property>
     <property name="geometry">
      <rect>
-      <x>340</x>
+      <x>410</x>
       <y>10</y>
-      <width>101</width>
+      <width>91</width>
       <height>34</height>
      </rect>
     </property>
@@ -234,9 +234,9 @@
     </property>
     <property name="geometry">
      <rect>
-      <x>230</x>
+      <x>210</x>
       <y>10</y>
-      <width>101</width>
+      <width>91</width>
       <height>34</height>
      </rect>
     </property>
@@ -256,7 +256,7 @@
      <rect>
       <x>10</x>
       <y>10</y>
-      <width>101</width>
+      <width>91</width>
       <height>34</height>
      </rect>
     </property>
@@ -274,9 +274,9 @@
     </property>
     <property name="geometry">
      <rect>
-      <x>120</x>
+      <x>110</x>
       <y>10</y>
-      <width>101</width>
+      <width>91</width>
       <height>34</height>
      </rect>
     </property>
@@ -286,6 +286,26 @@
     <property name="icon">
      <iconset>
       <normaloff>../../Ikonice/next.ico</normaloff>../../Ikonice/next.ico</iconset>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="btnStop">
+    <property name="enabled">
+     <bool>false</bool>
+    </property>
+    <property name="geometry">
+     <rect>
+      <x>310</x>
+      <y>10</y>
+      <width>91</width>
+      <height>34</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Stop</string>
+    </property>
+    <property name="icon">
+     <iconset>
+      <normaloff>../../../../Ikonice/stop.png</normaloff>../../../../Ikonice/stop.png</iconset>
     </property>
    </widget>
   </widget>
