@@ -37,7 +37,7 @@ void MainWindow::FillGCodeEditor()
         return;
 
     QString buffer;
-    int i = 0, currentCommandNumber = Executor::Instance().currentState().id();
+    int i = 0, currentCommandNumber = Executor::Instance().currentState().id() - 1;
     foreach (GCommand command, gCommands)
     {
         if(i == currentCommandNumber)

@@ -102,7 +102,7 @@ GCommand::GCommand(QString value)
 
 GCommand::~GCommand()
 {
-
+    this->_args.clear();
 }
 
 bool GCommand::valid()

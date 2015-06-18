@@ -25,10 +25,28 @@ State Executor::currentState()
 void Executor::Init(QList<GCommand> commands)
 {
     this->Reset();
-    foreach (GCommand command, commands)
-        this->_states.push_back(State(command));
-    if(this->_states.length() > 0)
+
+    bool error = false;
+    State initialState = State();
+    this->_states.push_back(initialState);
+    foreach(GCommand command, commands)
+    {
+        State nextState;
+        if(!this->_states[this->_states.length() - 1].GetNext(command, &nextState))
+        {
+            error = true;
+            break;
+        }
+
+        this->_states.push_back(nextState);
+    }
+
+    if(this->_states.length() > 0 && !error)
         this->_currentState = this->_states[0];
+    else if(error)
+    {
+        //ovde treba da se ispise error poruka i odradi neka invalidacija
+    }
 }
 
 void Executor::Execute(bool forward)

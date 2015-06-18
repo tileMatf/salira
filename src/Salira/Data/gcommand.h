@@ -13,6 +13,41 @@ class GArgumentString;
 
 class GCommand
 {
+/*public:
+    enum GCommandType
+    {
+        NONE = 0,
+        PUSHINT,
+        PUSHGLOBAL,
+        GLOBSTART,
+        PUSH,
+        POP,
+        SLIDE,
+        ALLOC,
+        UPDATE,
+        MKAP,
+        CONS,
+        ADD,
+        SUB,
+        MUL,
+        DIV,
+        NEG,
+        HEAD,
+        END,
+        BEGIN,
+        PRINT,
+        MIN,
+        MAX,
+        EVAL,
+        EVAL2,
+        UNWIND,
+        UNWIND2,
+        RETURN,
+        LABEL,
+        JUMP,
+        JFALSE
+    };*/
+
 private:
     bool _valid;
     QString _value;

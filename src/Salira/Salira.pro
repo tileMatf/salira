@@ -19,9 +19,8 @@ SOURCES += main.cpp\
         Engines/parser.cpp \
     Engines/executor.cpp \
     Data/state.cpp \
-    Data/stack.cpp \
-    Data/graph.cpp \
-    Data/dump.cpp
+    Data/graphnode.cpp \
+    Data/dumpnode.cpp
 
 HEADERS  += mainwindow.h \
             Engines/translator.h \
@@ -30,8 +29,7 @@ HEADERS  += mainwindow.h \
             Engines/parser.h \
     Engines/executor.h \
     Data/state.h \
-    Data/stack.h \
-    Data/graph.h \
-    Data/dump.h
+    Data/graphnode.h \
+    Data/dumpnode.h
             
 FORMS    += mainwindow.ui
