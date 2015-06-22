@@ -27,12 +27,12 @@ void Executor::Init(QList<GCommand> commands)
     this->Reset();
 
     bool error = false;
-    State initialState = State();
+    State initialState = State(0);
     this->_states.push_back(initialState);
     foreach(GCommand command, commands)
     {
         State nextState;
-        if(!this->_states[this->_states.length() - 1].GetNext(command, &nextState))
+        if(!(this->_states.last().GetNext(command, nextState)))
         {
             error = true;
             break;
@@ -80,7 +80,7 @@ void Executor::ExecutePrevious()
 void Executor::Reset()
 {
     this->_states.clear();
-    State::setMaxID(-1);
+    State::setMaxID(0);
 }
 
 

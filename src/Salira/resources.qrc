@@ -1,0 +1,14 @@
+<RCC>
+    <qresource prefix="/images">
+        <file>Images/arrow-refresh.png</file>
+        <file>Images/shape-square.png</file>
+        <file>Images/arrow-play.png</file>
+        <file>Images/arrow-back.png</file>
+        <file>Images/arrow-forward.png</file>
+        <file>Images/disk.png</file>
+        <file>Images/exit.png</file>
+        <file>Images/folder-open.png</file>
+        <file>Images/brush.png</file>
+        <file>Images/book-go.png</file>
+    </qresource>
+</RCC>

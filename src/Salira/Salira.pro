@@ -33,3 +33,6 @@ HEADERS  += mainwindow.h \
     Data/dumpnode.h
             
 FORMS    += mainwindow.ui
+
+RESOURCES += \
+    resources.qrc

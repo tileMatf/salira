@@ -1,11 +1,18 @@
 #include "mainwindow.h"
 #include <QApplication>
+#include <QDesktopWidget>
 
 int main(int argc, char *argv[])
 {
-    QApplication a(argc, argv);
-    MainWindow w;
-    w.show();
+    QApplication application(argc, argv);
+    MainWindow window;
 
-    return a.exec();
+    QDesktopWidget desktop;
+    window.setGeometry((desktop.screen()->width() - window.width()) / 2,
+                       (desktop.screen()->height() - window.height()) / 2,
+                       window.width(), window.height());
+
+    window.show();
+
+    return application.exec();
 }

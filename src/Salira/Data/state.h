@@ -22,7 +22,8 @@ private:
     QString _errorMessage;
 public:
     State();
-    State(int ep, int hp, int sp, int op, QStack<int> stack, QVector<GraphNode> graph, QVector<DumpNode> dump, GCommand command);
+    State(int id);
+    State(const State& state);
     ~State();
 
     static int maxID();
@@ -38,36 +39,36 @@ public:
     GCommand command();
     QString errorMessage();
 
-    bool GetNext(GCommand command, State* nextState);
-    bool PushInt(State* state);
-    bool PushGlobal(State* state);
-    bool GlobStart(State* state);
-    bool Push(State* state);
-    bool Pop(State* state);
-    bool Slide(State* state);
-    bool Alloc(State* state);
-    bool Update(State* state);
-    bool Mkap(State* state);
-    bool Cons(State* state);
-    bool Add(State* state);
-    bool Sub(State* state);
-    bool Mul(State* state);
-    bool Div(State* state);
-    bool Neg(State* state);
-    bool Head(State* state);
-    bool End(State* state);
-    bool Begin(State* state);
-    bool Print(State* state);
-    bool Min(State* state);
-    bool Max(State* state);
-    bool Eval(State* state);
-    bool Eval2(State* state);
-    bool Unwind(State* state);
-    bool Unwind2(State* state);
-    bool Return(State* state);
-    bool Label(State* state);
-    bool Jump(State* state);
-    bool JFalse(State* state);
+    bool GetNext(GCommand command, State& nextState);
+    bool PushInt(GCommand command, State& state);
+    bool PushGlobal(GCommand command, State& state);
+    bool GlobStart(GCommand command, State& state);
+    bool Push(GCommand command, State& state);
+    bool Pop(GCommand command, State& state);
+    bool Slide(GCommand command, State& state);
+    bool Alloc(GCommand command, State& state);
+    bool Update(GCommand command, State& state);
+    bool Mkap(GCommand command, State& state);
+    bool Cons(GCommand command, State& state);
+    bool Add(GCommand command, State& state);
+    bool Sub(GCommand command, State& state);
+    bool Mul(GCommand command, State& state);
+    bool Div(GCommand command, State& state);
+    bool Neg(GCommand command, State& state);
+    bool Head(GCommand command, State& state);
+    bool End(GCommand command, State& state);
+    bool Begin(GCommand command, State& state);
+    bool Print(GCommand command, State& state);
+    bool Min(GCommand command, State& state);
+    bool Max(GCommand command, State& state);
+    bool Eval(GCommand command, State& state);
+    bool Eval2(GCommand command, State& state);
+    bool Unwind(GCommand command, State& state);
+    bool Unwind2(GCommand command, State& state);
+    bool Return(GCommand command, State& state);
+    bool Label(GCommand command, State& state);
+    bool Jump(GCommand command, State& state);
+    bool JFalse(GCommand command, State& state);
 };
 
 #endif // STATE_H

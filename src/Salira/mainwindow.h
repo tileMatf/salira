@@ -14,12 +14,8 @@ class MainWindow : public QMainWindow
 public:
     explicit MainWindow(QWidget *parent = 0);
     ~MainWindow();
-    void FillGCodeEditor();
-    void FillVAXCodeEditor();
 
 private slots:
-    void on_btnOpen_clicked();
-
     void on_btnClear_clicked();
 
     void on_txtEditorGCode_textChanged();
@@ -36,8 +32,27 @@ private slots:
     void delay(int miliseconds);
     void on_btnStop_clicked();
 
+    void on_btnRun_clicked();
+
+    void on_tsmiOpen_triggered();
+
+    void on_tsmiSaveGCode_triggered();
+
+    void on_tsmiSaveVAXCode_triggered();
+
+    void on_tsmiClear_triggered();
+
+    void on_tsmiClose_triggered();
+
 private:
     Ui::MainWindow *ui;
+    void FillGCodeEditor();
+    void FillVAXCodeEditor();
+    void Open();
+    void Clear();
+    void SaveGCode();
+    void SaveVAXCode();
+    void Close();
 };
 
 #endif // MAINWINDOW_H
