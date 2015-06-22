@@ -48,6 +48,7 @@ private:
     Ui::MainWindow *ui;
     void FillGCodeEditor();
     void FillVAXCodeEditor();
+    void FillOutput();
     void Open();
     void Clear();
     void SaveGCode();

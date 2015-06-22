@@ -21,10 +21,9 @@ State::State(int id)
     this->_op = 0;
 }
 
-State::State(const State& state)
-    :_command(state._command)
+State::State(const State& state, GCommand command, int id)
+    :_command(command), _id(id)
 {
-    this->_id = state._id;
     this->_ep = state._ep;
     this->_hp = state._hp;
     this->_sp = state._sp;
@@ -32,7 +31,7 @@ State::State(const State& state)
     this->_stack = QStack<int>(state._stack);
     this->_graph = QVector<GraphNode>(state._graph);
     this->_dump = QVector<DumpNode>(state._dump);
-    this->_command = state._command;
+    this->_output = QVector<QString>(state._output);
 }
 
 State::~State()
@@ -40,6 +39,7 @@ State::~State()
     this->_stack.clear();
     this->_graph.clear();
     this->_dump.clear();
+    this->_output.clear();
 }
 
 int State::maxID()
@@ -90,6 +90,11 @@ QVector<GraphNode> State::graph()
 QVector<DumpNode> State::dump()
 {
     return this->_dump;
+}
+
+QVector<QString> State::output()
+{
+    return this->_output;
 }
 
 GCommand State::command()
@@ -200,9 +205,7 @@ bool State::GetNext(GCommand command, State& nextState)
 
 bool State::PushInt(GCommand command, State& state)
 {
-    state = State(*this);
-    state._command = command;
-    state._id = _maxID;
+    state = State(*this, command, _maxID);
     state._stack.push_back((state._hp)++);
     state._graph.push_back(GraphNode(state._hp, GraphNodeType::Integer, command.args()[0]->ToString().toInt()));
 
@@ -302,10 +305,8 @@ bool State::Print(GCommand command, State& state)
         return false;
     }
 
-    state = State(*this);
-    state._command = command;
-    state._id = _maxID;
-    state._stack.pop();
+    state = State(*this, state._command, _maxID);
+    state._output.push_back(QString::number(state._graph[state._stack.pop()].value()));
 
     return true;
 }

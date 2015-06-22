@@ -153,7 +153,11 @@
           <number>4</number>
          </property>
          <item row="1" column="0">
-          <widget class="QTextEdit" name="textEdit_8"/>
+          <widget class="QTextEdit" name="txtOutput">
+           <property name="readOnly">
+            <bool>true</bool>
+           </property>
+          </widget>
          </item>
          <item row="0" column="0">
           <widget class="QLabel" name="label_6">
@@ -614,7 +618,7 @@
      <normaloff>:/images/Images/arrow-refresh.png</normaloff>:/images/Images/arrow-refresh.png</iconset>
    </property>
    <property name="text">
-    <string>Evaluate</string>
+    <string>&amp;Evaluate</string>
    </property>
   </action>
   <action name="tsmiAbout">

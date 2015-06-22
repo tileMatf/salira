@@ -18,12 +18,13 @@ private:
     QStack<int> _stack;
     QVector<GraphNode> _graph;
     QVector<DumpNode> _dump;
+    QVector<QString> _output;
     GCommand _command;
     QString _errorMessage;
 public:
     State();
     State(int id);
-    State(const State& state);
+    State(const State& state, GCommand command, int id);
     ~State();
 
     static int maxID();
@@ -36,6 +37,7 @@ public:
     QStack<int> stack();
     QVector<GraphNode> graph();
     QVector<DumpNode> dump();
+    QVector<QString> output();
     GCommand command();
     QString errorMessage();
 

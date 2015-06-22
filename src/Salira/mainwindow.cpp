@@ -63,6 +63,13 @@ void MainWindow::FillVAXCodeEditor()
         ui->txtEditorVAXCode->append(command.ToString());
 }
 
+void MainWindow::FillOutput()
+{
+    ui->txtOutput->clear();
+
+    foreach (QString line, Executor::Instance().currentState().output())
+        ui->txtOutput->append(">> " + line);
+}
 
 void MainWindow::on_btnClear_clicked()
 {
@@ -87,6 +94,7 @@ void MainWindow::on_btnPrevious_clicked()
 {
     Executor::Instance().ExecutePrevious();
     this->FillGCodeEditor();
+    this->FillOutput();
 
     int currentID = Executor::Instance().currentState().id();
     ui->btnPrevious->setEnabled(currentID > 0);
@@ -99,6 +107,7 @@ void MainWindow::on_btnNext_clicked()
 {
     Executor::Instance().ExecuteNext();
     this->FillGCodeEditor();
+    this->FillOutput();
 
     int currentID = Executor::Instance().currentState().id();
     ui->btnPrevious->setEnabled(currentID > 0);
