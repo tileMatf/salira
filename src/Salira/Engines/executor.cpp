@@ -32,7 +32,7 @@ void Executor::Init(QList<GCommand> commands)
     foreach(GCommand command, commands)
     {
         State nextState;
-        if(!(this->_states.last().GetNext(command, nextState)))
+        if(!(this->_states.last().GetNext(command, nextState, commands)))
         {
             error = true;
             break;

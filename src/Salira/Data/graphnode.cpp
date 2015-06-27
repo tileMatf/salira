@@ -17,8 +17,8 @@ GraphNode::GraphNode(int id, GraphNodeType type, int value)
 
 }
 
-GraphNode::GraphNode(int id, int idRef1, int idRef2, GraphNodeType type, int value)
-    :_id(id),  _idRef1(idRef1), _idRef2(idRef2), _type(type), _value(value)
+GraphNode::GraphNode(int id, int idRef1, int idRef2, GraphNodeType type, int value, QString name)
+    :_id(id),  _idRef1(idRef1), _idRef2(idRef2), _type(type), _value(value), _functionName(name)
 {
 
 }

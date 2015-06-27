@@ -25,7 +25,7 @@ public:
     GraphNode();
     GraphNode(GraphNodeType type);
     GraphNode(int id, GraphNodeType type, int value);
-    GraphNode(int id, int idRef1, int idRef2, GraphNodeType type, int value);
+    GraphNode(int id, int idRef1, int idRef2, GraphNodeType type, int value, QString name);
     ~GraphNode();
 
     int id();

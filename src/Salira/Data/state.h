@@ -10,6 +10,7 @@ class State
 {
 private:
     static int _maxID;
+    static int _cBegin;
     int _id;
     int _ep;
     int _hp;
@@ -21,6 +22,9 @@ private:
     QVector<QString> _output;
     GCommand _command;
     QString _errorMessage;
+
+    int commandExists(State& state, QList<GCommand> commands);
+
 public:
     State();
     State(int id);
@@ -29,6 +33,8 @@ public:
 
     static int maxID();
     static void setMaxID(int value);
+    static int cBegin();
+    static void setCBegin(int value);
     int id();
     int ep();
     int hp();
@@ -41,7 +47,7 @@ public:
     GCommand command();
     QString errorMessage();
 
-    bool GetNext(GCommand command, State& nextState);
+    bool GetNext(GCommand command, State& nextState, QList<GCommand> commands);
     bool PushInt(GCommand command, State& state);
     bool PushGlobal(GCommand command, State& state);
     bool GlobStart(GCommand command, State& state);
@@ -63,14 +69,14 @@ public:
     bool Print(GCommand command, State& state);
     bool Min(GCommand command, State& state);
     bool Max(GCommand command, State& state);
-    bool Eval(GCommand command, State& state);
-    bool Eval2(GCommand command, State& state);
-    bool Unwind(GCommand command, State& state);
-    bool Unwind2(GCommand command, State& state);
-    bool Return(GCommand command, State& state);
-    bool Label(GCommand command, State& state);
-    bool Jump(GCommand command, State& state);
-    bool JFalse(GCommand command, State& state);
+    bool Eval(GCommand command, State& state, QList<GCommand> commands);
+    bool Eval2(GCommand command, State& state, QList<GCommand> commands);
+    bool Unwind(GCommand command, State& state, QList<GCommand> commands);
+    bool Unwind2(GCommand command, State& state, QList<GCommand> commands);
+    bool Return(GCommand command, State& state, QList<GCommand> commands);
+    bool Label(GCommand command, State& state, QList<GCommand> commands);
+    bool Jump(GCommand command, State& state, QList<GCommand> commands);
+    bool JFalse(GCommand command, State& state, QList<GCommand> commands);
 };
 
 #endif // STATE_H

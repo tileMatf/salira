@@ -12,7 +12,7 @@
 
 using namespace std;
 
-static QString fileName = "/home/jupikea/Desktop/Funkcionalno/Projekat/salira/src/Test/";
+static QString fileName = "/home/kostic/Downloads/Salira_Literatura/smiskovic_gmasina/";
 static QList<GCommand> gCommands;
 static QList<VAXCommand> vaxCommands;
 static bool _stopped;
@@ -68,7 +68,27 @@ void MainWindow::FillOutput()
     ui->txtOutput->clear();
 
     foreach (QString line, Executor::Instance().currentState().output())
-        ui->txtOutput->append(">> " + line);
+        ui->txtOutput->append(">> " + line + "\n");
+
+    // ovo sam koristila samo da bi mi prikazivao sta se nalazi kad na steku, na grafu, itd..
+    // to cu izbrisati posle
+    ui->txtOutput->append(QString("Stack:"));
+    for(int i =0; i < Executor::Instance().currentState().stack().length(); i++)
+        ui->txtOutput->append("id = " + QString::number(Executor::Instance().currentState().stack().at(i)));
+    ui->txtOutput->append(QString("Graph:"));
+    for(int i =0; i < Executor::Instance().currentState().graph().length(); i++)
+        ui->txtOutput->append("id = " + QString::number(Executor::Instance().currentState().graph()[i].id()) +
+                             + "value = " + QString::number(Executor::Instance().currentState().graph()[i].value()) +
+                              +" length=" + QString::number(Executor::Instance().currentState().graph().length())
+                              + " ep= " + QString::number(Executor::Instance().currentState().ep())
+                              + " type= " + QString::number(Executor::Instance().currentState().graph()[i].type())
+                              + " n1 n2 = " + QString::number(Executor::Instance().currentState().graph()[i].idRef1())
+                              + " " + QString::number(Executor::Instance().currentState().graph()[i].idRef2()));
+
+    ui->txtOutput->append(QString("Dump:"));
+    for(int i =0; i < Executor::Instance().currentState().dump().length(); i++)
+        for(int j = 0; j < Executor::Instance().currentState().dump()[i].stack().length(); j++)
+        ui->txtOutput->append(QString::number(Executor::Instance().currentState().dump()[i].stack()[j]) + " ");
 }
 
 void MainWindow::on_btnClear_clicked()
@@ -200,7 +220,7 @@ void MainWindow::on_tsmiClose_triggered()
 
 void MainWindow::Open()
 {
-    fileName = QFileDialog::getOpenFileName (this, tr("Open File"), fileName, tr("Files (.)"));
+    fileName = QFileDialog::getOpenFileName (this, tr("Open File"), fileName /*, tr("Files (.)")*/);
 
     if(fileName.length() > 0)
     {

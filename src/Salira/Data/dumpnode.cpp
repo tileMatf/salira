@@ -2,6 +2,7 @@
 
 DumpNode::DumpNode()
 {
+
 }
 
 DumpNode::DumpNode(QVector<int> stack, QVector<QString> code)

@@ -27,7 +27,7 @@ GCommand::GCommand(QString value)
     GCommandParts[GCommandParts.size()-1].replace(';', "");
 
 
-    if(!GCommandParts[0].compare("PUSHINT")) //Miskovic je u PUSHINT dopustio double kao argument
+    if(!GCommandParts[0].compare("PUSHINT"))
     {
         if(GCommandParts.size() != 2)
             return;
@@ -102,6 +102,8 @@ GCommand::GCommand(QString value)
 
 GCommand::~GCommand()
 {
+    this->_valid = false;
+    this->_value = "";
     this->_args.clear();
 }
 
