@@ -176,8 +176,8 @@ ARGEXP : ID {
 	    std::cout << " DOUBLE_NUM " << std::endl; 
 	    arguments.push_back(Expression(new SaliraInt($1)));
 	    }
-| ID_F '(' ARGS_F ')' {
-	  $$ = new Functor($1,{$3});
+| ID_F ARGS_F  {
+	  $$ = new Functor($1,{$2});
 }
 | EXP {}
 ;
@@ -205,8 +205,8 @@ EXP : EXP '+' EXP {
 	  std::cout << " DOUBLE_NUM " <<  std::to_string($1) << std::endl;
 	  $$ = new SaliraInt($1);
 }
-| ID_F '(' ARGS_F ')' {
-	  $$ = new Functor($1,{$3});
+| ID_F  ARGS_F {
+	  $$ = new Functor($1,{$2});
 }
 | ID {
 	std::cout << " ID " << $1 << std::endl;

@@ -455,7 +455,7 @@ namespace Lambda {
     enum
     {
       yyeof_ = 0,
-      yylast_ = 89,     ///< Last index in yytable_.
+      yylast_ = 72,     ///< Last index in yytable_.
       yynnts_ = 7,  ///< Number of nonterminal symbols.
       yyempty_ = -2,
       yyfinal_ = 12, ///< Termination state number.

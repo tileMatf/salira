@@ -1,0 +1,76 @@
+FUNCTIONS FOR TRANSFORMING INTO G CODE
+
+Initialization:
+{
+BEGIN;
+PUSHGLOBAL $Prog; 
+EVAL;
+PRINT;
+END;
+}
+
+(f x1 ... xn = E)
+F:
+{
+GLOBSTART f, n;
+R (E) [x1 = n, x2 = n-1, ... xn = 1] n ; (call function R with arguments E, [list of vars], num of vars)
+}
+
+R (E) [x1 = a1, ... xn = an] n :
+{
+C (E) [x1 = a1, ... xn = an] n ; (call function C with arguments E, [list of vars], num of vars)
+UPDATE (n+1); (evaluate n+1)
+POP n;
+UNWIND;
+}
+
+C (E) [x1 = a1, ... xn = an] n :
+if E = constant (INT_NUM)
+{
+  PUSHINT E;
+}
+else if = var (xk)
+{
+  PUSH (n - ak);
+}
+else if E = function f (X)
+{
+  C (X) [x1 = a1, ... xn = an] n;
+  PUSHGLOBAL F; 
+  MKAP;
+}
+
+Predefined function symbols:
+ADD, SUB, MUL, DIV, NEG
+
+EXAMPLE:
+
+$F x = NEG x
+$PROG = $F 3
+------------
+$PROG
+
+G CODE:
+{
+  BEGIN;
+  PUSHGLOBAL $PROG;
+  EVAL;
+  PRINT;
+  END;
+  
+  GLOBSTART $F, 1;
+  PUSH 0;
+  PUSHGLOBAL $NEG;
+  MKAP;
+  UPDATE 2;
+  POP 1;
+  UNWIND;
+  
+  GLOBSTART $PROG, 0;
+  PUSHINT 3;
+  PUSHGLOBAL $F;
+  MKAP;
+  UPDATE 1;
+  UNWIND;
+}
+
