@@ -53,7 +53,9 @@
 %token <doubleNum> DOUBLE_NUM
 %token <str> ID COMMENT ID_F
 %token LET IN MAX MIN NEG 
-%type <e> EXP ARGS 
+%type <e> EXP ARGS ARGEXP ARGS_F
+
+
 // Defining priority and associativity
 
 %left '+' '-'
@@ -72,30 +74,47 @@
 *          | LINE ;
 *
 * LINE :: ID_F ARGS = EXP
-* 	  | COMMENT
 *
-*  ---------- it would be nice if we put some comma between arguments ------------------
-* ARGS :: ARGS ARG
-* 	  | ARG
+* ARGS :: ARGS ARGEXP
+* 	  | ARGEXP
 *
-* ARG :: ID
+*
+* ARGEXP :: ID
 * 	| INT_NUM
 * 	| DOUBLE_NUM
-* 	| EXP
+* 	| ID ( ARGS_F )
+* 	TODO: EXP here should not be the same EXP as in function definition
+* 	| EXP 
+* 	
 *
 * EXP :: EXP + EXP
 * 	| EXP - EXP
 * 	| EXP * EXP
 * 	| EXP / EXP
-* 	TODO: these arguments have to be separated from arguments in function declaration because in function declaration we add arguments in list
-* 	of arguments and here we just check if number od arguments is consistent and if their names exists in list
-* 	| ID_F ( ARGS ) 
+* 	| ID_F ( ARGS_F ) 
 * 	| ID
 * 	| INT_NUM
 * 	| DOUBLE_NUM
 * 	| ( EXP )
+* 	| LIST
 *
+* LIST :: '[' LIST_INT ']'
+*       | '[' LIST_DOUBLE ']'
+*       | '[' LIST_LIST ']'
+*       
+* LIST_INT : LIST_INT ',' INT_NUM
+*	| INT_NUM
 *
+* LIST_DOUBLE : LIST_DOUBLE ',' DOUBLE_NUM
+*	| DOUBLE_NUM
+*
+* LIST_LIST : LIST_LIST ',' LIST
+*	| LIST
+* 
+* ARGS_F :: ARGS_F EXP
+* 	| EXP
+* 	
+* 	
 */
 
 %%
@@ -129,6 +148,7 @@ LINE : ID_F ARGS '=' EXP  {
 			      for(auto item : test){
 				std::cout << item->print() << std::endl;
 			      }
+			      
 			      Expression f = new Functor($1, test);
 			      SaliraInt* temp =(SaliraInt*) f->eval(test);
 			      std::cout << "Rez" <<  temp->value() << std::endl;
@@ -136,21 +156,11 @@ LINE : ID_F ARGS '=' EXP  {
 			      variables.clear();
 			      counter = 0;
 }
-| COMMENT {
-	std::cout << "Comment: " << $1 << std::endl;
-  }
 ;
-ARGS : ARGS ID  {
-		std::cout << " Args ID " << std::endl;	
-	 
-		if(variables.find($2) == variables.end()){
-		  variables[$2] = counter;
-		  counter++;
-		}
-		
-		arguments.push_back(new Token(variables[$2],ExpressionBase::S_INT ));	
-}
-| ID {	
+ARGS : ARGS ARGEXP {} 
+| ARGEXP {}
+;
+ARGEXP : ID {	
       std::cout << " ID " << $1<< std::endl; 
       if(variables.find($1) == variables.end()){
 	 variables[$1] = counter;
@@ -158,24 +168,18 @@ ARGS : ARGS ID  {
 	}
 	arguments.push_back(new Token(variables[$1],ExpressionBase::S_INT ));
 }
-| ARGS INT_NUM {
-	    std::cout << " Args NUM" << std::endl; 
-	    arguments.push_back(Expression(new SaliraInt($2)));
-	    
-}
 | INT_NUM {
-	    std::cout << " NUM " << std::endl; 
+	    std::cout << " INT_NUM " << std::endl; 
 	    arguments.push_back(Expression(new SaliraInt($1)));
+	   }
+| DOUBLE_NUM {
+	    std::cout << " DOUBLE_NUM " << std::endl; 
+	    arguments.push_back(Expression(new SaliraInt($1)));
+	    }
+| ID_F '(' ARGS_F ')' {
+	  $$ = new Functor($1,{$3});
 }
-/*
- TODO: 
-| ARGS DOUBLE_NUM {}
-| DOUBLE_NUM {}
-| ARGS EXP {} 
-*/
-| EXP {
-      $$ = $1;
-}
+| EXP {}
 ;
 EXP : EXP '+' EXP { 
 	std::cout << "PLUS" << std::endl;
@@ -186,21 +190,22 @@ EXP : EXP '+' EXP {
 	$$ = new Functor("minus",{$1,$3});
 	}
 | EXP '*' EXP {
-	std::cout << " PUTA " << std::endl;
+	std::cout << " MULT " << std::endl;
 	$$ = new Functor("mult",{$1,$3});
 	}
 | EXP '/' EXP { 
-	std::cout << " PODELJENO " << std::endl;
+	std::cout << " DIV " << std::endl;
 	$$ = new Functor("div",{$1,$3});
 } 
 | INT_NUM  { 
-	  std::cout << " BROJ " <<  std::to_string($1) << std::endl;
+	  std::cout << " INT_NUM " <<  std::to_string($1) << std::endl;
 	  $$ = new SaliraInt($1);
 }
-/*
-| DOUBLE_NUM {}
-*/
-| ID_F '(' ARGS ')' {
+| DOUBLE_NUM {
+	  std::cout << " DOUBLE_NUM " <<  std::to_string($1) << std::endl;
+	  $$ = new SaliraInt($1);
+}
+| ID_F '(' ARGS_F ')' {
 	  $$ = new Functor($1,{$3});
 }
 | ID {
@@ -217,55 +222,26 @@ EXP : EXP '+' EXP {
 		  std::cout << " ZAGRADE " << std::endl;
 		  $$ = $2;
 		  }
-;
 /*
-* | MAX {}
-* | MIN {}
-* | NEG {}
-*/
-/*  '-' EXP %prec UMINUS
-*/
-/*| T { 
-      std::cout << " T " << std::endl;
-      $$ = $1;
-} 
+| LIST {}
 ;
-T : T '*' F  { 
-	std::cout << " PUTA " << std::endl;
-	$$ = new Functor("mult",{$1,$3});}
-| T '/' F  { 
-	std::cout << " PODELJENO " << std::endl;
-	$$ = new Functor("div",{$1,$3});
-} 
-| F { 
-      std::cout << " F " << std::endl;
-      $$ = $1;
-} 
+LIST : '[' LIST_INT ']'
+| '[' LIST_DOUBLE ']'
+| '[' LIST_LIST ']'
 ;
-F: NUM  { 
-	  std::cout << " BROJ " <<  std::to_string($1) << std::endl;
-	  $$ = new SaliraInt($1);
-}
-| ID '(' ARGS ')' {
-	
-	  $$ = new Functor($1,{$3});
-}
-| ID {
-       
-	std::cout << " ID " << $1 << std::endl;
-	
-	if(variables.find($1) == variables.end()){
-	  throw SaliraException("Variable not exists in declaration of function arguments.");
-	}
-	
-	// NOTE: Second argument is artificial, todo -> type checking
-	$$ = new Token(variables[$1], ExpressionBase::S_INT);
-}
-| '(' ArGr ')'   { 	
-		  std::cout << " ZAGRADE " << std::endl;
-		  $$ = $2;
-		  }
-;*/
+LIST_INT : LIST_INT ',' INT_NUM
+| INT_NUM
+;
+LIST_DOUBLE : LIST_DOUBLE ',' DOUBLE_NUM
+| DOUBLE_NUM
+;
+LIST_LIST : LIST_LIST ',' LIST
+| LIST
+*/
+;
+ARGS_F : ARGS_F EXP {}
+| EXP {}
+;
 %%
 
 // We have to implement the error function
@@ -281,4 +257,5 @@ static int yylex(Lambda::BisonParser::semantic_type *yylval, Lambda::FlexScanner
 {
 	return scanner.yylex(yylval);
 }
+
 

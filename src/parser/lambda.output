@@ -1,6 +1,6 @@
 Terminals unused in grammar
 
-   DOUBLE_NUM
+   COMMENT
    LET
    IN
    MAX
@@ -9,8 +9,10 @@ Terminals unused in grammar
    UMINUS
 
 
-State 5 conflicts: 4 reduce/reduce
-State 6 conflicts: 4 reduce/reduce
+State 4 conflicts: 6 reduce/reduce
+State 5 conflicts: 6 reduce/reduce
+State 6 conflicts: 6 reduce/reduce
+State 37 conflicts: 6 reduce/reduce
 
 
 Grammar
@@ -21,41 +23,47 @@ Grammar
     2        | LINE ';'
 
     3 LINE: ID_F ARGS '=' EXP
-    4     | COMMENT
 
-    5 ARGS: ARGS ID
-    6     | ID
-    7     | ARGS INT_NUM
-    8     | INT_NUM
-    9     | EXP
+    4 ARGS: ARGS ARGEXP
+    5     | ARGEXP
 
-   10 EXP: EXP '+' EXP
-   11    | EXP '-' EXP
-   12    | EXP '*' EXP
-   13    | EXP '/' EXP
-   14    | INT_NUM
-   15    | ID_F '(' ARGS ')'
-   16    | ID
-   17    | '(' EXP ')'
+    6 ARGEXP: ID
+    7       | INT_NUM
+    8       | DOUBLE_NUM
+    9       | ID_F '(' ARGS_F ')'
+   10       | EXP
+
+   11 EXP: EXP '+' EXP
+   12    | EXP '-' EXP
+   13    | EXP '*' EXP
+   14    | EXP '/' EXP
+   15    | INT_NUM
+   16    | DOUBLE_NUM
+   17    | ID_F '(' ARGS_F ')'
+   18    | ID
+   19    | '(' EXP ')'
+
+   20 ARGS_F: ARGS_F EXP
+   21       | EXP
 
 
 Terminals, with rules where they appear
 
 $end (0) 0
-'(' (40) 15 17
-')' (41) 15 17
-'*' (42) 12
-'+' (43) 10
-'-' (45) 11
-'/' (47) 13
+'(' (40) 9 17 19
+')' (41) 9 17 19
+'*' (42) 13
+'+' (43) 11
+'-' (45) 12
+'/' (47) 14
 ';' (59) 1 2
 '=' (61) 3
 error (256)
-INT_NUM (258) 7 8 14
-DOUBLE_NUM (259)
-ID (260) 5 6 16
-COMMENT (261) 4
-ID_F (262) 3 15
+INT_NUM (258) 7 15
+DOUBLE_NUM (259) 8 16
+ID (260) 6 18
+COMMENT (261)
+ID_F (262) 3 9 17
 LET (263)
 IN (264)
 MAX (265)
@@ -71,381 +79,529 @@ $accept (22)
 PROGRAM (23)
     on left: 1 2, on right: 0 1
 LINE (24)
-    on left: 3 4, on right: 1 2
+    on left: 3, on right: 1 2
 ARGS (25)
-    on left: 5 6 7 8 9, on right: 3 5 7 15
-EXP (26)
-    on left: 10 11 12 13 14 15 16 17, on right: 3 9 10 11 12 13 17
+    on left: 4 5, on right: 3 4
+ARGEXP (26)
+    on left: 6 7 8 9 10, on right: 4 5
+EXP (27)
+    on left: 11 12 13 14 15 16 17 18 19, on right: 3 10 11 12 13 14
+    19 20 21
+ARGS_F (28)
+    on left: 20 21, on right: 9 17 20
 
 
 State 0
 
     0 $accept: . PROGRAM $end
 
-    COMMENT  shift, and go to state 1
-    ID_F     shift, and go to state 2
+    ID_F  shift, and go to state 1
 
-    PROGRAM  go to state 3
-    LINE     go to state 4
+    PROGRAM  go to state 2
+    LINE     go to state 3
 
 
 State 1
 
-    4 LINE: COMMENT .
+    3 LINE: ID_F . ARGS '=' EXP
 
-    $default  reduce using rule 4 (LINE)
+    INT_NUM     shift, and go to state 4
+    DOUBLE_NUM  shift, and go to state 5
+    ID          shift, and go to state 6
+    ID_F        shift, and go to state 7
+    '('         shift, and go to state 8
+
+    ARGS    go to state 9
+    ARGEXP  go to state 10
+    EXP     go to state 11
 
 
 State 2
 
-    3 LINE: ID_F . ARGS '=' EXP
+    0 $accept: PROGRAM . $end
+    1 PROGRAM: PROGRAM . LINE ';'
 
-    INT_NUM  shift, and go to state 5
-    ID       shift, and go to state 6
-    ID_F     shift, and go to state 7
-    '('      shift, and go to state 8
+    $end  shift, and go to state 12
+    ID_F  shift, and go to state 1
 
-    ARGS  go to state 9
-    EXP   go to state 10
+    LINE  go to state 13
 
 
 State 3
 
-    0 $accept: PROGRAM . $end
-    1 PROGRAM: PROGRAM . LINE ';'
+    2 PROGRAM: LINE . ';'
 
-    $end     shift, and go to state 11
-    COMMENT  shift, and go to state 1
-    ID_F     shift, and go to state 2
-
-    LINE  go to state 12
+    ';'  shift, and go to state 14
 
 
 State 4
 
-    2 PROGRAM: LINE . ';'
+    7 ARGEXP: INT_NUM .
+   15 EXP: INT_NUM .
 
-    ';'  shift, and go to state 13
+    INT_NUM     reduce using rule 7 (ARGEXP)
+    INT_NUM     [reduce using rule 15 (EXP)]
+    DOUBLE_NUM  reduce using rule 7 (ARGEXP)
+    DOUBLE_NUM  [reduce using rule 15 (EXP)]
+    ID          reduce using rule 7 (ARGEXP)
+    ID          [reduce using rule 15 (EXP)]
+    ID_F        reduce using rule 7 (ARGEXP)
+    ID_F        [reduce using rule 15 (EXP)]
+    '+'         reduce using rule 15 (EXP)
+    '-'         reduce using rule 15 (EXP)
+    '*'         reduce using rule 15 (EXP)
+    '/'         reduce using rule 15 (EXP)
+    '('         reduce using rule 7 (ARGEXP)
+    '('         [reduce using rule 15 (EXP)]
+    '='         reduce using rule 7 (ARGEXP)
+    '='         [reduce using rule 15 (EXP)]
+    $default    reduce using rule 7 (ARGEXP)
 
 
 State 5
 
-    8 ARGS: INT_NUM .
-   14 EXP: INT_NUM .
+    8 ARGEXP: DOUBLE_NUM .
+   16 EXP: DOUBLE_NUM .
 
-    INT_NUM   reduce using rule 8 (ARGS)
-    INT_NUM   [reduce using rule 14 (EXP)]
-    ID        reduce using rule 8 (ARGS)
-    ID        [reduce using rule 14 (EXP)]
-    '+'       reduce using rule 14 (EXP)
-    '-'       reduce using rule 14 (EXP)
-    '*'       reduce using rule 14 (EXP)
-    '/'       reduce using rule 14 (EXP)
-    ')'       reduce using rule 8 (ARGS)
-    ')'       [reduce using rule 14 (EXP)]
-    '='       reduce using rule 8 (ARGS)
-    '='       [reduce using rule 14 (EXP)]
-    $default  reduce using rule 8 (ARGS)
+    INT_NUM     reduce using rule 8 (ARGEXP)
+    INT_NUM     [reduce using rule 16 (EXP)]
+    DOUBLE_NUM  reduce using rule 8 (ARGEXP)
+    DOUBLE_NUM  [reduce using rule 16 (EXP)]
+    ID          reduce using rule 8 (ARGEXP)
+    ID          [reduce using rule 16 (EXP)]
+    ID_F        reduce using rule 8 (ARGEXP)
+    ID_F        [reduce using rule 16 (EXP)]
+    '+'         reduce using rule 16 (EXP)
+    '-'         reduce using rule 16 (EXP)
+    '*'         reduce using rule 16 (EXP)
+    '/'         reduce using rule 16 (EXP)
+    '('         reduce using rule 8 (ARGEXP)
+    '('         [reduce using rule 16 (EXP)]
+    '='         reduce using rule 8 (ARGEXP)
+    '='         [reduce using rule 16 (EXP)]
+    $default    reduce using rule 8 (ARGEXP)
 
 
 State 6
 
-    6 ARGS: ID .
-   16 EXP: ID .
+    6 ARGEXP: ID .
+   18 EXP: ID .
 
-    INT_NUM   reduce using rule 6 (ARGS)
-    INT_NUM   [reduce using rule 16 (EXP)]
-    ID        reduce using rule 6 (ARGS)
-    ID        [reduce using rule 16 (EXP)]
-    '+'       reduce using rule 16 (EXP)
-    '-'       reduce using rule 16 (EXP)
-    '*'       reduce using rule 16 (EXP)
-    '/'       reduce using rule 16 (EXP)
-    ')'       reduce using rule 6 (ARGS)
-    ')'       [reduce using rule 16 (EXP)]
-    '='       reduce using rule 6 (ARGS)
-    '='       [reduce using rule 16 (EXP)]
-    $default  reduce using rule 6 (ARGS)
+    INT_NUM     reduce using rule 6 (ARGEXP)
+    INT_NUM     [reduce using rule 18 (EXP)]
+    DOUBLE_NUM  reduce using rule 6 (ARGEXP)
+    DOUBLE_NUM  [reduce using rule 18 (EXP)]
+    ID          reduce using rule 6 (ARGEXP)
+    ID          [reduce using rule 18 (EXP)]
+    ID_F        reduce using rule 6 (ARGEXP)
+    ID_F        [reduce using rule 18 (EXP)]
+    '+'         reduce using rule 18 (EXP)
+    '-'         reduce using rule 18 (EXP)
+    '*'         reduce using rule 18 (EXP)
+    '/'         reduce using rule 18 (EXP)
+    '('         reduce using rule 6 (ARGEXP)
+    '('         [reduce using rule 18 (EXP)]
+    '='         reduce using rule 6 (ARGEXP)
+    '='         [reduce using rule 18 (EXP)]
+    $default    reduce using rule 6 (ARGEXP)
 
 
 State 7
 
-   15 EXP: ID_F . '(' ARGS ')'
+    9 ARGEXP: ID_F . '(' ARGS_F ')'
+   17 EXP: ID_F . '(' ARGS_F ')'
 
-    '('  shift, and go to state 14
+    '('  shift, and go to state 15
 
 
 State 8
 
-   17 EXP: '(' . EXP ')'
+   19 EXP: '(' . EXP ')'
 
-    INT_NUM  shift, and go to state 15
-    ID       shift, and go to state 16
-    ID_F     shift, and go to state 7
-    '('      shift, and go to state 8
+    INT_NUM     shift, and go to state 16
+    DOUBLE_NUM  shift, and go to state 17
+    ID          shift, and go to state 18
+    ID_F        shift, and go to state 19
+    '('         shift, and go to state 8
 
-    EXP  go to state 17
+    EXP  go to state 20
 
 
 State 9
 
     3 LINE: ID_F ARGS . '=' EXP
-    5 ARGS: ARGS . ID
-    7     | ARGS . INT_NUM
+    4 ARGS: ARGS . ARGEXP
 
-    INT_NUM  shift, and go to state 18
-    ID       shift, and go to state 19
-    '='      shift, and go to state 20
+    INT_NUM     shift, and go to state 4
+    DOUBLE_NUM  shift, and go to state 5
+    ID          shift, and go to state 6
+    ID_F        shift, and go to state 7
+    '('         shift, and go to state 8
+    '='         shift, and go to state 21
+
+    ARGEXP  go to state 22
+    EXP     go to state 11
 
 
 State 10
 
-    9 ARGS: EXP .
-   10 EXP: EXP . '+' EXP
-   11    | EXP . '-' EXP
-   12    | EXP . '*' EXP
-   13    | EXP . '/' EXP
+    5 ARGS: ARGEXP .
 
-    '+'  shift, and go to state 21
-    '-'  shift, and go to state 22
-    '*'  shift, and go to state 23
-    '/'  shift, and go to state 24
-
-    $default  reduce using rule 9 (ARGS)
+    $default  reduce using rule 5 (ARGS)
 
 
 State 11
+
+   10 ARGEXP: EXP .
+   11 EXP: EXP . '+' EXP
+   12    | EXP . '-' EXP
+   13    | EXP . '*' EXP
+   14    | EXP . '/' EXP
+
+    '+'  shift, and go to state 23
+    '-'  shift, and go to state 24
+    '*'  shift, and go to state 25
+    '/'  shift, and go to state 26
+
+    $default  reduce using rule 10 (ARGEXP)
+
+
+State 12
 
     0 $accept: PROGRAM $end .
 
     $default  accept
 
 
-State 12
+State 13
 
     1 PROGRAM: PROGRAM LINE . ';'
 
-    ';'  shift, and go to state 25
+    ';'  shift, and go to state 27
 
 
-State 13
+State 14
 
     2 PROGRAM: LINE ';' .
 
     $default  reduce using rule 2 (PROGRAM)
 
 
-State 14
-
-   15 EXP: ID_F '(' . ARGS ')'
-
-    INT_NUM  shift, and go to state 5
-    ID       shift, and go to state 6
-    ID_F     shift, and go to state 7
-    '('      shift, and go to state 8
-
-    ARGS  go to state 26
-    EXP   go to state 10
-
-
 State 15
 
-   14 EXP: INT_NUM .
+    9 ARGEXP: ID_F '(' . ARGS_F ')'
+   17 EXP: ID_F '(' . ARGS_F ')'
 
-    $default  reduce using rule 14 (EXP)
+    INT_NUM     shift, and go to state 16
+    DOUBLE_NUM  shift, and go to state 17
+    ID          shift, and go to state 18
+    ID_F        shift, and go to state 19
+    '('         shift, and go to state 8
+
+    EXP     go to state 28
+    ARGS_F  go to state 29
 
 
 State 16
 
-   16 EXP: ID .
+   15 EXP: INT_NUM .
 
-    $default  reduce using rule 16 (EXP)
+    $default  reduce using rule 15 (EXP)
 
 
 State 17
 
-   10 EXP: EXP . '+' EXP
-   11    | EXP . '-' EXP
-   12    | EXP . '*' EXP
-   13    | EXP . '/' EXP
-   17    | '(' EXP . ')'
+   16 EXP: DOUBLE_NUM .
 
-    '+'  shift, and go to state 21
-    '-'  shift, and go to state 22
-    '*'  shift, and go to state 23
-    '/'  shift, and go to state 24
-    ')'  shift, and go to state 27
+    $default  reduce using rule 16 (EXP)
 
 
 State 18
 
-    7 ARGS: ARGS INT_NUM .
+   18 EXP: ID .
 
-    $default  reduce using rule 7 (ARGS)
+    $default  reduce using rule 18 (EXP)
 
 
 State 19
 
-    5 ARGS: ARGS ID .
+   17 EXP: ID_F . '(' ARGS_F ')'
 
-    $default  reduce using rule 5 (ARGS)
+    '('  shift, and go to state 30
 
 
 State 20
 
-    3 LINE: ID_F ARGS '=' . EXP
+   11 EXP: EXP . '+' EXP
+   12    | EXP . '-' EXP
+   13    | EXP . '*' EXP
+   14    | EXP . '/' EXP
+   19    | '(' EXP . ')'
 
-    INT_NUM  shift, and go to state 15
-    ID       shift, and go to state 16
-    ID_F     shift, and go to state 7
-    '('      shift, and go to state 8
-
-    EXP  go to state 28
+    '+'  shift, and go to state 23
+    '-'  shift, and go to state 24
+    '*'  shift, and go to state 25
+    '/'  shift, and go to state 26
+    ')'  shift, and go to state 31
 
 
 State 21
 
-   10 EXP: EXP '+' . EXP
+    3 LINE: ID_F ARGS '=' . EXP
 
-    INT_NUM  shift, and go to state 15
-    ID       shift, and go to state 16
-    ID_F     shift, and go to state 7
-    '('      shift, and go to state 8
-
-    EXP  go to state 29
-
-
-State 22
-
-   11 EXP: EXP '-' . EXP
-
-    INT_NUM  shift, and go to state 15
-    ID       shift, and go to state 16
-    ID_F     shift, and go to state 7
-    '('      shift, and go to state 8
-
-    EXP  go to state 30
-
-
-State 23
-
-   12 EXP: EXP '*' . EXP
-
-    INT_NUM  shift, and go to state 15
-    ID       shift, and go to state 16
-    ID_F     shift, and go to state 7
-    '('      shift, and go to state 8
-
-    EXP  go to state 31
-
-
-State 24
-
-   13 EXP: EXP '/' . EXP
-
-    INT_NUM  shift, and go to state 15
-    ID       shift, and go to state 16
-    ID_F     shift, and go to state 7
-    '('      shift, and go to state 8
+    INT_NUM     shift, and go to state 16
+    DOUBLE_NUM  shift, and go to state 17
+    ID          shift, and go to state 18
+    ID_F        shift, and go to state 19
+    '('         shift, and go to state 8
 
     EXP  go to state 32
 
 
+State 22
+
+    4 ARGS: ARGS ARGEXP .
+
+    $default  reduce using rule 4 (ARGS)
+
+
+State 23
+
+   11 EXP: EXP '+' . EXP
+
+    INT_NUM     shift, and go to state 16
+    DOUBLE_NUM  shift, and go to state 17
+    ID          shift, and go to state 18
+    ID_F        shift, and go to state 19
+    '('         shift, and go to state 8
+
+    EXP  go to state 33
+
+
+State 24
+
+   12 EXP: EXP '-' . EXP
+
+    INT_NUM     shift, and go to state 16
+    DOUBLE_NUM  shift, and go to state 17
+    ID          shift, and go to state 18
+    ID_F        shift, and go to state 19
+    '('         shift, and go to state 8
+
+    EXP  go to state 34
+
+
 State 25
+
+   13 EXP: EXP '*' . EXP
+
+    INT_NUM     shift, and go to state 16
+    DOUBLE_NUM  shift, and go to state 17
+    ID          shift, and go to state 18
+    ID_F        shift, and go to state 19
+    '('         shift, and go to state 8
+
+    EXP  go to state 35
+
+
+State 26
+
+   14 EXP: EXP '/' . EXP
+
+    INT_NUM     shift, and go to state 16
+    DOUBLE_NUM  shift, and go to state 17
+    ID          shift, and go to state 18
+    ID_F        shift, and go to state 19
+    '('         shift, and go to state 8
+
+    EXP  go to state 36
+
+
+State 27
 
     1 PROGRAM: PROGRAM LINE ';' .
 
     $default  reduce using rule 1 (PROGRAM)
 
 
-State 26
-
-    5 ARGS: ARGS . ID
-    7     | ARGS . INT_NUM
-   15 EXP: ID_F '(' ARGS . ')'
-
-    INT_NUM  shift, and go to state 18
-    ID       shift, and go to state 19
-    ')'      shift, and go to state 33
-
-
-State 27
-
-   17 EXP: '(' EXP ')' .
-
-    $default  reduce using rule 17 (EXP)
-
-
 State 28
 
-    3 LINE: ID_F ARGS '=' EXP .
-   10 EXP: EXP . '+' EXP
-   11    | EXP . '-' EXP
-   12    | EXP . '*' EXP
-   13    | EXP . '/' EXP
+   11 EXP: EXP . '+' EXP
+   12    | EXP . '-' EXP
+   13    | EXP . '*' EXP
+   14    | EXP . '/' EXP
+   21 ARGS_F: EXP .
 
-    '+'  shift, and go to state 21
-    '-'  shift, and go to state 22
-    '*'  shift, and go to state 23
-    '/'  shift, and go to state 24
+    '+'  shift, and go to state 23
+    '-'  shift, and go to state 24
+    '*'  shift, and go to state 25
+    '/'  shift, and go to state 26
 
-    $default  reduce using rule 3 (LINE)
+    $default  reduce using rule 21 (ARGS_F)
 
 
 State 29
 
-   10 EXP: EXP . '+' EXP
-   10    | EXP '+' EXP .
-   11    | EXP . '-' EXP
-   12    | EXP . '*' EXP
-   13    | EXP . '/' EXP
+    9 ARGEXP: ID_F '(' ARGS_F . ')'
+   17 EXP: ID_F '(' ARGS_F . ')'
+   20 ARGS_F: ARGS_F . EXP
 
-    '*'  shift, and go to state 23
-    '/'  shift, and go to state 24
+    INT_NUM     shift, and go to state 16
+    DOUBLE_NUM  shift, and go to state 17
+    ID          shift, and go to state 18
+    ID_F        shift, and go to state 19
+    '('         shift, and go to state 8
+    ')'         shift, and go to state 37
 
-    $default  reduce using rule 10 (EXP)
+    EXP  go to state 38
 
 
 State 30
 
-   10 EXP: EXP . '+' EXP
-   11    | EXP . '-' EXP
-   11    | EXP '-' EXP .
-   12    | EXP . '*' EXP
-   13    | EXP . '/' EXP
+   17 EXP: ID_F '(' . ARGS_F ')'
 
-    '*'  shift, and go to state 23
-    '/'  shift, and go to state 24
+    INT_NUM     shift, and go to state 16
+    DOUBLE_NUM  shift, and go to state 17
+    ID          shift, and go to state 18
+    ID_F        shift, and go to state 19
+    '('         shift, and go to state 8
 
-    $default  reduce using rule 11 (EXP)
+    EXP     go to state 28
+    ARGS_F  go to state 39
 
 
 State 31
 
-   10 EXP: EXP . '+' EXP
-   11    | EXP . '-' EXP
-   12    | EXP . '*' EXP
-   12    | EXP '*' EXP .
-   13    | EXP . '/' EXP
+   19 EXP: '(' EXP ')' .
 
-    '/'  shift, and go to state 24
-
-    $default  reduce using rule 12 (EXP)
+    $default  reduce using rule 19 (EXP)
 
 
 State 32
 
-   10 EXP: EXP . '+' EXP
-   11    | EXP . '-' EXP
-   12    | EXP . '*' EXP
-   13    | EXP . '/' EXP
-   13    | EXP '/' EXP .
+    3 LINE: ID_F ARGS '=' EXP .
+   11 EXP: EXP . '+' EXP
+   12    | EXP . '-' EXP
+   13    | EXP . '*' EXP
+   14    | EXP . '/' EXP
 
-    $default  reduce using rule 13 (EXP)
+    '+'  shift, and go to state 23
+    '-'  shift, and go to state 24
+    '*'  shift, and go to state 25
+    '/'  shift, and go to state 26
+
+    $default  reduce using rule 3 (LINE)
 
 
 State 33
 
-   15 EXP: ID_F '(' ARGS ')' .
+   11 EXP: EXP . '+' EXP
+   11    | EXP '+' EXP .
+   12    | EXP . '-' EXP
+   13    | EXP . '*' EXP
+   14    | EXP . '/' EXP
 
-    $default  reduce using rule 15 (EXP)
+    '*'  shift, and go to state 25
+    '/'  shift, and go to state 26
+
+    $default  reduce using rule 11 (EXP)
+
+
+State 34
+
+   11 EXP: EXP . '+' EXP
+   12    | EXP . '-' EXP
+   12    | EXP '-' EXP .
+   13    | EXP . '*' EXP
+   14    | EXP . '/' EXP
+
+    '*'  shift, and go to state 25
+    '/'  shift, and go to state 26
+
+    $default  reduce using rule 12 (EXP)
+
+
+State 35
+
+   11 EXP: EXP . '+' EXP
+   12    | EXP . '-' EXP
+   13    | EXP . '*' EXP
+   13    | EXP '*' EXP .
+   14    | EXP . '/' EXP
+
+    '/'  shift, and go to state 26
+
+    $default  reduce using rule 13 (EXP)
+
+
+State 36
+
+   11 EXP: EXP . '+' EXP
+   12    | EXP . '-' EXP
+   13    | EXP . '*' EXP
+   14    | EXP . '/' EXP
+   14    | EXP '/' EXP .
+
+    $default  reduce using rule 14 (EXP)
+
+
+State 37
+
+    9 ARGEXP: ID_F '(' ARGS_F ')' .
+   17 EXP: ID_F '(' ARGS_F ')' .
+
+    INT_NUM     reduce using rule 9 (ARGEXP)
+    INT_NUM     [reduce using rule 17 (EXP)]
+    DOUBLE_NUM  reduce using rule 9 (ARGEXP)
+    DOUBLE_NUM  [reduce using rule 17 (EXP)]
+    ID          reduce using rule 9 (ARGEXP)
+    ID          [reduce using rule 17 (EXP)]
+    ID_F        reduce using rule 9 (ARGEXP)
+    ID_F        [reduce using rule 17 (EXP)]
+    '+'         reduce using rule 17 (EXP)
+    '-'         reduce using rule 17 (EXP)
+    '*'         reduce using rule 17 (EXP)
+    '/'         reduce using rule 17 (EXP)
+    '('         reduce using rule 9 (ARGEXP)
+    '('         [reduce using rule 17 (EXP)]
+    '='         reduce using rule 9 (ARGEXP)
+    '='         [reduce using rule 17 (EXP)]
+    $default    reduce using rule 9 (ARGEXP)
+
+
+State 38
+
+   11 EXP: EXP . '+' EXP
+   12    | EXP . '-' EXP
+   13    | EXP . '*' EXP
+   14    | EXP . '/' EXP
+   20 ARGS_F: ARGS_F EXP .
+
+    '+'  shift, and go to state 23
+    '-'  shift, and go to state 24
+    '*'  shift, and go to state 25
+    '/'  shift, and go to state 26
+
+    $default  reduce using rule 20 (ARGS_F)
+
+
+State 39
+
+   17 EXP: ID_F '(' ARGS_F . ')'
+   20 ARGS_F: ARGS_F . EXP
+
+    INT_NUM     shift, and go to state 16
+    DOUBLE_NUM  shift, and go to state 17
+    ID          shift, and go to state 18
+    ID_F        shift, and go to state 19
+    '('         shift, and go to state 8
+    ')'         shift, and go to state 40
+
+    EXP  go to state 38
+
+
+State 40
+
+   17 EXP: ID_F '(' ARGS_F ')' .
+
+    $default  reduce using rule 17 (EXP)
