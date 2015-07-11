@@ -1,3 +1,4 @@
-F 0 = 4.2;
+F 0 6 = 0;
 G x = x;
-F n = 2 + F G 0 ;
+K x 3 = x;
+F n k = n + F G K 0 3 n + 5; 

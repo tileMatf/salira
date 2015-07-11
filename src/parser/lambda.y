@@ -39,7 +39,7 @@
 			      
 }
 
-// Yylval can have one of these types
+// yylval can have one of these types
 %union
 {
 	int intNum;
@@ -57,14 +57,14 @@
 
 
 // Defining priority and associativity
-
 %left '+' '-'
 %left '*'
-%left UMINUS
 %left '/'
 %left '(' ')'
 %left '='
-
+%right "func"
+%right "func2"
+%right "func1"
 /*
 * 
 *  Grammar:
@@ -82,8 +82,8 @@
 * ARGEXP :: ID
 * 	| INT_NUM
 * 	| DOUBLE_NUM
-* 	| ID ( ARGS_F )
-* 	TODO: EXP here should not be the same EXP as in function definition
+* 	| ID ARGS_F 
+* 	TODO: EXP here should not be the same EXP as in function definition if we want f(n+1) = sth, not done yet
 * 	| EXP 
 * 	
 *
@@ -91,7 +91,7 @@
 * 	| EXP - EXP
 * 	| EXP * EXP
 * 	| EXP / EXP
-* 	| ID_F ( ARGS_F ) 
+* 	| ID_F ARGS_F 
 * 	| ID
 * 	| INT_NUM
 * 	| DOUBLE_NUM
@@ -176,10 +176,9 @@ ARGEXP : ID {
 	    std::cout << " DOUBLE_NUM " << std::endl; 
 	    arguments.push_back(Expression(new SaliraInt($1)));
 	    }
-| ID_F ARGS_F  {
+/*| ID_F ARGS_F  {
 	  $$ = new Functor($1,{$2});
-}
-| EXP {}
+}*/
 ;
 EXP : EXP '+' EXP { 
 	std::cout << "PLUS" << std::endl;
@@ -197,7 +196,7 @@ EXP : EXP '+' EXP {
 	std::cout << " DIV " << std::endl;
 	$$ = new Functor("div",{$1,$3});
 } 
-| INT_NUM  { 
+| INT_NUM { 
 	  std::cout << " INT_NUM " <<  std::to_string($1) << std::endl;
 	  $$ = new SaliraInt($1);
 }
@@ -205,8 +204,9 @@ EXP : EXP '+' EXP {
 	  std::cout << " DOUBLE_NUM " <<  std::to_string($1) << std::endl;
 	  $$ = new SaliraInt($1);
 }
-| ID_F  ARGS_F {
-	  $$ = new Functor($1,{$2});
+| ID_F ARGS_F  %prec "func"{
+	 auto a = new Functor($1,{$2});
+	 $$ = a->eval({$2});
 }
 | ID {
 	std::cout << " ID " << $1 << std::endl;
@@ -239,8 +239,8 @@ LIST_LIST : LIST_LIST ',' LIST
 | LIST
 */
 ;
-ARGS_F : ARGS_F EXP {}
-| EXP {}
+ARGS_F : ARGS_F EXP %prec "func1" {}
+| EXP %prec "func2"{}
 ;
 %%
 

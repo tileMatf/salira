@@ -25,7 +25,7 @@
 using FuncMap = std::unordered_map<std::string, MetaFunc>;
 
 class Functor : public ExpressionBase {
-friend class SalirDev;
+friend class SaliraDev;
 public:
   static FuncMap functions;
 public:

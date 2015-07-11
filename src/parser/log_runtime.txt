@@ -298412,3 +298412,1079 @@ Evaluated args:
 	SaliraInt: 2
 	SaliraInt: 4
 Name plus
+F
+Evaluated args: 
+	SaliraInt: 6
+Name F
+G
+Evaluated args: 
+	SaliraInt: 6
+Name G
+F
+Evaluated args: 
+	SaliraInt: 6
+Name F
+G
+Evaluated args: 
+	SaliraInt: 6
+Name G
+F
+Evaluated args: 
+	SaliraInt: 6
+Name F
+Matched!
+	SaliraInt: 6
+G
+Evaluated args: 
+	SaliraInt: 0
+Name G
+F
+Evaluated args: 
+	SaliraInt: 0
+Name F
+Matched!
+	SaliraInt: 0
+plus
+Evaluated args: 
+	SaliraInt: 2
+	SaliraInt: 4
+Name plus
+F
+Evaluated args: 
+	SaliraInt: 6
+	SaliraInt: 6
+Name F
+G
+Evaluated args: 
+	SaliraInt: 6
+Name G
+F
+Evaluated args: 
+	SaliraInt: 6
+	SaliraInt: 6
+Name F
+Matched!
+	SaliraInt: 6
+	SaliraInt: 6
+G
+Evaluated args: 
+	SaliraInt: 0
+Name G
+F
+Evaluated args: 
+	SaliraInt: 0
+Name F
+F
+Evaluated args: 
+	SaliraInt: 6
+	SaliraInt: 6
+Name F
+G
+Evaluated args: 
+	SaliraInt: 6
+Name G
+F
+Evaluated args: 
+	SaliraInt: 6
+	SaliraInt: 6
+Name F
+Matched!
+	SaliraInt: 6
+	SaliraInt: 6
+G
+Evaluated args: 
+	SaliraInt: 0
+Name G
+F
+Evaluated args: 
+	SaliraInt: 0
+Name F
+F
+Evaluated args: 
+	SaliraInt: 6
+	SaliraInt: 6
+Name F
+G
+Evaluated args: 
+	SaliraInt: 6
+Name G
+F
+Evaluated args: 
+	SaliraInt: 6
+	SaliraInt: 6
+Name F
+Matched!
+	SaliraInt: 6
+	SaliraInt: 6
+F
+Evaluated args: 
+	SaliraInt: 6
+	SaliraInt: 6
+Name F
+G
+Evaluated args: 
+	SaliraInt: 6
+Name G
+F
+Evaluated args: 
+	SaliraInt: 6
+	SaliraInt: 6
+Name F
+Matched!
+	SaliraInt: 6
+	SaliraInt: 6
+G
+Evaluated args: 
+	SaliraInt: 0
+Name G
+F
+Evaluated args: 
+	SaliraInt: 0
+Name F
+F
+Evaluated args: 
+	SaliraInt: 6
+	SaliraInt: 6
+Name F
+G
+Evaluated args: 
+	SaliraInt: 6
+Name G
+F
+Evaluated args: 
+	SaliraInt: 6
+	SaliraInt: 6
+Name F
+Matched!
+	SaliraInt: 6
+	SaliraInt: 6
+G
+Evaluated args: 
+	SaliraInt: 0
+Name G
+F
+Evaluated args: 
+	SaliraInt: 0
+Name F
+F
+Evaluated args: 
+	SaliraInt: 6
+	SaliraInt: 6
+Name F
+G
+Evaluated args: 
+	SaliraInt: 6
+Name G
+F
+Evaluated args: 
+	SaliraInt: 6
+	SaliraInt: 6
+Name F
+Matched!
+	SaliraInt: 6
+	SaliraInt: 6
+G
+Evaluated args: 
+	SaliraInt: 6
+Name G
+F
+Evaluated args: 
+	SaliraInt: 6
+	SaliraInt: 6
+Name F
+G
+Evaluated args: 
+	SaliraInt: 6
+Name G
+F
+Evaluated args: 
+	SaliraInt: 6
+	SaliraInt: 6
+Name F
+G
+Evaluated args: 
+	SaliraInt: 6
+Name G
+F
+Evaluated args: 
+	SaliraInt: 6
+	SaliraInt: 6
+Name F
+plus
+Evaluated args: 
+	SaliraInt: 0
+	SaliraInt: 3
+Name plus
+G
+Evaluated args: 
+	SaliraInt: 3
+Name G
+plus
+Evaluated args: 
+	SaliraInt: 6
+	SaliraInt: 3
+Name plus
+F
+Evaluated args: 
+	SaliraInt: 6
+	SaliraInt: 6
+Name F
+G
+Evaluated args: 
+	SaliraInt: 6
+Name G
+F
+Evaluated args: 
+	SaliraInt: 6
+	SaliraInt: 6
+Name F
+Matched!
+	SaliraInt: 6
+	SaliraInt: 6
+G
+Evaluated args: 
+	SaliraInt: 0
+Name G
+F
+Evaluated args: 
+	SaliraInt: 0
+Name F
+F
+Evaluated args: 
+	SaliraInt: 6
+	SaliraInt: 6
+Name F
+G
+Evaluated args: 
+	SaliraInt: 6
+Name G
+F
+Evaluated args: 
+	SaliraInt: 6
+	SaliraInt: 6
+Name F
+Matched!
+	SaliraInt: 6
+	SaliraInt: 6
+G
+Evaluated args: 
+	SaliraInt: 0
+Name G
+F
+Evaluated args: 
+	SaliraInt: 0
+Name F
+F
+Evaluated args: 
+	SaliraInt: 6
+	SaliraInt: 6
+Name F
+G
+Evaluated args: 
+	SaliraInt: 6
+Name G
+G
+Evaluated args: 
+	SaliraInt: 0
+Name G
+F
+Evaluated args: 
+	SaliraInt: 0
+Name F
+F
+Evaluated args: 
+	SaliraInt: 6
+	SaliraInt: 6
+Name F
+Matched!
+	SaliraInt: 6
+	SaliraInt: 6
+plus
+Evaluated args: 
+	SaliraInt: 6
+	SaliraInt: 0
+Name plus
+F
+Evaluated args: 
+	SaliraInt: 6
+	SaliraInt: 6
+Name F
+G
+Evaluated args: 
+	SaliraInt: 6
+Name G
+G
+Evaluated args: 
+	SaliraInt: 0
+Name G
+F
+Evaluated args: 
+	SaliraInt: 0
+Name F
+F
+Evaluated args: 
+	SaliraInt: 6
+	SaliraInt: 6
+Name F
+Matched!
+	SaliraInt: 6
+	SaliraInt: 6
+plus
+Evaluated args: 
+	SaliraInt: 6
+	SaliraInt: 0
+Name plus
+F
+Evaluated args: 
+	SaliraInt: 6
+	SaliraInt: 6
+Name F
+G
+Evaluated args: 
+	SaliraInt: 6
+Name G
+G
+Evaluated args: 
+	SaliraInt: 0
+Name G
+F
+Evaluated args: 
+	SaliraInt: 0
+Name F
+F
+Evaluated args: 
+	SaliraInt: 6
+	SaliraInt: 6
+Name F
+Matched!
+	SaliraInt: 6
+	SaliraInt: 6
+plus
+Evaluated args: 
+	SaliraInt: 6
+	SaliraInt: 0
+Name plus
+F
+Evaluated args: 
+	SaliraInt: 6
+	SaliraInt: 6
+Name F
+G
+Evaluated args: 
+	SaliraInt: 6
+Name G
+G
+Evaluated args: 
+	SaliraInt: 0
+Name G
+F
+Evaluated args: 
+	SaliraInt: 0
+Name F
+F
+Evaluated args: 
+	SaliraInt: 6
+	SaliraInt: 6
+Name F
+Matched!
+	SaliraInt: 6
+	SaliraInt: 6
+plus
+Evaluated args: 
+	SaliraInt: 6
+	SaliraInt: 0
+Name plus
+F
+Evaluated args: 
+	SaliraInt: 6
+	SaliraInt: 6
+Name F
+G
+Evaluated args: 
+	SaliraInt: 6
+Name G
+F
+Evaluated args: 
+	SaliraInt: 6
+	SaliraInt: 6
+Name F
+Matched!
+	SaliraInt: 6
+	SaliraInt: 6
+plus
+Evaluated args: 
+	SaliraInt: 6
+	SaliraInt: 6
+Name plus
+F
+Evaluated args: 
+	SaliraInt: 6
+	SaliraInt: 6
+Name F
+G
+Evaluated args: 
+	SaliraInt: 6
+Name G
+G
+Evaluated args: 
+	SaliraInt: 0
+Name G
+F
+Evaluated args: 
+	SaliraInt: 0
+Name F
+F
+Evaluated args: 
+	SaliraInt: 6
+	SaliraInt: 6
+Name F
+Matched!
+	SaliraInt: 6
+	SaliraInt: 6
+plus
+Evaluated args: 
+	SaliraInt: 6
+	SaliraInt: 6
+Name plus
+plus
+Evaluated args: 
+	SaliraInt: 12
+	SaliraInt: 0
+Name plus
+F
+Evaluated args: 
+	SaliraInt: 6
+	SaliraInt: 6
+Name F
+G
+Evaluated args: 
+	SaliraInt: 6
+Name G
+G
+Evaluated args: 
+	SaliraInt: 0
+Name G
+F
+Evaluated args: 
+	SaliraInt: 0
+Name F
+F
+Evaluated args: 
+	SaliraInt: 6
+	SaliraInt: 6
+Name F
+Matched!
+	SaliraInt: 6
+	SaliraInt: 6
+plus
+Evaluated args: 
+	SaliraInt: 6
+	SaliraInt: 6
+Name plus
+plus
+Evaluated args: 
+	SaliraInt: 12
+	SaliraInt: 7
+Name plus
+F
+Evaluated args: 
+	SaliraInt: 6
+	SaliraInt: 6
+Name F
+G
+Evaluated args: 
+	SaliraInt: 6
+Name G
+G
+Evaluated args: 
+	SaliraInt: 0
+Name G
+F
+Evaluated args: 
+	SaliraInt: 0
+Name F
+F
+Evaluated args: 
+	SaliraInt: 6
+	SaliraInt: 6
+Name F
+Matched!
+	SaliraInt: 6
+	SaliraInt: 6
+plus
+Evaluated args: 
+	SaliraInt: 6
+	SaliraInt: 7
+Name plus
+F
+Evaluated args: 
+	SaliraInt: 6
+	SaliraInt: 6
+Name F
+G
+Evaluated args: 
+	SaliraInt: 6
+Name G
+G
+Evaluated args: 
+	SaliraInt: 0
+Name G
+F
+Evaluated args: 
+	SaliraInt: 0
+Name F
+F
+Evaluated args: 
+	SaliraInt: 6
+	SaliraInt: 6
+Name F
+Matched!
+	SaliraInt: 6
+	SaliraInt: 6
+plus
+Evaluated args: 
+	SaliraInt: 6
+	SaliraInt: 0
+Name plus
+F
+Evaluated args: 
+	SaliraInt: 6
+	SaliraInt: 6
+Name F
+G
+Evaluated args: 
+	SaliraInt: 6
+Name G
+G
+Evaluated args: 
+	SaliraInt: 0
+Name G
+F
+Evaluated args: 
+	SaliraInt: 0
+Name F
+F
+Evaluated args: 
+	SaliraInt: 6
+	SaliraInt: 6
+Name F
+Matched!
+	SaliraInt: 6
+	SaliraInt: 6
+plus
+Evaluated args: 
+	SaliraInt: 6
+	SaliraInt: 0
+Name plus
+F
+Evaluated args: 
+	SaliraInt: 6
+	SaliraInt: 6
+Name F
+G
+Evaluated args: 
+	SaliraInt: 6
+Name G
+G
+Evaluated args: 
+	SaliraInt: 0
+Name G
+F
+Evaluated args: 
+	SaliraInt: 0
+Name F
+F
+Evaluated args: 
+	SaliraInt: 6
+	SaliraInt: 6
+Name F
+Matched!
+	SaliraInt: 6
+	SaliraInt: 6
+plus
+Evaluated args: 
+	SaliraInt: 6
+	SaliraInt: 0
+Name plus
+F
+Evaluated args: 
+	SaliraInt: 6
+	SaliraInt: 6
+Name F
+G
+Evaluated args: 
+	SaliraInt: 6
+Name G
+G
+Evaluated args: 
+	SaliraInt: 0
+Name G
+F
+Evaluated args: 
+	SaliraInt: 0
+Name F
+F
+Evaluated args: 
+	SaliraInt: 6
+	SaliraInt: 6
+Name F
+Matched!
+	SaliraInt: 6
+	SaliraInt: 6
+plus
+Evaluated args: 
+	SaliraInt: 6
+	SaliraInt: 0
+Name plus
+plus
+Evaluated args: 
+	SaliraInt: 6
+	SaliraInt: 5
+Name plus
+F
+Evaluated args: 
+	SaliraInt: 6
+	SaliraInt: 6
+Name F
+G
+Evaluated args: 
+	SaliraInt: 6
+Name G
+G
+Evaluated args: 
+	SaliraInt: 0
+Name G
+F
+Evaluated args: 
+	SaliraInt: 0
+Name F
+F
+Evaluated args: 
+	SaliraInt: 6
+	SaliraInt: 6
+Name F
+Matched!
+	SaliraInt: 6
+	SaliraInt: 6
+plus
+Evaluated args: 
+	SaliraInt: 6
+	SaliraInt: 0
+Name plus
+plus
+Evaluated args: 
+	SaliraInt: 6
+	SaliraInt: 5
+Name plus
+F
+Evaluated args: 
+	SaliraInt: 6
+	SaliraInt: 6
+Name F
+G
+Evaluated args: 
+	SaliraInt: 6
+Name G
+G
+Evaluated args: 
+	SaliraInt: 0
+Name G
+F
+Evaluated args: 
+	SaliraInt: 0
+Name F
+F
+Evaluated args: 
+	SaliraInt: 6
+	SaliraInt: 6
+Name F
+Matched!
+	SaliraInt: 6
+	SaliraInt: 6
+plus
+Evaluated args: 
+	SaliraInt: 6
+	SaliraInt: 0
+Name plus
+F
+Evaluated args: 
+	SaliraInt: 6
+	SaliraInt: 6
+Name F
+G
+Evaluated args: 
+	SaliraInt: 6
+Name G
+G
+Evaluated args: 
+	SaliraInt: 0
+Name G
+F
+Evaluated args: 
+	SaliraInt: 0
+Name F
+F
+Evaluated args: 
+	SaliraInt: 6
+	SaliraInt: 6
+Name F
+Matched!
+	SaliraInt: 6
+	SaliraInt: 6
+plus
+Evaluated args: 
+	SaliraInt: 6
+	SaliraInt: 0
+Name plus
+F
+Evaluated args: 
+	SaliraInt: 6
+	SaliraInt: 6
+Name F
+G
+Evaluated args: 
+	SaliraInt: 6
+Name G
+G
+Evaluated args: 
+	SaliraInt: 0
+Name G
+plus
+Evaluated args: 
+	SaliraInt: 0
+	SaliraInt: 5
+Name plus
+F
+Evaluated args: 
+	SaliraInt: 5
+Name F
+F
+Evaluated args: 
+	SaliraInt: 6
+	SaliraInt: 6
+Name F
+Matched!
+	SaliraInt: 6
+	SaliraInt: 6
+plus
+Evaluated args: 
+	SaliraInt: 6
+	SaliraInt: 0
+Name plus
+F
+Evaluated args: 
+	SaliraInt: 6
+	SaliraInt: 6
+Name F
+G
+Evaluated args: 
+	SaliraInt: 6
+Name G
+G
+Evaluated args: 
+	SaliraInt: 0
+Name G
+F
+Evaluated args: 
+	SaliraInt: 0
+Name F
+F
+Evaluated args: 
+	SaliraInt: 6
+	SaliraInt: 6
+Name F
+Matched!
+	SaliraInt: 6
+	SaliraInt: 6
+plus
+Evaluated args: 
+	SaliraInt: 6
+	SaliraInt: 0
+Name plus
+F
+Evaluated args: 
+	SaliraInt: 6
+	SaliraInt: 6
+Name F
+G
+Evaluated args: 
+	SaliraInt: 6
+Name G
+G
+Evaluated args: 
+	SaliraInt: 0
+Name G
+F
+Evaluated args: 
+	SaliraInt: 0
+Name F
+F
+Evaluated args: 
+	SaliraInt: 6
+	SaliraInt: 6
+Name F
+Matched!
+	SaliraInt: 6
+	SaliraInt: 6
+plus
+Evaluated args: 
+	SaliraInt: 6
+	SaliraInt: 0
+Name plus
+F
+Evaluated args: 
+	SaliraInt: 6
+	SaliraInt: 6
+Name F
+G
+Evaluated args: 
+	SaliraInt: 6
+Name G
+G
+Evaluated args: 
+	SaliraInt: 0
+Name G
+F
+Evaluated args: 
+	SaliraInt: 0
+Name F
+F
+Evaluated args: 
+	SaliraInt: 6
+	SaliraInt: 6
+Name F
+Matched!
+	SaliraInt: 6
+	SaliraInt: 6
+plus
+Evaluated args: 
+	SaliraInt: 6
+	SaliraInt: 0
+Name plus
+plus
+Evaluated args: 
+	SaliraInt: 6
+	SaliraInt: 5
+Name plus
+F
+Evaluated args: 
+	SaliraInt: 6
+	SaliraInt: 6
+Name F
+G
+Evaluated args: 
+	SaliraInt: 6
+Name G
+G
+Evaluated args: 
+	SaliraInt: 0
+Name G
+F
+Evaluated args: 
+	SaliraInt: 0
+Name F
+F
+Evaluated args: 
+	SaliraInt: 6
+	SaliraInt: 6
+Name F
+Matched!
+	SaliraInt: 6
+	SaliraInt: 6
+plus
+Evaluated args: 
+	SaliraInt: 6
+	SaliraInt: 0
+Name plus
+F
+Evaluated args: 
+	SaliraInt: 6
+	SaliraInt: 6
+Name F
+G
+Evaluated args: 
+	SaliraInt: 6
+Name G
+G
+Evaluated args: 
+	SaliraInt: 0
+Name G
+F
+Evaluated args: 
+	SaliraInt: 0
+Name F
+F
+Evaluated args: 
+	SaliraInt: 6
+	SaliraInt: 6
+Name F
+Matched!
+	SaliraInt: 6
+	SaliraInt: 6
+plus
+Evaluated args: 
+	SaliraInt: 6
+	SaliraInt: 0
+Name plus
+plus
+Evaluated args: 
+	SaliraInt: 6
+	SaliraInt: 5
+Name plus
+F
+Evaluated args: 
+	SaliraInt: 6
+	SaliraInt: 6
+Name F
+G
+Evaluated args: 
+	SaliraInt: 6
+Name G
+G
+Evaluated args: 
+	SaliraInt: 0
+Name G
+F
+Evaluated args: 
+	SaliraInt: 0
+Name F
+F
+Evaluated args: 
+	SaliraInt: 6
+	SaliraInt: 6
+Name F
+Matched!
+	SaliraInt: 6
+	SaliraInt: 6
+plus
+Evaluated args: 
+	SaliraInt: 6
+	SaliraInt: 0
+Name plus
+plus
+Evaluated args: 
+	SaliraInt: 6
+	SaliraInt: 5
+Name plus
+F
+Evaluated args: 
+	SaliraInt: 6
+	SaliraInt: 6
+Name F
+G
+Evaluated args: 
+	SaliraInt: 6
+Name G
+G
+Evaluated args: 
+	SaliraInt: 0
+Name G
+F
+Evaluated args: 
+	SaliraInt: 0
+Name F
+F
+Evaluated args: 
+	SaliraInt: 6
+	SaliraInt: 6
+Name F
+Matched!
+	SaliraInt: 6
+	SaliraInt: 6
+plus
+Evaluated args: 
+	SaliraInt: 6
+	SaliraInt: 0
+Name plus
+plus
+Evaluated args: 
+	SaliraInt: 6
+	SaliraInt: 5
+Name plus
+F
+Evaluated args: 
+	SaliraInt: 6
+	SaliraInt: 6
+Name F
+G
+Evaluated args: 
+	SaliraInt: 6
+Name G
+K
+Evaluated args: 
+	SaliraInt: 6
+Name K
+K
+Evaluated args: 
+	SaliraInt: 0
+Name K
+G
+Evaluated args: 
+	SaliraInt: 0
+Name G
+F
+Evaluated args: 
+	SaliraInt: 0
+Name F
+F
+Evaluated args: 
+	SaliraInt: 6
+	SaliraInt: 6
+Name F
+Matched!
+	SaliraInt: 6
+	SaliraInt: 6
+plus
+Evaluated args: 
+	SaliraInt: 6
+	SaliraInt: 0
+Name plus
+plus
+Evaluated args: 
+	SaliraInt: 6
+	SaliraInt: 5
+Name plus
+F
+Evaluated args: 
+	SaliraInt: 6
+	SaliraInt: 6
+Name F
+G
+Evaluated args: 
+	SaliraInt: 6
+Name G
+K
+Evaluated args: 
+	SaliraInt: 6
+	SaliraInt: 6
+Name K
+K
+Evaluated args: 
+	SaliraInt: 0
+Name K
+G
+Evaluated args: 
+	SaliraInt: 0
+Name G
+F
+Evaluated args: 
+	SaliraInt: 0
+Name F
+F
+Evaluated args: 
+	SaliraInt: 6
+	SaliraInt: 6
+Name F
+Matched!
+	SaliraInt: 6
+	SaliraInt: 6
+plus
+Evaluated args: 
+	SaliraInt: 6
+	SaliraInt: 0
+Name plus
+plus
+Evaluated args: 
+	SaliraInt: 6
+	SaliraInt: 5
+Name plus

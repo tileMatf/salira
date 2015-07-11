@@ -172,8 +172,7 @@ namespace Lambda {
         IN = 264,
         MAX = 265,
         MIN = 266,
-        NEG = 267,
-        UMINUS = 268
+        NEG = 267
       };
     };
 
@@ -341,9 +340,9 @@ namespace Lambda {
   // YYTABLE[YYPACT[STATE-NUM]] -- What to do in state STATE-NUM.  If
   // positive, shift that token.  If negative, reduce the rule whose
   // number is the opposite.  If YYTABLE_NINF, syntax error.
-  static const signed char yytable_[];
+  static const unsigned char yytable_[];
 
-  static const signed char yycheck_[];
+  static const unsigned char yycheck_[];
 
   // YYSTOS[STATE-NUM] -- The (internal number of the) accessing
   // symbol of state STATE-NUM.
@@ -455,13 +454,13 @@ namespace Lambda {
     enum
     {
       yyeof_ = 0,
-      yylast_ = 72,     ///< Last index in yytable_.
+      yylast_ = 41,     ///< Last index in yytable_.
       yynnts_ = 7,  ///< Number of nonterminal symbols.
       yyempty_ = -2,
-      yyfinal_ = 12, ///< Termination state number.
+      yyfinal_ = 9, ///< Termination state number.
       yyterror_ = 1,
       yyerrcode_ = 256,
-      yyntokens_ = 22  ///< Number of tokens.
+      yyntokens_ = 24  ///< Number of tokens.
     };
 
 
@@ -472,7 +471,7 @@ namespace Lambda {
 
 #line 3 "lambda.y" // lalr1.cc:372
 } // Lambda
-#line 476 "lambda.tab.h" // lalr1.cc:372
+#line 475 "lambda.tab.h" // lalr1.cc:372
 
 
 
