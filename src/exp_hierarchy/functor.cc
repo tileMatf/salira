@@ -43,11 +43,14 @@ bool Functor::insertFunc(std::string identifier, FuncDecl f, std::vector<Express
     }
 }
   
-bool Functor::initBaseFunctions(){  
+bool Functor::initBaseFunctions(const SaliraWritter &out){  
   // NOTE: Think about moving this into type's class, it should definetly make more sense and be
   // more readable.
   if(Functor::functions.size() != 0)
     return true;
+  
+  // Initializing G code
+  out.write("BEGIN; \nPUSHGLOBAL $Prog; \nEVAL; \nPRINT; \nEND;");
   // plus
   FuncDecl plus = [](std::vector<Expression> values){ return Expression(
 							new SaliraInt(
@@ -94,6 +97,11 @@ bool Functor::initBaseFunctions(){
 // Printing on console functor, at least, identifier for now.
 std::string Functor::print() const {
   return std::string("Functor: ") + _identifier;
+}
+
+// Generating G code
+void Functor::generateGCode(const SaliraWritter &out) const
+{
 }
 
 // API

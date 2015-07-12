@@ -16,6 +16,7 @@ namespace Lambda
 {
 	class FlexScanner : public yyFlexLexer
 	{
+	  
 		public:
 			// Save the pointer to yylval so we can change it, and invoke scanner
 			int yylex(Lambda::BisonParser::semantic_type *lval)

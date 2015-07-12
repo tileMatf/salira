@@ -15,6 +15,7 @@ public:
     virtual bool isConstant() const {return true;}
     virtual bool isToken() {return false;}
     virtual Expression eval(const std::vector<Expression>& values) const =0;
+    virtual void generateGCode(const SaliraWritter &out) const = 0;
     
 };
 
@@ -38,6 +39,9 @@ public:
   virtual Expression eval(const std::vector<Expression>& values) const {
     return new SaliraInt(_value);
   }
+  virtual void generateGCode(const SaliraWritter &out) const{
+    
+  }
 };
 
 /*
@@ -59,6 +63,9 @@ public:
   virtual Expression eval(const std::vector<Expression>& values) const {
     return new SaliraDouble(_value);
   }  
+  virtual void generateGCode(const SaliraWritter &out) const{
+    
+  }
 };
 
 /* 
@@ -77,7 +84,9 @@ public:
   virtual std::string print() {return std::string("List");}
   virtual Type getType() const {return T_LIST;}
   virtual Expression eval(const std::vector<Expression>& values)const { return new SaliraInt(-1);}
-  
+  virtual void generateGCode(const SaliraWritter &out) const{
+    
+  }
   
 };
 
@@ -102,8 +111,12 @@ public:
     // Again not sure, its 2:46am
     return values[_placement]->eval(values);
   }
+  virtual void generateGCode(const SaliraWritter &out) const{
+    
+  }
   virtual Type getType() const {return _type;}
   Token(int place, Type type) : _placement(place), _type(type), ExpressionBase(false) {}
+  
   virtual std::string print() const { 
     std::string p1("Token: ");
     switch(_type){

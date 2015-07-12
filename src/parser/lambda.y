@@ -34,6 +34,9 @@
 	// Position of current variable in arguments order
 	int counter = 0;
 	
+	// Object for writting gcode
+	const SaliraWritter writter;
+	
 	// Prototype for the yylex function
 	static int yylex(Lambda::BisonParser::semantic_type *yylval, Lambda::FlexScanner &scanner);
 			      
@@ -123,7 +126,7 @@ PROGRAM : PROGRAM LINE ';'
 ;
 LINE : ID_F ARGS '=' EXP  {
 			      //NOTE: Need to  be called at the begining of program to load all basic functions
-			      Functor::initBaseFunctions();
+			      Functor::initBaseFunctions(writter);
 	
 			      std::cout << " USAO " << std::endl; 
 			    
@@ -150,6 +153,7 @@ LINE : ID_F ARGS '=' EXP  {
 			      }
 			      
 			      Expression f = new Functor($1, test);
+			      f->generateGCode(writter); 
 			      SaliraInt* temp =(SaliraInt*) f->eval(test);
 			      std::cout << "Rez" <<  temp->value() << std::endl;
 			      arguments.clear();

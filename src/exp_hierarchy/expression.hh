@@ -6,6 +6,7 @@
 #include <unordered_map>
 #include <functional>
 #include "SaliraExceptions.hh"
+#include "salira_writter.hh"
 
 // Forward declaration of Expression so I can write bunch of aliases.
 class ExpressionBase;
@@ -24,7 +25,7 @@ using FuncDecl = std::function< Expression ( std::vector<Expression> ) >;
 class ExpressionBase{
 private:
   // Types T_INT, T_DOUBLE, T_LIST represent Token type;
-  bool _is_constant;   
+  bool _is_constant;  
 public:
   enum Type {S_INT, S_DOUBLE, S_FUNCTOR, S_TOKEN, T_INT, T_DOUBLE, T_LIST};
   ExpressionBase(bool t = false):_is_constant(t){
@@ -35,6 +36,7 @@ public:
   virtual std::string print() const = 0;
   virtual Type getType() const = 0;
   virtual Expression eval(const std::vector<Expression>& values)const = 0;
+  virtual void generateGCode(const SaliraWritter &out) const = 0; 
   
   virtual ~ExpressionBase() {}
 };

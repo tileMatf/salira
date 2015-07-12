@@ -139,7 +139,7 @@ namespace Lambda {
     /// Symbol semantic values.
     union semantic_type
     {
-    #line 44 "lambda.y" // lalr1.cc:372
+    #line 47 "lambda.y" // lalr1.cc:372
 
 	int intNum;
 	double doubleNum;

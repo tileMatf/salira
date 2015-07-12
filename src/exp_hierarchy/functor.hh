@@ -35,9 +35,10 @@ public:
   static bool isFunctionDefined(std::string identifier);
   // Inserting new function
   static bool insertFunc(std::string identifier, FuncDecl f, std::vector<Expression> args);
-  // Initialize basic functions. Filling FuncMap with functions. 
+  // Initialize basic functions and G code. Filling FuncMap with functions. 
   // NOTE: Similar mechanism can be used for including another .hs file.
-  static bool initBaseFunctions();
+  static bool initBaseFunctions(const SaliraWritter &out);
+ 
   // Reaching for function from map.
   static FuncDecl getFunc(std::string identifier, std::vector<Expression> args) throw();
 private:
@@ -68,6 +69,7 @@ public:
   inline virtual bool isToken() const { return false; }
   inline virtual bool isConstant() const { return true; }
   virtual Expression eval(const std::vector<Expression>& values) const;
+  virtual void generateGCode(const SaliraWritter &out) const;
   virtual Type getType() const {return S_FUNCTOR;};
   virtual ~Functor() {
     // Deleting memory from arguments
