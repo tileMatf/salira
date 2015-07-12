@@ -76,12 +76,50 @@ public:
 class SaliraList : public ExpressionBase {
 private:
   Type _type_of_elements;
-  std::vector<Expression> _elements;
+  std::list<Expression> _elements;
 public:
-  SaliraList(Type type, std::vector<Expression> arr) : _type_of_elements(type), _elements(arr) {}
+  SaliraList(Type type, std::vector<Expression> arr) : _type_of_elements(type){
+		for(Expression element : arr){
+			if(_type_of_elements != element->getType()){
+				throw SaliraException("Elements are not of the same type!");
+			}
+			_elements.push_back(element);
+		}
+		
+	}
+  
+  
+  // Methods for accessing.
+  void addElementFront(Expression new_element){
+		this->_elements.push_front(new_element);
+  }
+  void addElementBack(Expression new_element){
+		this->_elements.push_back(new_element);
+  }
+  Expression head(){
+		return this->_elements.front();
+  }
+  // Return first element of list and then removes it.
+  Expression popHead(){
+		Expression ret = head();
+		_elements.pop_front();
+		return ret;
+  }
+  
+  // Check which type are elements of the list.
+  Type elementType(){ return _type_of_elements; }
+  
+ 
+  virtual std::string print() {
+		std::string res = "List: ";
+		for(auto item : _elements){
+			res += item->print();
+			res += " ";
+		}
+		return res;
+	}
   virtual bool isToken() const {return false;}
   virtual bool isConstant() const {return false;}
-  virtual std::string print() {return std::string("List");}
   virtual Type getType() const {return T_LIST;}
   virtual Expression eval(const std::vector<Expression>& values)const { return new SaliraInt(-1);}
   virtual void generateGCode(const SaliraWritter &out) const{
