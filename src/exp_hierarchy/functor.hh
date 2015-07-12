@@ -70,6 +70,8 @@ public:
   inline virtual bool isConstant() const { return true; }
   virtual Expression eval(const std::vector<Expression>& values) const;
   virtual void generateGCode(const SaliraWritter &out) const;
+  void R(const SaliraWritter &out) const;
+  void C(const SaliraWritter &out, const std::vector<Expression> &values) const;
   virtual Type getType() const {return S_FUNCTOR;};
   virtual ~Functor() {
     // Deleting memory from arguments

@@ -1,16 +1,12 @@
 Map contents!
+	F Num: 1
+		Declaration: 
+			Arguments
+				Token: int
+				Token: int
 	G Num: 1
 		Declaration: 
 			Arguments
-				Token: int
-	F Num: 2
-		Declaration: 
-			Arguments
-				SaliraInt: 0
-				SaliraInt: 6
-		Declaration: 
-			Arguments
-				Token: int
 				Token: int
 	div Num: 1
 		Declaration: 
