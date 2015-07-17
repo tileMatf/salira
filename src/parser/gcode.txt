@@ -1,4 +1,6 @@
+
 BEGIN; 
+<<<<<<< HEAD
 PUSHGLOBAL $Prog; 
 EVAL; 
 PRINT; 
@@ -15,3 +17,11 @@ GLOBSTART F, 2;
 UPDATE 3;
 POP 2;
 UNWIND;
+=======
+ PUSHGLOBAL $Prog; 
+ EVAL; 
+ PRINT;
+ END;
+
+
+>>>>>>> fe44c8348fe67bb222ea67b77f721a28524b8c54
