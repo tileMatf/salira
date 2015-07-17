@@ -8,7 +8,8 @@
 #include <Engines/parser.h>
 #include <Engines/executor.h>
 #include <unistd.h>
-#include<QTime>
+#include <QTime>
+
 
 using namespace std;
 
@@ -63,6 +64,15 @@ void MainWindow::FillVAXCodeEditor()
         ui->txtEditorVAXCode->append(command.ToString());
 }
 
+void removeAllButton(QLayout *layout)
+{
+    QLayoutItem *child;
+    while ((child = layout->takeAt(0)) != 0) {
+        delete child->widget();
+        delete child;
+    }
+}
+
 void MainWindow::FillOutput()
 {
     ui->txtOutput->clear();
@@ -70,8 +80,46 @@ void MainWindow::FillOutput()
     foreach (QString line, Executor::Instance().currentState().output())
         ui->txtOutput->append(">> " + line + "\n");
 
-    // ovo sam koristila samo da bi mi prikazivao sta se nalazi kad na steku, na grafu, itd..
-    // to cu izbrisati posle
+
+    removeAllButton(ui->stackLayout);
+
+    for(int i = 0; i < Executor::Instance().currentState().stack().length(); i++)
+    {
+        QString nodeName = "NODE [" + QString::number(Executor::Instance().currentState().stack().at(i)+1) + "]";
+        ui->stackLayout->insertWidget(ui->stackLayout->count()-i,new QPushButton(nodeName));
+    }
+
+    removeAllButton(ui->graphLayout);
+    for(int i = 0; i < Executor::Instance().currentState().graph().length(); i++)
+    {
+        QString nodeName;
+        switch(Executor::Instance().currentState().graph()[i].type())
+        {
+        case 0:
+            nodeName = "HOLE";
+            break;
+        case 1:
+            nodeName = "INTEGER\nNODE [" + QString::number(Executor::Instance().currentState().graph()[i].id()+1)
+                    + "]\n" + QString::number(Executor::Instance().currentState().graph()[i].value());
+            break;
+        case 2:
+            nodeName = "FUNCTION\nNODE [" + QString::number(Executor::Instance().currentState().graph()[i].id()+1)
+                    + "]\n" + Executor::Instance().currentState().graph()[i].functionName();
+            break;
+        case 3:
+            nodeName = "CONST";
+            break;
+        case 4:
+            nodeName = "APPLICATION\nNODE[" + QString::number(Executor::Instance().currentState().graph()[i].id()+1)
+                    + "]\nNODE [" + QString::number(Executor::Instance().currentState().graph()[i].idRef1()+1)
+                    + "]\nNODE [" + QString::number(Executor::Instance().currentState().graph()[i].idRef2()+1);
+            break;
+        }
+
+        ui->graphLayout->insertWidget(ui->graphLayout->count()-i,new QPushButton(nodeName));
+    }
+
+
     ui->txtOutput->append(QString("Stack:"));
     for(int i =0; i < Executor::Instance().currentState().stack().length(); i++)
         ui->txtOutput->append("id = " + QString::number(Executor::Instance().currentState().stack().at(i)));

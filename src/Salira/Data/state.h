@@ -24,6 +24,7 @@ private:
     QString _errorMessage;
 
     int commandExists(State& state, QList<GCommand> commands);
+    int labelExists(QList<GCommand> commands);
 
 public:
     State();

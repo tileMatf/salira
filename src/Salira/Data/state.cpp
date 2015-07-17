@@ -123,9 +123,21 @@ QString State::errorMessage()
 int State::commandExists(State& state, QList<GCommand> commands)
 {
     int nodeID = state.stack().at(state.stack().length() - 1);
+
     for(int i = 0; i < commands.length(); i++) {
         if(commands[i].ToString() == QString("GLOBSTART " + state.graph()[nodeID].functionName() + " "
                 + QString::number(state.graph()[nodeID].value()) + ";"))
+            return i;
+    }
+    return -1;
+}
+
+int State::labelExists(QList<GCommand> commands)
+{
+    QString labelName = commands[_maxID-1].args()[0]->ToString();
+
+    for(int i = 0; i < commands.length(); i++) {
+        if(commands[i].ToString() == QString("LABEL " + labelName + ";"))
             return i;
     }
     return -1;
@@ -309,7 +321,7 @@ bool State::Alloc(GCommand command, State& state)
     state = State(*this, command, _maxID);
     for(int i = 0; i < arg; i++)
     {
-        state._stack.push_back(maxID() - 2 + i);
+        state._stack.push_back(maxID() - 1 + i);
         state._ep++;
         state._graph.push_back(GraphNode(state.hp() + i, GraphNodeType::None, 0));
     }
@@ -700,12 +712,26 @@ bool State::Return(GCommand command, State& state, QList<GCommand> commands)
 
 bool State::Label(GCommand command, State& state, QList<GCommand> commands)
 {
-    state._cBegin++;
+    state = State(*this, command, _maxID);
+
+    //state._cBegin++;
     return true;
 }
 
+
 bool State::Jump(GCommand command, State& state, QList<GCommand> commands)
 {
+    //state = State(*this, command, _maxID);
+    int index = labelExists(commands);
+
+    if(index == -1)
+    {
+        this->_errorMessage = "Error: No appropriate label for JUMP instruction.";
+        return false;
+    }
+
+    state = State(*this, commands[index], index);  //index je pozicija labele na koju treba da se skoci
+                                                   //treba da se ode na to stanje, ali ovo ne radi ovako
     return true;
 }
 
