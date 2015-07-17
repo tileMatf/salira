@@ -50,7 +50,7 @@ bool Functor::initBaseFunctions(const SaliraWritter &out){
     return true;
   
   // Initializing G code
-  out.write("BEGIN; \nPUSHGLOBAL $Prog; \nEVAL; \nPRINT; \nEND;");
+  out.write("BEGIN; \nPUSHGLOBAL $Prog; \nEVAL; \nPRINT; \nEND;\n");
   // plus
   FuncDecl plus = [](std::vector<Expression> values){ return Expression(
 							new SaliraInt(
@@ -102,8 +102,29 @@ std::string Functor::print() const {
 // Generating G code
 void Functor::generateGCode(const SaliraWritter &out) const
 {
+  out.write("GLOBSTART " + _identifier + ", " + std::to_string(_arguments.size()) + ";\n" );
+  R(out);
 }
 
+void Functor::R(const SaliraWritter &out) const
+{
+  C(out, _arguments);
+  out.write("UPDATE " + std::to_string(_arguments.size()+1) + ";\nPOP " + std::to_string(_arguments.size()) + ";\nUNWIND;\n");
+}
+
+void Functor::C(const SaliraWritter &out, const std::vector<Expression> &values) const
+{
+  for(auto i = 0 ; i < values.size(); i++)
+    switch(values[i]->getType())
+    {
+      case S_TOKEN: 
+      {
+	out.write("PUSH " + std::to_string(((SaliraInt*)values[i])->value()) + ";\n");
+      }
+      
+    }
+    
+}
 // API
 // Problem: Need to check if arguments need to evaluate
 Expression Functor::eval(const std::vector<Expression>& values)const { 

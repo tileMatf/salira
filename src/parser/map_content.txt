@@ -1,0 +1,35 @@
+Map contents!
+	F Num: 1
+		Declaration: 
+			Arguments
+				Token: int
+				Token: int
+	G Num: 1
+		Declaration: 
+			Arguments
+				Token: int
+	div Num: 1
+		Declaration: 
+			Arguments
+				Token:  just token
+				Token:  just token
+	mult Num: 1
+		Declaration: 
+			Arguments
+				Token:  just token
+				Token:  just token
+	K Num: 1
+		Declaration: 
+			Arguments
+				Token: int
+				SaliraInt: 3
+	minus Num: 1
+		Declaration: 
+			Arguments
+				Token:  just token
+				Token:  just token
+	plus Num: 1
+		Declaration: 
+			Arguments
+				Token:  just token
+				Token:  just token

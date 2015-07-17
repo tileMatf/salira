@@ -14,7 +14,7 @@ F:
 {
 GLOBSTART f, n;
 R (E) [x1 = n, x2 = n-1, ... xn = 1] n ; (call function R with arguments E, [list of vars], num of vars)
-}
+}C
 
 R (E) [x1 = a1, ... xn = an] n :
 {
@@ -43,7 +43,7 @@ else if E = function f (X)
 Predefined function symbols:
 ADD, SUB, MUL, DIV, NEG
 
-EXAMPLE:
+EXAMPLE 1:
 
 $F x = NEG x
 $PROG = $F 3
@@ -52,25 +52,85 @@ $PROG
 
 G CODE:
 {
-  BEGIN;
-  PUSHGLOBAL $PROG;
-  EVAL;
-  PRINT;
-  END;
+  BEGIN; 	// Begining of program
+  PUSHGLOBAL $PROG;	// Load $PROG
+  EVAL;		// Evaluate
+  PRINT;	// Print
+  END;		// End of program
   
-  GLOBSTART $F, 1;
-  PUSH 0;
-  PUSHGLOBAL $NEG;
-  MKAP;
-  UPDATE 2;
-  POP 1;
-  UNWIND;
+  GLOBSTART $F, 1;	// Begining of F(x) (one argument)
+  PUSH 0;	// Push x
+  PUSHGLOBAL $NEG;	// Push Neg
+  MKAP;		// Construct Neg(x)
+  UPDATE 2;	// Update the root of redex
+  POP 1;	// Pop the parameter
+  UNWIND;	// Continue evaluation
   
-  GLOBSTART $PROG, 0;
-  PUSHINT 3;
-  PUSHGLOBAL $F;
-  MKAP;
-  UPDATE 1;
-  UNWIND;
+  GLOBSTART $PROG, 0;	// Begining of Prog() (no args)
+  PUSHINT 3;	// Push 3
+  PUSHGLOBAL $F;	// Push F
+  MKAP;		// Construct F(3)
+  UPDATE 1;	// Update the root of redex
+  UNWIND;	// Continue evaluation
+}
+
+
+EXAMPLE 2:
+
+$G x y = 10*x + y
+$F x y = $G x y + $G x-1 y-1
+$PROG = $F 3 4
+------------
+$PROG
+
+G CODE:
+{
+  BEGIN;	// Begining of program
+  PUSHGLOBAL $PROG;	// Load Prog
+  EVAL;		// Evaluate
+  PRINT;	// Print
+  END;		// End of progra,
+    
+  GLOBSTART $G, 2;	// Begining of G(x,y) (two args)
+  PUSH 1;	// Push y
+  PUSH 0;	// Push x
+  PUSHINT 10;	// Push 10
+  PUSHGLOBAL $MUL;	// Push Mul
+  MKAP;		// Construct Mul(10,x)
+  PUSHGLOBAL $ADD;	// Push Add
+  MKAP;		// Construct Add(Mul(10,x),y)
+  UPDATE 3;	// Update root of redex
+  POP 2;	// Pop the parameters
+  UNWIND;	// Continue evaluation
+    
+  GLOBSTART $F, 2;	// Begining of F(x,y) (two args)
+  PUSHINT 1;	// Push 1
+  PUSH 1;	// Push y
+  PUSHGLOBAL $SUB;	// Push Sub
+  MKAP;		// Construct Sub(y,1)
+  PUSHINT 1;	// Push 1
+  PUSH 0;	// Push x
+  PUSHGLOBAL $SUB;	// Push Sub
+  MKAP;		// Construct Sub(x,1)
+  PUSHGLOBAL $G;	// Push G
+  MKAP;  	// Construct G(Sub(x,1), Sub(y,1))
+  PUSH 1;	// Push y
+  PUSH 0;	// Push x
+  PUSHGLOBAL $G;	// Push G
+  MKAP;		// Construct G(x,y)
+  PUSHGLOBAL $ADD;	// Push Add
+  MKAP;		// Construct Add( G(x,y), G(Sub(x,1), Sub(y,1)))
+  UPDATE 3;	// Update root of redex
+  POP 2;	// Pop the parameters
+  UNWIND;	// Continue evaluation
+  
+  GLOBSTART $PROG, 0;	// Begining of Prog() (no args)
+  PUSHINT 4;	// Push 4
+  PUSHINT 3;	// Push 3
+  PUSHGLOBAL $F;	// Push F
+  MKAP;		// Construct F(3,4)
+  UPDATE 1;	// Update the root of redex
+  UNWIND;	// Continue evaluation
+
 }
 
