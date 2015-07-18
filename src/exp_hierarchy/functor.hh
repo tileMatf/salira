@@ -43,11 +43,19 @@ public:
   static FuncDecl getFunc(std::string identifier, std::vector<Expression> args) throw();
 private:
   std::string _identifier;
+	std::string _idenF;
   std::vector<Expression> _arguments;
 public:
   Functor(std::string id, std::initializer_list<Expression> list);
   Functor(std::string id, std::vector<Expression> args);
   
+	
+	void setIdF(std::string id){
+		_idenF = id;
+	}
+	
+	void generateGCodeStart(const SaliraWritter& out, std::vector<Expression> 
+values, std::string name);
   // Adding additional argument to arguments
   // Intention: So functor can be modified through parsing expression, translation for parsing purposes
   inline void addToArguments(Expression t){ _arguments.push_back(t); }
@@ -69,7 +77,9 @@ public:
   inline virtual bool isToken() const { return false; }
   inline virtual bool isConstant() const { return true; }
   virtual Expression eval(const std::vector<Expression>& values) const;
-  virtual void generateGCode(const SaliraWritter &out) const;
+  virtual void generateGCode(const SaliraWritter &out, 
+std::vector<Expression>
+values = std::vector<Expression>()) ;
   virtual Type getType() const {return S_FUNCTOR;};
   virtual ~Functor() {
     // Deleting memory from arguments

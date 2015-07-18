@@ -15,7 +15,8 @@ public:
     virtual bool isConstant() const {return true;}
     virtual bool isToken() {return false;}
     virtual Expression eval(const std::vector<Expression>& values) const =0;
-    virtual void generateGCode(const SaliraWritter &out) const = 0;
+    virtual void generateGCode(const SaliraWritter &out, 
+std::vector<Expression> values) = 0;
     
 };
 
@@ -39,8 +40,9 @@ public:
   virtual Expression eval(const std::vector<Expression>& values) const {
     return new SaliraInt(_value);
   }
-  virtual void generateGCode(const SaliraWritter &out) const{
-    
+  virtual void generateGCode(const SaliraWritter &out,std::vector<Expression>
+values) {
+    out.write("PUSHINT " + std::to_string(_value) + ";\n");
   }
 };
 
@@ -63,8 +65,10 @@ public:
   virtual Expression eval(const std::vector<Expression>& values) const {
     return new SaliraDouble(_value);
   }  
-  virtual void generateGCode(const SaliraWritter &out) const{
-    
+  virtual void generateGCode(const SaliraWritter &out, 
+std::vector<Expression>
+values) {
+    out.write("PUSHDOUBLE "+std::to_string(_value)+ ";\n");
   }
 };
 
@@ -122,7 +126,8 @@ public:
   virtual bool isConstant() const {return false;}
   virtual Type getType() const {return T_LIST;}
   virtual Expression eval(const std::vector<Expression>& values)const { return new SaliraInt(-1);}
-  virtual void generateGCode(const SaliraWritter &out) const{
+  virtual void generateGCode(const SaliraWritter &out, 
+std::vector<Expression> values) {
     
   }
   
@@ -149,8 +154,16 @@ public:
     // Again not sure, its 2:46am
     return values[_placement]->eval(values);
   }
-  virtual void generateGCode(const SaliraWritter &out) const{
-    
+  virtual void generateGCode(const SaliraWritter &out, std::vector<Expression>
+values ) {
+    if(_type == ExpressionBase::S_TOKEN || _type == T_INT){
+			int numOfArgs = values.size();
+			int pos = numOfArgs - _placement ;
+			out.write("PUSH "+std::to_string(pos)+";\n");
+    }
+    else{
+			values[_placement]->generateGCode(out, values);
+    }
   }
   virtual Type getType() const {return _type;}
   Token(int place, Type type) : _placement(place), _type(type), ExpressionBase(false) {}

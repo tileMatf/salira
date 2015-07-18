@@ -17,7 +17,8 @@ class ExpressionBase;
  */
 using Expression = ExpressionBase*;
 //using Expression = std::shared_ptr<ExpressionBase>;
-using FuncDecl = std::function< Expression ( std::vector<Expression> ) >;
+using FuncDecl = std::function< void (const SaliraWritter& 
+out,std::vector<Expression> ) >;
 
 
 /*
@@ -37,8 +38,8 @@ public:
   virtual std::string print() const = 0;
   virtual Type getType() const = 0;
   virtual Expression eval(const std::vector<Expression>& values)const = 0;
-  virtual void generateGCode(const SaliraWritter &out) const = 0; 
-  
+	virtual void generateGCode(const SaliraWritter &out, 
+std::vector<Expression> values) = 0; 
   virtual ~ExpressionBase() {}
 };
 

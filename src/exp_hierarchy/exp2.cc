@@ -8,7 +8,8 @@
 #include "auto_load.hh"
 
 int main() {
-  Functor::initBaseFunctions();
+  SaliraWritter out{};
+	Functor::initBaseFunctions(out);
   Expression p = new Token(0,ExpressionBase::T_INT);
   Expression p1 =new Token(1,ExpressionBase::T_INT);
   std::vector<Expression> _args;
@@ -25,15 +26,12 @@ int main() {
   std::vector<Expression> test {pt1,pt2};
   std::vector<Expression> test1 {ptt1, ptt2};
   Expression p2 = new SaliraInt(8);
-  Expression e1 = new Functor("minus", {p,p1});
-  Expression e = new Functor("plus", {p2, e1});
-  SaliraUtility::insertFunctionInPool("test", e,_args);
-  Expression result = e->eval(test);
-  std::cout << ((SaliraInt*)result)->value() << std::endl;
-  
-  result = e->eval(test1);
-  std::cout << ((SaliraInt*)result)->value() << std::endl;
-  
+  Expression e1 = new Functor("$SUB", {p,p1});
+  Expression e = new Functor("$ADD", {p2, e1});
+  //Expression result = e->eval(test);
+	
+  ((Functor*)e)->generateGCodeStart(out,std::vector<Expression>(),"$f");
+  SaliraUtility::insertFunctionInPool("$f", e,_args);
   std::cout << "Test" << std::endl;
   return 0;
 }

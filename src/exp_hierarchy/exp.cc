@@ -9,7 +9,8 @@
 #include "salira_dev.hh"
 
 int main() {
-  Functor::initBaseFunctions();
+	SaliraWritter t = SaliraWritter();
+  Functor::initBaseFunctions(t);
   Expression p = new Token(0,ExpressionBase::S_INT);
   std::vector<Expression> _args;
   std::vector<Expression> tint;

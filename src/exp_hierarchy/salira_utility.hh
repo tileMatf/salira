@@ -24,8 +24,9 @@ public:
     // are those that lambda can capture elements by value (or reference) so 
     // its much easier to write, instead of calling overloaded operator() on functor
     // and its much more flexible if want to write your own extension to basic functions.
-    FuncDecl f = [e](std::vector<Expression> values){
-      return e->eval(values);
+    FuncDecl f = [e](const SaliraWritter &out, std::vector<Expression> values){
+			// Changed from eval, in purposes of generation of 
+      e->generateGCode(out, values);
     };
     return f;
   }
@@ -33,6 +34,7 @@ public:
   // Wrapper for easier insertion. 
   static void insertFunctionInPool(std::string identifier, Expression e, std::vector<Expression> args){
     Functor::insertFunc(identifier, SaliraUtility::makeLambda(e), args);
+		
   }
   
 // Write extractors, basically need to write utilities which will extract values from 
