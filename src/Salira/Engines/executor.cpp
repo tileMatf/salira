@@ -81,6 +81,7 @@ void Executor::ExecutePrevious()
 void Executor::Reset()
 {
     this->_states.clear();
+    this->currentState() = State();
     State::setMaxID(0);
 }
 

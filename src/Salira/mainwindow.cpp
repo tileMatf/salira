@@ -17,10 +17,10 @@ static QString fileName = "/home/kostic/Downloads/Salira_Literatura/smiskovic_gm
 static QList<GCommand> gCommands;
 static QList<VAXCommand> vaxCommands;
 static bool _stopped;
+static bool _gCodeValid;
 
 MainWindow::MainWindow(QWidget *parent) :
-    QMainWindow(parent),
-    ui(new Ui::MainWindow)
+    QMainWindow(parent), ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
 }
@@ -47,49 +47,57 @@ void MainWindow::FillGCodeEditor()
             buffer += command.ToString() + "<br>";
         i++;
     }
-
     ui->txtEditorGCode->setHtml(buffer);
-    ui->btnTranslate->setEnabled(true);
-    //ui->btnClear->setEnabled(true);
+
+    ui->tsmiClear->setEnabled(true);
+    ui->tsmiSaveGCode->setEnabled(true);
+
+    ui->btnTranslate->setEnabled(ui->txtEditorVAXCode->toPlainText().length() == 0);
+    _gCodeValid = true;
 }
 
-void MainWindow::FillVAXCodeEditor()
+void MainWindow::FillVAXCodeEditor(bool clearOnly)
 {
     ui -> txtEditorVAXCode->clear();
 
-    if(vaxCommands.size() == 0)
+    if(clearOnly)
         return;
+
+    if(!Translator::Instance().Translate(gCommands, &vaxCommands) || vaxCommands.size() == 0)
+    {
+        ui->btnTranslate->setEnabled(true);
+        ui->tsmiSaveVAXCode->setEnabled(false);
+        return;
+    }
 
     foreach (VAXCommand command, vaxCommands)
         ui->txtEditorVAXCode->append(command.ToString());
+
+    ui->btnTranslate->setEnabled(false);
+    ui->tsmiSaveVAXCode->setEnabled(true);
 }
 
-void removeAllButton(QLayout *layout)
+void MainWindow::FillStack(bool clearOnly)
 {
-    QLayoutItem *child;
-    while ((child = layout->takeAt(0)) != 0) {
-        delete child->widget();
-        delete child;
-    }
-}
+    this->RemoveAllButtons(ui->frameStack->layout());
 
-void MainWindow::FillOutput()
-{
-    ui->txtOutput->clear();
-
-    foreach (QString line, Executor::Instance().currentState().output())
-        ui->txtOutput->append(">> " + line + "\n");
-
-
-    removeAllButton(ui->stackLayout);
+    if(clearOnly)
+        return;
 
     for(int i = 0; i < Executor::Instance().currentState().stack().length(); i++)
     {
         QString nodeName = "NODE [" + QString::number(Executor::Instance().currentState().stack().at(i)+1) + "]";
-        ui->stackLayout->insertWidget(ui->stackLayout->count()-i,new QPushButton(nodeName));
+        ui->frameStack->layout()->addWidget(new QPushButton(nodeName));
     }
+}
 
-    removeAllButton(ui->graphLayout);
+void MainWindow::FillGraph(bool clearOnly)
+{
+    this->RemoveAllButtons(ui->frameGraph->layout());
+
+    if(clearOnly)
+        return;
+
     for(int i = 0; i < Executor::Instance().currentState().graph().length(); i++)
     {
         QString nodeName;
@@ -115,10 +123,27 @@ void MainWindow::FillOutput()
                     + "]\nNODE [" + QString::number(Executor::Instance().currentState().graph()[i].idRef2()+1);
             break;
         }
-
-        ui->graphLayout->insertWidget(ui->graphLayout->count()-i,new QPushButton(nodeName));
+        ui->frameGraph->layout()->addWidget(new QPushButton(nodeName));
     }
+}
 
+void MainWindow::FillDump(bool clearOnly)
+{
+    this->RemoveAllButtons(ui->frameDump->layout());
+
+    if(clearOnly)
+        return;
+}
+
+void MainWindow::FillOutput(bool clearOnly)
+{
+    ui->txtOutput->clear();
+
+    if(clearOnly)
+        return;
+
+    foreach (QString line, Executor::Instance().currentState().output())
+        ui->txtOutput->append(">> " + line + "\n");
 
     ui->txtOutput->append(QString("Stack:"));
     for(int i =0; i < Executor::Instance().currentState().stack().length(); i++)
@@ -139,59 +164,117 @@ void MainWindow::FillOutput()
         ui->txtOutput->append(QString::number(Executor::Instance().currentState().dump()[i].stack()[j]) + " ");
 }
 
-void MainWindow::on_btnClear_clicked()
+void MainWindow::RefreshUI(bool clearOnly, bool keepGCodeText)
 {
-    this->Clear();
+    if(!keepGCodeText)
+        this->FillGCodeEditor();
+    this->FillStack(clearOnly);
+    this->FillGraph(clearOnly);
+    this->FillDump(clearOnly);
+    this->FillOutput(clearOnly);
 }
 
-void MainWindow::on_txtEditorGCode_textChanged()
+void MainWindow::RefreshFileMenu(bool clearEnabled, bool saveGCodeEnabled, bool saveVAXCodeEnabled)
 {
-    bool enable = ui->txtEditorGCode->toPlainText().length() > 0;
-
-    //ui->btnClear->setEnabled(enable);
-    ui->btnTranslate->setEnabled(enable);
+    ui->tsmiClear->setEnabled(clearEnabled);
+    ui->tsmiSaveGCode->setEnabled(saveGCodeEnabled);
+    ui->tsmiSaveVAXCode->setEnabled(saveVAXCodeEnabled);
 }
 
-void MainWindow::on_btnTranslate_clicked()
+void MainWindow::RefreshRunMenu(bool evaluateEnabled, bool nextEnabled, bool previousEnabled, bool runEnabled, bool stopEnabled)
 {
-    if(Translator::Instance().Translate(gCommands, &vaxCommands))
-        FillVAXCodeEditor();
+    ui->tsmiRestart->setEnabled(evaluateEnabled);
+    ui->tsmiNext->setEnabled(nextEnabled);
+    ui->tsmiPrevious->setEnabled(previousEnabled);
+    ui->tsmiRun->setEnabled(runEnabled);
+    ui->tsmiStop->setEnabled(stopEnabled);
+
+    ui->btnRestart->setEnabled(evaluateEnabled);
+    ui->btnNext->setEnabled(nextEnabled);
+    ui->btnPrevious->setEnabled(previousEnabled);
+    ui->btnRun->setEnabled(runEnabled);
+    ui->btnStop->setEnabled(stopEnabled);
 }
 
-void MainWindow::on_btnPrevious_clicked()
+void MainWindow::RemoveAllButtons(QLayout *layout)
 {
-    Executor::Instance().ExecutePrevious();
-    this->FillGCodeEditor();
-    this->FillOutput();
-
-    int currentID = Executor::Instance().currentState().id();
-    ui->btnPrevious->setEnabled(currentID > 0);
-    ui->btnRestart->setEnabled(currentID > 0);
-    ui->btnNext->setEnabled(currentID < State::maxID());
-    ui->btnRun->setEnabled(currentID < State::maxID());
+    QLayoutItem *child;
+    while ((child = layout->takeAt(0)) != 0)
+    {
+        delete child->widget();
+        delete child;
+    }
 }
 
-void MainWindow::on_btnNext_clicked()
+void MainWindow::Clear(bool keepGCodeText)
+{
+    gCommands.clear();
+    vaxCommands.clear();
+    Executor::Instance().Reset();
+
+    this->RefreshFileMenu(false, false, false);
+    this->RefreshRunMenu(false, false, false, false, false);
+    this->RefreshUI(true, keepGCodeText);
+
+    ui->btnTranslate->setEnabled(false);
+    ui->txtEditorVAXCode->clear();
+    _gCodeValid = false;
+}
+
+void MainWindow::Evaluate()
+{
+    this->Clear(true);
+
+    QList<QString> buffer;
+    QString plainText = ui->txtEditorGCode->toPlainText();
+
+    int beginIndex = 0, endIndex = 0;
+    while((endIndex = plainText.indexOf("\n", beginIndex)) != -1)
+    {
+        buffer.push_back(QString(plainText.begin() + beginIndex, endIndex - beginIndex));
+        beginIndex = endIndex + 1;
+    }
+    endIndex = plainText.lastIndexOf("\n") + 1;
+    buffer.push_back(QString(plainText.begin() + endIndex, plainText.length() - endIndex));
+
+    for (int i = buffer.length() - 1; i >= 0 && buffer[i] == ""; i--)
+        buffer.removeAt(i);
+
+    if(Parser::Instance().Parse(buffer, &gCommands))
+    {
+        Executor::Instance().Init(gCommands);
+
+        this->RefreshUI();
+        this->RefreshFileMenu(true, true, false);
+        this->RefreshRunMenu(false, true, false, true, false);
+        this->FillVAXCodeEditor(true);
+        ui->btnTranslate->setEnabled(true);
+        _gCodeValid = true;
+    }
+}
+
+void MainWindow::Next()
 {
     Executor::Instance().ExecuteNext();
-    this->FillGCodeEditor();
-    this->FillOutput();
+    this->RefreshUI();
 
     int currentID = Executor::Instance().currentState().id();
-    ui->btnPrevious->setEnabled(currentID > 0);
-    ui->btnRestart->setEnabled(currentID > 0);
-    ui->btnNext->setEnabled(currentID < State::maxID());
-    ui->btnRun->setEnabled(currentID < State::maxID());
+    this->RefreshRunMenu(currentID > 0, currentID < State::maxID(), currentID > 0, currentID < State::maxID(), false);
 }
 
-void MainWindow::on_btnRun_clicked()
+void MainWindow::Previous()
+{
+    Executor::Instance().ExecutePrevious();
+    this->RefreshUI();
+
+    int currentID = Executor::Instance().currentState().id();
+    this->RefreshRunMenu(currentID > 0, currentID < State::maxID(), currentID > 0, currentID < State::maxID(), false);
+}
+
+void MainWindow::Run()
 {
     _stopped = false;
-    ui->btnStop->setEnabled(true);
-    ui->btnPrevious->setEnabled(false);
-    ui->btnNext->setEnabled(false);
-    ui->btnRun->setEnabled(false);
-    ui->btnRestart->setEnabled(false);
+    this->RefreshRunMenu(false, false, false, false, true);
 
     while(Executor::Instance().currentState().id() < State::maxID())
     {
@@ -199,74 +282,21 @@ void MainWindow::on_btnRun_clicked()
             break;
         this->delay(500);
         Executor::Instance().ExecuteNext();
-        FillGCodeEditor();
+        this->RefreshUI();
     }
+    _stopped = true;
 
     int currentID = Executor::Instance().currentState().id();
-    ui->btnPrevious->setEnabled(currentID > 0);
-    ui->btnNext->setEnabled(currentID < State::maxID());
-    ui->btnRun->setEnabled(currentID < State::maxID());
-    ui->btnRestart->setEnabled(currentID > 0);
-    ui->btnStop->setEnabled(false);
+    this->RefreshRunMenu(currentID > 0, currentID < State::maxID(), currentID > 0, currentID < State::maxID(), false);
 }
 
-void MainWindow::on_btnStop_clicked()
+void MainWindow::Stop()
 {
     _stopped = true;
     ui->btnStop->setEnabled(false);
 }
 
-void MainWindow::on_btnRestart_clicked()
-{
-    Executor::Instance().Init(gCommands);
-    this->FillGCodeEditor();
-
-    ui->btnNext->setEnabled(true);
-    ui->btnRun->setEnabled(true);
-    ui->btnPrevious->setEnabled(false);
-    ui->btnRestart->setEnabled(false);
-}
-
-void MainWindow::delay( int millisecondsToWait)
-{
-    QTime dieTime = QTime::currentTime().addMSecs( millisecondsToWait );
-    while( QTime::currentTime() < dieTime )
-    {
-        QCoreApplication::processEvents( QEventLoop::AllEvents, 100 );
-    }
-}
-
-void MainWindow::on_btnPlay_clicked()
-{
-
-}
-
 void MainWindow::on_tsmiOpen_triggered()
-{
-    this->Open();
-}
-
-void MainWindow::on_tsmiClear_triggered()
-{
-    this->Clear();
-}
-
-void MainWindow::on_tsmiSaveGCode_triggered()
-{
-    this->SaveGCode();
-}
-
-void MainWindow::on_tsmiSaveVAXCode_triggered()
-{
-   this->SaveVAXCode();
-}
-
-void MainWindow::on_tsmiClose_triggered()
-{
-   this->close();
-}
-
-void MainWindow::Open()
 {
     fileName = QFileDialog::getOpenFileName (this, tr("Open File"), fileName /*, tr("Files (.)")*/);
 
@@ -282,35 +312,124 @@ void MainWindow::Open()
                 buffer.push_back(in.readLine());
             file.close();
 
+            for (int i = buffer.length() - 1; i >= 0 && buffer[i] == ""; i--)
+                buffer.removeAt(i);
+
             if(Parser::Instance().Parse(buffer, &gCommands))
             {
-                FillGCodeEditor();
                 Executor::Instance().Init(gCommands);
-                ui->btnRun->setEnabled(true);
-                ui->btnNext->setEnabled(true);
+
+                this->RefreshUI();
+                this->RefreshFileMenu(true, true, false);
+                this->RefreshRunMenu(false, true, false, true, false);
+                this->FillVAXCodeEditor(true);
+                ui->btnTranslate->setEnabled(true);
+                _gCodeValid = true;
             }
         }
     }
 }
 
-void MainWindow::Clear()
+void MainWindow::on_tsmiClear_triggered()
 {
-    ui->txtEditorGCode->clear();
-    ui->txtEditorVAXCode->clear();
+    this->Clear();
+}
+
+void MainWindow::on_tsmiSaveGCode_triggered()
+{
+    //ovo treba implementirati
+}
+
+void MainWindow::on_tsmiSaveVAXCode_triggered()
+{
+   //ovo treba implementirati
+}
+
+void MainWindow::on_tsmiClose_triggered()
+{
+   this->close();
+}
+
+void MainWindow::on_tsmiRestart_triggered()
+{
+    this->Evaluate();
+}
+
+void MainWindow::on_tsmiNext_triggered()
+{
+    this->Next();
+}
+
+void MainWindow::on_tsmiPrevious_triggered()
+{
+    this->Previous();
+}
+
+void MainWindow::on_tsmiRun_triggered()
+{
+    this->Run();
+}
+
+void MainWindow::on_tsmiStop_triggered()
+{
+    this->Stop();
+}
+
+void MainWindow::on_btnRestart_clicked()
+{
+    this->Evaluate();
+}
+
+void MainWindow::on_btnNext_clicked()
+{
+    this->Next();
+}
+
+void MainWindow::on_btnPrevious_clicked()
+{
+    this->Previous();
+}
+
+void MainWindow::on_btnRun_clicked()
+{
+    this->Run();
+}
+
+void MainWindow::on_btnStop_clicked()
+{
+    this->Stop();
+}
+
+void MainWindow::on_txtEditorGCode_textChanged()
+{
+    bool notEmpty = ui->txtEditorGCode->toPlainText().length() > 0;
+    _gCodeValid = false;
+
+    this->RefreshFileMenu(notEmpty, notEmpty, ui->txtEditorVAXCode->toPlainText().length() > 0);
+    this->RefreshRunMenu(notEmpty, false, false, false, false);
     ui->btnTranslate->setEnabled(false);
 }
 
-void MainWindow::SaveGCode()
+void MainWindow::on_btnTranslate_clicked()
 {
-
+    this->FillVAXCodeEditor();
 }
 
-void MainWindow::SaveVAXCode()
+void MainWindow::on_txtEditorVAXCode_textChanged()
 {
-
+    ui->tsmiSaveVAXCode->setEnabled(ui->txtEditorVAXCode->toPlainText().length() > 0);
 }
 
-void MainWindow::Close()
+void MainWindow::delay( int millisecondsToWait)
 {
-    this->close();
+    QTime dieTime = QTime::currentTime().addMSecs( millisecondsToWait );
+    while( QTime::currentTime() < dieTime )
+    {
+        QCoreApplication::processEvents( QEventLoop::AllEvents, 100 );
+    }
+}
+
+void MainWindow::on_btnPlay_clicked()
+{
+
 }

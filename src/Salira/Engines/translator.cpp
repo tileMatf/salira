@@ -13,6 +13,10 @@ Translator& Translator::Instance()
 bool Translator::Translate(QList<GCommand> input, QList<VAXCommand>* output)
 {
     output->clear();
+
+    if(input.length() == 0)
+        return false;
+
     foreach (GCommand gCommand, input)
     {
         QList<VAXCommand> vaxCommands;
