@@ -77,6 +77,7 @@ values, std::string name);
   inline virtual bool isToken() const { return false; }
   inline virtual bool isConstant() const { return true; }
   virtual Expression eval(const std::vector<Expression>& values) const;
+
   virtual void generateGCode(const SaliraWritter &out, 
 std::vector<Expression>
 values = std::vector<Expression>()) ;

@@ -1,8 +1,0 @@
-
-BEGIN; 
- PUSHGLOBAL $Prog; 
- EVAL; 
- PRINT;
- END;
-
-
