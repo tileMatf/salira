@@ -358,6 +358,18 @@
      <layout class="QVBoxLayout" name="verticalLayout_2" stretch="6,4">
       <item>
        <widget class="QGroupBox" name="groupBox_3">
+        <property name="minimumSize">
+         <size>
+          <width>416</width>
+          <height>0</height>
+         </size>
+        </property>
+        <property name="maximumSize">
+         <size>
+          <width>600</width>
+          <height>16777215</height>
+         </size>
+        </property>
         <property name="alignment">
          <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
         </property>
@@ -388,7 +400,7 @@
           </widget>
          </item>
          <item row="1" column="1">
-          <widget class="QScrollArea" name="scrollArea">
+          <widget class="QScrollArea" name="scrollAreaStack">
            <property name="frameShape">
             <enum>QFrame::StyledPanel</enum>
            </property>
@@ -402,9 +414,9 @@
             <enum>QAbstractScrollArea::AdjustToContents</enum>
            </property>
            <property name="widgetResizable">
-            <bool>false</bool>
+            <bool>true</bool>
            </property>
-           <widget class="QWidget" name="scrollAreaWidgetContents">
+           <widget class="QWidget" name="frameStack">
             <property name="geometry">
              <rect>
               <x>0</x>
@@ -413,52 +425,22 @@
               <height>230</height>
              </rect>
             </property>
-            <layout class="QVBoxLayout" name="verticalLayout_6">
+            <layout class="QVBoxLayout" name="verticalLayout_3">
+             <property name="spacing">
+              <number>1</number>
+             </property>
              <property name="leftMargin">
-              <number>0</number>
+              <number>1</number>
              </property>
              <property name="topMargin">
-              <number>0</number>
+              <number>1</number>
              </property>
              <property name="rightMargin">
-              <number>0</number>
+              <number>1</number>
              </property>
              <property name="bottomMargin">
-              <number>0</number>
+              <number>1</number>
              </property>
-             <item>
-              <widget class="QFrame" name="frameStack">
-               <property name="sizePolicy">
-                <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
-                 <horstretch>0</horstretch>
-                 <verstretch>0</verstretch>
-                </sizepolicy>
-               </property>
-               <property name="frameShape">
-                <enum>QFrame::StyledPanel</enum>
-               </property>
-               <property name="frameShadow">
-                <enum>QFrame::Raised</enum>
-               </property>
-               <layout class="QVBoxLayout" name="verticalLayout_3">
-                <property name="spacing">
-                 <number>1</number>
-                </property>
-                <property name="leftMargin">
-                 <number>1</number>
-                </property>
-                <property name="topMargin">
-                 <number>1</number>
-                </property>
-                <property name="rightMargin">
-                 <number>1</number>
-                </property>
-                <property name="bottomMargin">
-                 <number>1</number>
-                </property>
-               </layout>
-              </widget>
-             </item>
             </layout>
            </widget>
           </widget>
@@ -483,7 +465,7 @@
           </widget>
          </item>
          <item row="1" column="3">
-          <widget class="QScrollArea" name="scrollArea_2">
+          <widget class="QScrollArea" name="scrollAreaGraph">
            <property name="frameShape">
             <enum>QFrame::StyledPanel</enum>
            </property>
@@ -497,9 +479,9 @@
             <enum>QAbstractScrollArea::AdjustToContents</enum>
            </property>
            <property name="widgetResizable">
-            <bool>false</bool>
+            <bool>true</bool>
            </property>
-           <widget class="QWidget" name="scrollAreaWidgetContents_2">
+           <widget class="QWidget" name="frameGraph">
             <property name="geometry">
              <rect>
               <x>0</x>
@@ -508,55 +490,22 @@
               <height>230</height>
              </rect>
             </property>
-            <layout class="QVBoxLayout" name="verticalLayout_7">
+            <layout class="QVBoxLayout" name="verticalLayout_4">
              <property name="spacing">
-              <number>0</number>
+              <number>1</number>
              </property>
              <property name="leftMargin">
-              <number>0</number>
+              <number>1</number>
              </property>
              <property name="topMargin">
-              <number>0</number>
+              <number>1</number>
              </property>
              <property name="rightMargin">
-              <number>0</number>
+              <number>1</number>
              </property>
              <property name="bottomMargin">
-              <number>0</number>
+              <number>1</number>
              </property>
-             <item>
-              <widget class="QFrame" name="frameGraph">
-               <property name="sizePolicy">
-                <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
-                 <horstretch>0</horstretch>
-                 <verstretch>0</verstretch>
-                </sizepolicy>
-               </property>
-               <property name="frameShape">
-                <enum>QFrame::StyledPanel</enum>
-               </property>
-               <property name="frameShadow">
-                <enum>QFrame::Raised</enum>
-               </property>
-               <layout class="QVBoxLayout" name="verticalLayout_4">
-                <property name="spacing">
-                 <number>1</number>
-                </property>
-                <property name="leftMargin">
-                 <number>1</number>
-                </property>
-                <property name="topMargin">
-                 <number>1</number>
-                </property>
-                <property name="rightMargin">
-                 <number>1</number>
-                </property>
-                <property name="bottomMargin">
-                 <number>1</number>
-                </property>
-               </layout>
-              </widget>
-             </item>
             </layout>
            </widget>
           </widget>
@@ -581,7 +530,7 @@
           </widget>
          </item>
          <item row="1" column="5">
-          <widget class="QScrollArea" name="scrollArea_3">
+          <widget class="QScrollArea" name="scrollAreaDump">
            <property name="frameShape">
             <enum>QFrame::StyledPanel</enum>
            </property>
@@ -595,9 +544,9 @@
             <enum>QAbstractScrollArea::AdjustToContents</enum>
            </property>
            <property name="widgetResizable">
-            <bool>false</bool>
+            <bool>true</bool>
            </property>
-           <widget class="QWidget" name="scrollAreaWidgetContents_3">
+           <widget class="QWidget" name="frameDump">
             <property name="geometry">
              <rect>
               <x>0</x>
@@ -606,55 +555,22 @@
               <height>230</height>
              </rect>
             </property>
-            <layout class="QVBoxLayout" name="verticalLayout_8">
+            <layout class="QVBoxLayout" name="verticalLayout_5">
              <property name="spacing">
-              <number>0</number>
+              <number>1</number>
              </property>
              <property name="leftMargin">
-              <number>0</number>
+              <number>1</number>
              </property>
              <property name="topMargin">
-              <number>0</number>
+              <number>1</number>
              </property>
              <property name="rightMargin">
-              <number>0</number>
+              <number>1</number>
              </property>
              <property name="bottomMargin">
-              <number>0</number>
+              <number>1</number>
              </property>
-             <item>
-              <widget class="QFrame" name="frameDump">
-               <property name="sizePolicy">
-                <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
-                 <horstretch>0</horstretch>
-                 <verstretch>0</verstretch>
-                </sizepolicy>
-               </property>
-               <property name="frameShape">
-                <enum>QFrame::StyledPanel</enum>
-               </property>
-               <property name="frameShadow">
-                <enum>QFrame::Raised</enum>
-               </property>
-               <layout class="QVBoxLayout" name="verticalLayout_5">
-                <property name="spacing">
-                 <number>1</number>
-                </property>
-                <property name="leftMargin">
-                 <number>1</number>
-                </property>
-                <property name="topMargin">
-                 <number>1</number>
-                </property>
-                <property name="rightMargin">
-                 <number>1</number>
-                </property>
-                <property name="bottomMargin">
-                 <number>1</number>
-                </property>
-               </layout>
-              </widget>
-             </item>
             </layout>
            </widget>
           </widget>
@@ -669,6 +585,18 @@
           <horstretch>0</horstretch>
           <verstretch>0</verstretch>
          </sizepolicy>
+        </property>
+        <property name="minimumSize">
+         <size>
+          <width>416</width>
+          <height>0</height>
+         </size>
+        </property>
+        <property name="maximumSize">
+         <size>
+          <width>600</width>
+          <height>16777215</height>
+         </size>
         </property>
         <layout class="QGridLayout" name="gridLayout_4">
          <property name="leftMargin">

@@ -234,9 +234,11 @@ void MainWindow::Evaluate()
     endIndex = plainText.lastIndexOf("\n") + 1;
     buffer.push_back(QString(plainText.begin() + endIndex, plainText.length() - endIndex));
 
+    for (int i = 0; i <= buffer.length() - 1 && buffer[0] == ""; i++)
+        buffer.removeAt(0);
+
     for (int i = buffer.length() - 1; i >= 0 && buffer[i] == ""; i--)
         buffer.removeAt(i);
-
 
     if(Parser::Instance().Parse(buffer, &gCommands))
     {
@@ -317,6 +319,9 @@ void MainWindow::on_tsmiOpen_triggered()
             while(!in.atEnd())
                 buffer.push_back(in.readLine());
             file.close();
+
+            for (int i = 0; i <= buffer.length() - 1 && buffer[0] == ""; i++)
+                buffer.removeAt(0);
 
             for (int i = buffer.length() - 1; i >= 0 && buffer[i] == ""; i--)
                 buffer.removeAt(i);
