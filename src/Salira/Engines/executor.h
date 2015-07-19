@@ -21,7 +21,7 @@ public:
     QList<State> states();
     State currentState();
 
-    void Init(QList<GCommand> commands);
+    bool Init(QList<GCommand> commands, QString& errorMessage);
     void ExecuteNext();
     void ExecutePrevious();
     void Reset();

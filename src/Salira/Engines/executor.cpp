@@ -23,30 +23,52 @@ State Executor::currentState()
     return this->_currentState;
 }
 
-void Executor::Init(QList<GCommand> commands)
+bool Executor::Init(QList<GCommand> commands, QString& errorMessage)
 {
     this->Reset();
 
     bool error = false;
     State initialState = State(0);
     this->_states.push_back(initialState);
-    foreach(GCommand command, commands)
+
+    State nextState;
+    for (int i = 0; i < commands.length(); i++)
     {
-        State nextState;
-        if(!(this->_states.last().GetNext(command, nextState, commands)))
+        GCommand command = commands[i];
+        if(!(this->_states.last().GetNext(command, nextState, commands, i)))
         {
             error = true;
             break;
         }
 
+        if(nextState.command().value() == "JUMP")
+        {
+            QString labelName = nextState.command().args()[0]->ToString();
+
+            for(int j = 0; j < commands.length(); j++)
+            {
+                if(commands[j].ToString() == QString("LABEL " + labelName + ";"))
+                {
+                    i = j - 1;
+                    break;
+                }
+            }
+        }
+
+
+
         this->_states.push_back(nextState);
     }
 
     if(this->_states.length() > 0 && !error)
+    {
         this->_currentState = this->_states[0];
+        return true;
+    }
     else if(error)
     {
-        //ovde treba da se ispise error poruka i odradi neka invalidacija
+        errorMessage = nextState.errorMessage();
+        return false;
     }
 }
 

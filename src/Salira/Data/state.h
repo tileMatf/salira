@@ -22,14 +22,15 @@ private:
     QVector<QString> _output;
     GCommand _command;
     QString _errorMessage;
+    int _currentLineNumber;
 
     int commandExists(State& state, QList<GCommand> commands);
-    int labelExists(QList<GCommand> commands);
+    int labelExists(QList<GCommand> commands, QString labelName);
 
 public:
     State();
     State(int id);
-    State(const State& state, GCommand command, int id);
+    State(const State& state, GCommand command, int id, int jumpTo = -1);
     ~State();
 
     static int maxID();
@@ -47,8 +48,9 @@ public:
     QVector<QString> output();
     GCommand command();
     QString errorMessage();
+    int currentLineNumber();
 
-    bool GetNext(GCommand command, State& nextState, QList<GCommand> commands);
+    bool GetNext(GCommand command, State& nextState, QList<GCommand> commands, int lineNumber);
     bool PushInt(GCommand command, State& state);
     bool PushGlobal(GCommand command, State& state);
     bool GlobStart(GCommand command, State& state);
@@ -75,7 +77,7 @@ public:
     bool Unwind(GCommand command, State& state, QList<GCommand> commands);
     bool Unwind2(GCommand command, State& state, QList<GCommand> commands);
     bool Return(GCommand command, State& state, QList<GCommand> commands);
-    bool Label(GCommand command, State& state, QList<GCommand> commands);
+    bool Label(GCommand command, State& state, QList<GCommand> commands, int lineNumber);
     bool Jump(GCommand command, State& state, QList<GCommand> commands);
     bool JFalse(GCommand command, State& state, QList<GCommand> commands);
 };

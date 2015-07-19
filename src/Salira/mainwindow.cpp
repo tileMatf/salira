@@ -38,7 +38,7 @@ void MainWindow::FillGCodeEditor()
         return;
 
     QString buffer;
-    int i = 0, currentCommandNumber = Executor::Instance().currentState().id() - 1;
+    int i = 0, currentCommandNumber = Executor::Instance().currentState().currentLineNumber() - 1;
     foreach (GCommand command, gCommands)
     {
         if(i == currentCommandNumber)
@@ -240,16 +240,24 @@ void MainWindow::Evaluate()
     for (int i = buffer.length() - 1; i >= 0 && buffer[i] == ""; i--)
         buffer.removeAt(i);
 
+
     if(Parser::Instance().Parse(buffer, &gCommands))
     {
-        Executor::Instance().Init(gCommands);
-
-        this->RefreshUI();
-        this->RefreshFileMenu(true, true, false);
-        this->RefreshRunMenu(false, true, false, true, false);
-        this->FillVAXCodeEditor(true);
-        ui->btnTranslate->setEnabled(true);
-        _gCodeValid = true;
+        QString errorMessage;
+        if(Executor::Instance().Init(gCommands, errorMessage))
+        {
+            this->RefreshUI();
+            this->RefreshFileMenu(true, true, false);
+            this->RefreshRunMenu(false, true, false, true, false);
+            this->FillVAXCodeEditor(true);
+            ui->btnTranslate->setEnabled(true);
+            _gCodeValid = true;
+        }
+        else
+        {
+            ui->txtOutput->clear();
+            ui->txtOutput->append(errorMessage);
+        }
     }
 }
 
@@ -317,14 +325,21 @@ void MainWindow::on_tsmiOpen_triggered()
 
             if(Parser::Instance().Parse(buffer, &gCommands))
             {
-                Executor::Instance().Init(gCommands);
-
-                this->RefreshUI();
-                this->RefreshFileMenu(true, true, false);
-                this->RefreshRunMenu(false, true, false, true, false);
-                this->FillVAXCodeEditor(true);
-                ui->btnTranslate->setEnabled(true);
-                _gCodeValid = true;
+                QString errorMessage;
+                if(Executor::Instance().Init(gCommands, errorMessage))
+                {
+                    this->RefreshUI();
+                    this->RefreshFileMenu(true, true, false);
+                    this->RefreshRunMenu(false, true, false, true, false);
+                    this->FillVAXCodeEditor(true);
+                    ui->btnTranslate->setEnabled(true);
+                    _gCodeValid = true;
+                }
+                else
+                {
+                    ui->txtOutput->clear();
+                    ui->txtOutput->append(errorMessage);
+                }
             }
         }
     }
