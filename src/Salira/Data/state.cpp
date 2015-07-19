@@ -253,10 +253,10 @@ bool State::PushGlobal(GCommand command, State& state)
 {
     state = State(*this, command, _maxID);
     state._stack.push_back(state.hp());
-    state._ep++;
+//    state._ep++;
     state._graph.push_back(GraphNode(state.hp(),0,0,GraphNodeType::Function, command.args()[1]->ToString().toInt(), command.args()[0]->ToString()));
     state._hp++;
-    state._cBegin++;
+ //   state._cBegin++;
 
     return true;
 }
@@ -264,7 +264,7 @@ bool State::PushGlobal(GCommand command, State& state)
 bool State::GlobStart(GCommand command, State& state)
 {
     state = State(*this, command, _maxID);
-    state._cBegin++;
+//    state._cBegin++;
     return true;
 }
 
@@ -274,8 +274,8 @@ bool State::Push(GCommand command, State& state)
 
     state = State(*this, command, _maxID);
     state._stack.push_back(state.hp() - arg - 1);
-    state._ep++;
-    state._cBegin++;
+//    state._ep++;
+//    state._cBegin++;
 
     return true;
 }
@@ -287,8 +287,8 @@ bool State::Pop(GCommand command, State& state)
     state = State(*this, command, _maxID);
     for(int i = 0; i < arg; i++)
         state._stack.pop();
-    state._ep -= arg;
-    state._cBegin++;
+//    state._ep -= arg;
+//    state._cBegin++;
 
     return true;
 }
@@ -297,17 +297,17 @@ bool State::Slide(GCommand command, State& state)
 {
     int arg = command.args()[0]->ToString().toInt();
 
-    if(arg < state.stack().length())
+    if(arg > state.stack().length())
     {
         state._errorMessage = "Error on line " + QString::number(currentLineNumber()) + ": Invalid command SLIDE";
         return false;
     }
     state = State(*this, command, _maxID);
-    state._stack[state.stack().length() - arg - 1] = state.stack().at(state.stack().length() - 1);
+    state._stack[state.stack().length() - arg - 1] = state.stack().last();
     for(int i = 0; i < arg; i++)
         state._stack.pop();
-    state._ep -= arg;
-    state._cBegin++;
+//    state._ep -= arg;
+//    state._cBegin++;
 
     return true;
 }
@@ -319,12 +319,12 @@ bool State::Alloc(GCommand command, State& state)
     state = State(*this, command, _maxID);
     for(int i = 0; i < arg; i++)
     {
-        state._stack.push_back(maxID() - 1 + i);
-        state._ep++;
+        state._stack.push_back(state.hp() + i);
+        //state._ep++;
         state._graph.push_back(GraphNode(state.hp() + i, GraphNodeType::None, 0));
     }
     state._hp += arg;
-    state._cBegin++;
+//    state._cBegin++;
 
     return true;
 }
@@ -335,11 +335,22 @@ bool State::Update(GCommand command, State& state) //proveriti jos jednom
 
     int k = command.args()[0]->ToString().toInt();
 
-    GraphNodeType nodeType = state._graph[state.stack().at(state.stack().length() - 1)].type();
+    GraphNodeType nodeType;
+
+    int value;
+    int idRef1;
+    int idRef2;
+
+    foreach (GraphNode node, state.graph()) {
+        if(node.id() == state.stack().last())
+       {
+            nodeType = node.type();
+            value = node.value();
+            idRef1 = node.idRef1();
+            idRef2 = node.idRef2();
+       }
+    }
     int id = state._graph[state.stack().at(state.stack().length() - k - 1)].id();
-    int value = state._graph[state.stack().at(state.stack().length() - 1)].value();
-    int idRef1 = state._graph[state.stack().at(state.stack().length() - 1)].idRef1();
-    int idRef2 = state._graph[state.stack().at(state.stack().length() - 1)].idRef2();
     int index = state._stack.at(state.stack().length() - k - 1);
     QString name = state._graph[state.stack().at(state.stack().length() - 1 )].functionName();
 
@@ -347,8 +358,8 @@ bool State::Update(GCommand command, State& state) //proveriti jos jednom
     state._stack.pop();
 
     state._graph[index] = GraphNode(id, idRef1, idRef2, nodeType, value, name);
-    state._ep--;
-    state._cBegin++;
+//    state._ep--;
+//    state._cBegin++;
 
     return true;
 }
@@ -356,18 +367,22 @@ bool State::Update(GCommand command, State& state) //proveriti jos jednom
 bool State::Mkap(GCommand command, State& state) //proveriti jos jednom
 {
     state = State(*this, command, _maxID);
-    int id1 = state.graph()[state.stack().at(state.stack().length() - 1)].id();
-    int id2 = state.graph()[state.stack().at(state.stack().length() - 2)].id();
+
+    int id1, id2;
+    foreach(GraphNode node, state.graph())
+    {
+        if(node.id() == state.stack().last())
+            id1 = node.id();
+        if(node.id() == state.stack()[state.stack().length() - 2])
+            id2 = node.id();
+    }
 
     state._stack.pop();
     state._stack.pop();
     state._stack.push_back(state.hp());
 
-
     state._graph.push_back(GraphNode(state.hp(), id1, id2, GraphNodeType::Application, 0, NULL));
     state._hp++;
-    state._ep--;
-    state._cBegin++;
 
     return true;
 }
@@ -375,33 +390,58 @@ bool State::Mkap(GCommand command, State& state) //proveriti jos jednom
 bool State::Cons(GCommand command, State& state)
 {
     state = State(*this, command, _maxID);
-    int id1 = state._graph[state._stack.at(state.stack().length() - 1)].id();
-    int id2 = state._graph[state._stack.at(state.stack().length() - 2)].id();
+    int id1, id2;
+    foreach(GraphNode node, state.graph())
+    {
+        if(node.id() == state.stack().last())
+            id1 = node.id();
+        if(node.id() == state.stack()[state.stack().length() - 2])
+            id2 = node.id();
+    }
 
     state._stack.pop();
     state._stack.pop();
     state._stack.push_back(state.hp());
 
     state._graph.push_back(GraphNode(state.hp(), id1, id2, GraphNodeType::Cons, 0, NULL));
-    state._hp ++;
-    state._ep --;
-    state._cBegin++;
+    state._hp++;
+
     return true;
 }
 
 bool State::Add(GCommand command, State& state)
 {
     state = State(*this, command, _maxID);
-    GraphNodeType arg1Type = state._graph[state._stack.at(state.stack().length() - 1)].type();
-    GraphNodeType arg2Type = state._graph[state._stack.at(state.stack().length() - 2)].type();
+//    GraphNodeType arg1Type = state._graph[state._stack.at(state.stack().length() - 1)].type();
+//    GraphNodeType arg2Type = state._graph[state._stack.at(state.stack().length() - 2)].type();
+
+    GraphNodeType arg1Type, arg2Type;
+
+    foreach(GraphNode node, state.graph())
+    {
+        if(node.id() == state.stack().last())
+            arg1Type = node.type();
+        if(node.id() == state.stack()[state.stack().length() - 2])
+            arg2Type = node.type();
+    }
 
     if(arg1Type != GraphNodeType::Integer || arg2Type != GraphNodeType::Integer)
     {
         state._errorMessage = "Error on line " + QString::number(currentLineNumber()) + ": ADD instruction on non-INT node.";
         return false;
     }
-    int arg1 = state._graph[state._stack.at(state.stack().length() - 1)].value();
-    int arg2 = state._graph[state._stack.at(state.stack().length() - 2)].value();
+
+//    int arg1 = state._graph[state._stack.at(state.stack().length() - 1)].value();
+//    int arg2 = state._graph[state._stack.at(state.stack().length() - 2)].value();
+    int arg1, arg2;
+
+    foreach(GraphNode node, state.graph())
+    {
+        if(node.id() == state.stack().last())
+            arg1 = node.value();
+        if(node.id() == state.stack()[state.stack().length() - 2])
+            arg2 = node.value();
+    }
 
     state._stack.pop();
     state._stack.pop();
@@ -409,8 +449,8 @@ bool State::Add(GCommand command, State& state)
 
     state._graph.push_back(GraphNode(state.hp(), GraphNodeType::Integer, arg1 + arg2));
     state._hp++;
-    state._ep--;
-    state._cBegin++;
+//    state._ep--;
+//    state._cBegin++;
 
     return true;
 }
@@ -418,16 +458,35 @@ bool State::Add(GCommand command, State& state)
 bool State::Sub(GCommand command, State& state)
 {
     state = State(*this, command, _maxID);
-    GraphNodeType arg1Type = state._graph[state._stack.at(state.stack().length() - 1)].type();
-    GraphNodeType arg2Type = state._graph[state._stack.at(state.stack().length() - 2)].type();
+//    GraphNodeType arg1Type = state._graph[state._stack.at(state.stack().length() - 1)].type();
+//    GraphNodeType arg2Type = state._graph[state._stack.at(state.stack().length() - 2)].type();
+
+    GraphNodeType arg1Type, arg2Type;
+
+    foreach(GraphNode node, state.graph())
+    {
+        if(node.id() == state.stack().last())
+            arg1Type = node.type();
+        if(node.id() == state.stack()[state.stack().length() - 2])
+            arg2Type = node.type();
+    }
 
     if(arg1Type != GraphNodeType::Integer || arg2Type != GraphNodeType::Integer)
     {
         state._errorMessage = "Error on line " + QString::number(currentLineNumber()) + ": SUB instruction on non-INT node.";
         return false;
     }
-    int arg1 = state._graph[state._stack.at(state.stack().length() - 1)].value();
-    int arg2 = state._graph[state._stack.at(state.stack().length() - 2)].value();
+//    int arg1 = state._graph[state._stack.at(state.stack().length() - 1)].value();
+//    int arg2 = state._graph[state._stack.at(state.stack().length() - 2)].value();
+    int arg1, arg2;
+
+    foreach(GraphNode node, state.graph())
+    {
+        if(node.id() == state.stack().last())
+            arg1 = node.value();
+        if(node.id() == state.stack()[state.stack().length() - 2])
+            arg2 = node.value();
+    }
 
     state._stack.pop();
     state._stack.pop();
@@ -435,8 +494,8 @@ bool State::Sub(GCommand command, State& state)
 
     state._graph.push_back(GraphNode(state.hp(), GraphNodeType::Integer, arg1 - arg2));
     state._hp++;
-    state._ep--;
-    state._cBegin++;
+//    state._ep--;
+//    state._cBegin++;
 
     return true;
 }
@@ -444,16 +503,36 @@ bool State::Sub(GCommand command, State& state)
 bool State::Mul(GCommand command, State& state)
 {
     state = State(*this, command, _maxID);
-    GraphNodeType arg1Type = state._graph[state._stack.at(state.stack().length() - 1)].type();
-    GraphNodeType arg2Type = state._graph[state._stack.at(state.stack().length() - 2)].type();
+//    GraphNodeType arg1Type = state._graph[state._stack.at(state.stack().length() - 1)].type();
+//    GraphNodeType arg2Type = state._graph[state._stack.at(state.stack().length() - 2)].type();
+
+
+    GraphNodeType arg1Type, arg2Type;
+
+    foreach(GraphNode node, state.graph())
+    {
+        if(node.id() == state.stack().last())
+            arg1Type = node.type();
+        if(node.id() == state.stack()[state.stack().length() - 2])
+            arg2Type = node.type();
+    }
 
     if(arg1Type != GraphNodeType::Integer || arg2Type != GraphNodeType::Integer)
     {
         state._errorMessage = "Error on line " + QString::number(currentLineNumber()) + ": MUL instruction on non-INT node.";
         return false;
     }
-    int arg1 = state._graph[state._stack.at(state.stack().length() - 1)].value();
-    int arg2 = state._graph[state._stack.at(state.stack().length() - 2)].value();
+//    int arg1 = state._graph[state._stack.at(state.stack().length() - 1)].value();
+//    int arg2 = state._graph[state._stack.at(state.stack().length() - 2)].value();
+    int arg1, arg2;
+
+    foreach(GraphNode node, state.graph())
+    {
+        if(node.id() == state.stack().last())
+            arg1 = node.value();
+        if(node.id() == state.stack()[state.stack().length() - 2])
+            arg2 = node.value();
+    }
 
     state._stack.pop();
     state._stack.pop();
@@ -461,8 +540,8 @@ bool State::Mul(GCommand command, State& state)
 
     state._graph.push_back(GraphNode(state.hp(), GraphNodeType::Integer, arg1 * arg2));
     state._hp++;
-    state._ep--;
-    state._cBegin++;
+//    state._ep--;
+//    state._cBegin++;
 
     return true;
 }
@@ -470,17 +549,35 @@ bool State::Mul(GCommand command, State& state)
 bool State::Div(GCommand command, State& state)
 {
     state = State(*this, command, _maxID);
-    GraphNodeType arg1Type = state._graph[state._stack.at(state.stack().length() - 1)].type();
-    GraphNodeType arg2Type = state._graph[state._stack.at(state.stack().length() - 2)].type();
+//    GraphNodeType arg1Type = state._graph[state._stack.at(state.stack().length() - 1)].type();
+//    GraphNodeType arg2Type = state._graph[state._stack.at(state.stack().length() - 2)].type();
+    GraphNodeType arg1Type, arg2Type;
 
+    foreach(GraphNode node, state.graph())
+    {
+        if(node.id() == state.stack().last())
+            arg1Type = node.type();
+        if(node.id() == state.stack()[state.stack().length() - 2])
+            arg2Type = node.type();
+     }
     if(arg1Type != GraphNodeType::Integer || arg2Type != GraphNodeType::Integer)
     {
         state._errorMessage = "Error on line " + QString::number(currentLineNumber()) + ": DIV instruction on non-INT node.";
         return false;
     }
 
-    int arg1 = state._graph[state._stack.at(state.stack().length() - 1)].value();
-    int arg2 = state._graph[state._stack.at(state.stack().length() - 2)].value();
+//    int arg1 = state._graph[state._stack.at(state.stack().length() - 1)].value();
+//    int arg2 = state._graph[state._stack.at(state.stack().length() - 2)].value();
+
+    int arg1, arg2;
+
+    foreach(GraphNode node, state.graph())
+    {
+        if(node.id() == state.stack().last())
+            arg1 = node.value();
+        if(node.id() == state.stack()[state.stack().length() - 2])
+            arg2 = node.value();
+    }
 
     if(arg2 == 0)
     {
@@ -494,8 +591,8 @@ bool State::Div(GCommand command, State& state)
 
     state._graph.push_back(GraphNode(state.hp(), GraphNodeType::Integer, arg1 / arg2));
     state._hp++;
-    state._ep--;
-    state._cBegin++;
+//    state._ep--;
+//    state._cBegin++;
 
     return true;
 }
@@ -503,7 +600,14 @@ bool State::Div(GCommand command, State& state)
 bool State::Neg(GCommand command, State& state) //mozda treba da se izbaci i cvor iz grafa, ne samo sa steka
 {
     state = State(*this, command, _maxID);
-    GraphNodeType argType = state._graph[state._stack.at(state.stack().length() - 1)].type();
+    //GraphNodeType argType = state._graph[state._stack.at(state.stack().length() - 1)].type();
+    GraphNodeType argType;
+
+    foreach(GraphNode node, state.graph())
+    {
+        if(node.id() == state.stack().last())
+            argType = node.type();
+    }
 
     if(argType != GraphNodeType::Integer)
     {
@@ -511,13 +615,18 @@ bool State::Neg(GCommand command, State& state) //mozda treba da se izbaci i cvo
         return false;
     }
 
-    int arg = state._graph[state._stack.at(state.stack().length() - 1)].value();
-
+   // int arg = state._graph[state._stack.at(state.stack().length() - 1)].value();
+    int arg;
+    foreach(GraphNode node, state.graph())
+    {
+        if(node.id() == state.stack().last())
+            arg = node.value();
+    }
     state._stack[state.stack().length() - 1] = state.hp();
 
     state._graph.push_back(GraphNode(state.hp(), GraphNodeType::Integer, -arg));
     state._hp++;
-    state._cBegin++;
+//    state._cBegin++;
 
     return true;
 }
@@ -525,7 +634,17 @@ bool State::Neg(GCommand command, State& state) //mozda treba da se izbaci i cvo
 bool State::Head(GCommand command, State& state) //mozda treba da se izbaci i cvor iz grafa
 {
     state = State(*this, command, _maxID);
-    GraphNodeType argType = state._graph[state._stack.at(state.stack().length() - 1)].type();
+    GraphNodeType argType;
+    int id;
+
+    foreach(GraphNode node, state.graph())
+    {
+        if(node.id() == state.stack().last())
+        {
+            argType = node.type();
+            id = node.idRef1();
+        }
+    }
 
     if(argType != GraphNodeType::Cons)
     {
@@ -533,8 +652,9 @@ bool State::Head(GCommand command, State& state) //mozda treba da se izbaci i cv
         return false;
     }
 
-    state._stack[state.stack().length() - 1] = state._graph[state.stack().at(state.stack().length() - 1)].idRef1();
-    state._cBegin++;
+
+    state._stack[state.stack().length() - 1] = id;
+//    state._cBegin++;
 
     return true;
 }
@@ -542,7 +662,7 @@ bool State::Head(GCommand command, State& state) //mozda treba da se izbaci i cv
 bool State::End(GCommand command, State& state)
 {
     state = State(*this, command, _maxID);
-    state._cBegin++;
+    //state._cBegin++;
     return true;
 }
 
@@ -552,26 +672,35 @@ bool State::Begin(GCommand command, State& state)
     state._stack.clear();
     state._graph.clear();
     state._dump.clear();
-    state._ep = 0;
-    state._sp = 0;
+    //state._ep = 0;
+   // state._sp = 0;
     state._hp = 0;
-    state._cBegin++;
+   // state._cBegin++;
 
     return true;
 }
 
 bool State::Print(GCommand command, State& state)
 {
-    if(this->graph()[this->_stack[this->_stack.length() - 1]].type() != GraphNodeType::Integer)
+    GraphNodeType argType;
+    int value;
+    foreach (GraphNode node, state.graph()) {
+        if(node.id() == state.stack().last())
+        {
+            argType = node.type();
+            value = node.value();
+        }
+    }
+    if(argType != GraphNodeType::Integer)
     {
         state._errorMessage = "Error on line " + QString::number(currentLineNumber()) + ": PRINT instruction on non-INT node";
         return false;
     }
 
     state = State(*this, state._command, _maxID);
-    state._output.push_back(QString::number(state._graph[state._stack.pop()].value()));
-    state._ep --;
-    state._cBegin++;
+    state._output.push_back(QString::number(value));
+    //state._ep --;
+    //state._cBegin++;
 
     return true;
 }
@@ -579,16 +708,33 @@ bool State::Print(GCommand command, State& state)
 bool State::Min(GCommand command, State& state)
 {
     state = State(*this, command, _maxID);
-    GraphNodeType arg1Type = state.graph()[state.stack().at(state.stack().length() - 1)].type();
-    GraphNodeType arg2Type = state.graph()[state.stack().at(state.stack().length() - 2)].type();
+
+//    GraphNodeType arg1Type = state.graph()[state.stack().at(state.stack().length() - 1)].type();
+//    GraphNodeType arg2Type = state.graph()[state.stack().at(state.stack().length() - 2)].type();
+
+    GraphNodeType arg1Type, arg2Type;
+    int arg1, arg2;
+
+    foreach (GraphNode node, state.graph()) {
+        if(node.id() == state.stack().last())
+        {
+            arg1Type = node.type();
+            arg1 = node.value();
+        }
+        if(node.id() == state.stack()[state.stack().length() - 2])
+        {
+            arg2Type = node.type();
+            arg2 = node.value();
+        }
+    }
 
     if(arg1Type != GraphNodeType::Integer || arg2Type != GraphNodeType::Integer)
     {
         state._errorMessage = "Error on line " + QString::number(currentLineNumber()) + ": MIN instruction on non-INT node.";
         return false;
     }
-    int arg1 = state.graph()[state.stack().at(state.stack().length() - 1)].value();
-    int arg2 = state.graph()[state.stack().at(state.stack().length() - 2)].value();
+//    int arg1 = state.graph()[state.stack().at(state.stack().length() - 1)].value();
+//    int arg2 = state.graph()[state.stack().at(state.stack().length() - 2)].value();
 
     state._stack.pop();
     state._stack.pop();
@@ -596,7 +742,7 @@ bool State::Min(GCommand command, State& state)
 
     state._graph.push_back(GraphNode(state.hp(), GraphNodeType::Integer, arg1 < arg2 ? arg1 : arg2));
     state._hp++;
-    state._ep--;
+//    state._ep--;
 
     return true;
 }
@@ -604,16 +750,32 @@ bool State::Min(GCommand command, State& state)
 bool State::Max(GCommand command, State& state)
 {
     state = State(*this, command, _maxID);
-    GraphNodeType arg1Type = state.graph()[state.stack().at(state.stack().length() - 1)].type();
-    GraphNodeType arg2Type = state.graph()[state.stack().at(state.stack().length() - 2)].type();
+//    GraphNodeType arg1Type = state.graph()[state.stack().at(state.stack().length() - 1)].type();
+//    GraphNodeType arg2Type = state.graph()[state.stack().at(state.stack().length() - 2)].type();
+
+    GraphNodeType arg1Type, arg2Type;
+    int arg1, arg2;
+
+    foreach (GraphNode node, state.graph()) {
+        if(node.id() == state.stack().last())
+        {
+            arg1Type = node.type();
+            arg1 = node.value();
+        }
+        if(node.id() == state.stack()[state.stack().length() - 2])
+        {
+            arg2Type = node.type();
+            arg2 = node.value();
+        }
+    }
 
     if(arg1Type != GraphNodeType::Integer || arg2Type != GraphNodeType::Integer)
     {
         state._errorMessage = "Error on line " + QString::number(currentLineNumber()) + ": MAX instruction on non-INT node.";
         return false;
     }
-    int arg1 = state.graph()[state.stack().at(state.stack().length() - 1)].value();
-    int arg2 = state.graph()[state.stack().at(state.stack().length() - 2)].value();
+//    int arg1 = state.graph()[state.stack().at(state.stack().length() - 1)].value();
+//    int arg2 = state.graph()[state.stack().at(state.stack().length() - 2)].value();
 
     state._stack.pop();
     state._stack.pop();
@@ -621,19 +783,67 @@ bool State::Max(GCommand command, State& state)
 
     state._graph.push_back(GraphNode(state.hp(), GraphNodeType::Integer, arg1 > arg2 ? arg1 : arg2));
     state._hp++;
-    state._ep--;
+//    state._ep--;
 
     return true;
 }
 
 bool State::Eval(GCommand command, State& state, QList<GCommand> commands)
 {
-    GraphNodeType argType = state.graph()[state.stack().at(state.stack().length() - 1)].type();
+    GraphNodeType argType;
+
+    foreach (GraphNode node, state.graph()) {
+        if(node.id() == state.stack().last())
+            argType = node.type();
+    }
 
     if(argType == GraphNodeType::Cons || argType == GraphNodeType::Integer)
     {
+        state = State(*this, command, _maxID);
         return true;
     }
+
+   /* if(argType == GraphNodeType::Application)
+    {
+        DumpNode dump;
+        QVector<int> dumpStack;
+        QVector<QString> dumpCode;
+
+
+        for(int i = 0; i < state.stack().length()-1; i++)
+            dumpStack.push_back(state.stack()[i]);
+
+        dump = DumpNode(dumpStack, dumpCode);
+        state._dump.push_back(dump);
+    }
+    if(argType == GraphNodeType::Function)
+    {
+        int nodeID = state.stack().last();
+        int index = commandExists(state, commands);
+
+        if(index == -1)
+        {
+            state._errorMessage = "Error on line " + QString::number(this->currentLineNumber()) + ": No appropriate function " +
+                    command.args()[0]->ToString() + " for EVAL instruction.";
+            return false;
+        }
+
+        DumpNode dump;
+        QVector<int> stack;
+        QVector<QString> code;
+        for(int i = 0; i < state.stack().length(); i++)
+            stack.push_back(state.stack().at(i));
+
+        for(int i = cBegin(); i < commands.length(); i++)
+            code.push_back(commands[i].ToString());
+
+        dump = DumpNode(stack, code);
+        state._dump.push_back(dump);
+
+
+        return true;
+    }
+
 /*
     if(argType == GraphNodeType::Application)
     {
@@ -651,42 +861,8 @@ bool State::Eval(GCommand command, State& state, QList<GCommand> commands)
         return true;
     }
 */
-    if(argType == GraphNodeType::Function)
-    {
-        int nodeID = state.stack().at(state.stack().length() - 1);
-        int index = commandExists(state, commands);
+    state = State(*this, command, _maxID);
 
-        if(index == -1)
-        {
-            state._errorMessage = "Error on line " + QString::number(this->currentLineNumber()) + ": No appropriate function " +
-                    command.args()[0]->ToString() + " for EVAL instruction.";
-            return false;
-        }
-
-        DumpNode dump;
-        QVector<int> stack;
-        QVector<QString> code;
-        for(int i = 0; i < state.stack().length(); i++)
-            stack.push_back(state.stack().at(i));
-        /*for(int i = 0; i < state.stack().length(); i++)
-            state._stack.pop();*/
-        for(int i = cBegin(); i < commands.length(); i++)
-            code.push_back(commands[i].ToString());  //proveriti dump
-
-//        state._stack.push_back(stack.at(stack.length() - 1));
-
-        dump = DumpNode(stack, code);
-        state._dump.push_back(dump);
-
-        state = State(*this, command, _maxID);
-
-        return true;
-    }
-    else
-    {
-        state._cBegin++;
-        return true;
-    }
     return true;
 }
 
@@ -736,8 +912,15 @@ bool State::Jump(GCommand command, State& state, QList<GCommand> commands)
 
 bool State::JFalse(GCommand command, State& state, QList<GCommand> commands)
 {
+    GraphNodeType argType;
+    GraphNode currentNode;
 
-    GraphNodeType argType = state.graph()[state.stack().at(state.stack().length() - 1)].type();
+    foreach(GraphNode node, state.graph())
+        if(node.id() == state.stack().last())
+        {
+            argType = state.graph()[state.stack().last()].type();
+            currentNode = node;
+        }
 
     if(argType != GraphNodeType::Integer)
     {
@@ -746,7 +929,7 @@ bool State::JFalse(GCommand command, State& state, QList<GCommand> commands)
         return false;
     }
 
-    if(state.graph()[state.stack().at(state.stack().length() - 1)].value() == 0)
+    if(currentNode.value() == 0)
     {
         int index = labelExists(commands, command.args()[0]->ToString());
 
@@ -757,7 +940,6 @@ bool State::JFalse(GCommand command, State& state, QList<GCommand> commands)
             return false;
         }
     }
-
 
     state = State(*this, command, _maxID);
     state._stack.pop();

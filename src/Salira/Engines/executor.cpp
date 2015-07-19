@@ -23,12 +23,11 @@ State Executor::currentState()
     return this->_currentState;
 }
 
-GCommand Executor::previousPushInt(QList<GCommand> commands, int currentLine)
+int Executor::valueOfGraphNode(int id, State state)
 {
-    for(int i = currentLine - 1; i >= 0; i--)
-        if(commands[i].value() == "PUSHINT")
-            return commands[i];
-    return GCommand("");
+    for(int i = 0; i < state.graph().length(); i++)
+        if(state.graph()[i].id() == id)
+            return state.graph()[i].value();
 }
 
 bool Executor::Init(QList<GCommand> commands, QString& errorMessage)
@@ -40,9 +39,11 @@ bool Executor::Init(QList<GCommand> commands, QString& errorMessage)
     this->_states.push_back(initialState);
 
     State nextState;
+    State state;
     for (int i = 0; i < commands.length(); i++)
     {
         GCommand command = commands[i];
+        state = nextState;
         if(!(this->_states.last().GetNext(command, nextState, commands, i)))
         {
             error = true;
@@ -63,8 +64,7 @@ bool Executor::Init(QList<GCommand> commands, QString& errorMessage)
             }
         }
 
-        bool ok;
-        if(nextState.command().value() == "JFALSE" && previousPushInt(commands, i).args()[0]->ToString().toInt(&ok, 10) == 0)
+        if(nextState.command().value() == "JFALSE" && valueOfGraphNode(state.stack().last(), state) == 0)
         {
             QString labelName = nextState.command().args()[0]->ToString();
 
@@ -78,11 +78,6 @@ bool Executor::Init(QList<GCommand> commands, QString& errorMessage)
             }
         }
 
-/*        if(nextState.command().value() == "EVAL" )
-        {
-
-        }
-*/
         this->_states.push_back(nextState);
     }
 

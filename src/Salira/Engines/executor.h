@@ -14,14 +14,17 @@ private:
     QList<State> _states;
     State _currentState;
 
+
     void Execute(bool forward);
-    GCommand previousPushInt(QList<GCommand> commands, int currentLine);
-    GCommand previousPushGlobal(QList<GCommand> commands, int currentLine);
+
+    int valueOfGraphNode(int id, State state);
+
 public:
     static Executor& Instance();
 
     QList<State> states();
     State currentState();
+
 
     bool Init(QList<GCommand> commands, QString& errorMessage);
     void ExecuteNext();
