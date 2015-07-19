@@ -184,6 +184,15 @@ ARGEXP : ID {
 	}
 	arguments.push_back(new Token(variables[$1],ExpressionBase::S_INT ));
 }
+| INT_NUM {
+	    std::cout << " INT_NUM " << std::endl; 
+	    arguments.push_back(Expression(new SaliraInt($1)));
+	   }
+| DOUBLE_NUM {
+	    
+	    std::cout << " DOUBLE_NUM " << std::endl; 
+	    arguments.push_back(Expression(new SaliraInt($1)));
+	    }
 ;
 VALS : VALS VAL {}
 | VAL {}
