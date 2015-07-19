@@ -244,7 +244,6 @@ void MainWindow::Evaluate()
         if(Executor::Instance().Init(gCommands, errorMessage))
         {
             this->RefreshUI();
-            this->RefreshFileMenu(true, true, false);
             this->RefreshRunMenu(false, true, false, true, false);
             this->FillVAXCodeEditor(true);
             ui->btnTranslate->setEnabled(true);
@@ -256,6 +255,8 @@ void MainWindow::Evaluate()
             ui->txtOutput->append(errorMessage);
         }
     }
+
+    this->RefreshFileMenu(ui->txtEditorGCode->toPlainText().length() > 0, ui->txtEditorGCode->toPlainText().length() > 0, false);
 }
 
 void MainWindow::Next()
