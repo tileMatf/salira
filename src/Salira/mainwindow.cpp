@@ -1,7 +1,6 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 #include <QFileDialog>
-#include <iostream>
 #include <fstream>
 #include <QTextStream>
 #include <Engines/translator.h>
@@ -10,8 +9,6 @@
 #include <unistd.h>
 #include <QTime>
 
-
-using namespace std;
 
 static QString fileName = "/home/kostic/Downloads/Salira_Literatura/smiskovic_gmasina/";
 static QList<GCommand> gCommands;
@@ -108,7 +105,7 @@ void MainWindow::FillGraph(bool clearOnly)
             break;
         case 1:
             nodeName = "INTEGER\nNODE [" + QString::number(Executor::Instance().currentState().graph()[i].id()+1)
-                    + "]\n" + QString::number(Executor::Instance().currentState().graph()[i].value());
+                    + "]\nValue = " + QString::number(Executor::Instance().currentState().graph()[i].value());
             break;
         case 2:
             nodeName = "FUNCTION\nNODE [" + QString::number(Executor::Instance().currentState().graph()[i].id()+1)
@@ -352,12 +349,46 @@ void MainWindow::on_tsmiClear_triggered()
 
 void MainWindow::on_tsmiSaveGCode_triggered()
 {
-    //ovo treba implementirati
+    try{
+         QString saveFilename = QFileDialog::getSaveFileName(this, tr("Save file"), "GCode.txt");
+
+         QFile file(saveFilename);
+         file.open(QIODevice::WriteOnly);
+
+         QTextStream outStream(&file);
+
+         if(ui->txtEditorGCode->toPlainText().length() > 0)
+             outStream << ui->txtEditorGCode->toPlainText();
+
+         outStream.flush();
+         file.close();
+     }
+     catch(std::exception e)
+     {
+        ui->txtOutput->append("Error: Saving GCode file");
+     }
 }
 
 void MainWindow::on_tsmiSaveVAXCode_triggered()
 {
-   //ovo treba implementirati
+    try{
+         QString saveFilename = QFileDialog::getSaveFileName(this, tr("Save file"), "VAXCode.txt");
+
+         QFile file(saveFilename);
+         file.open(QIODevice::WriteOnly);
+
+         QTextStream outStream(&file);
+
+         if(ui->txtEditorVAXCode->toPlainText().length() > 0)
+             outStream << ui->txtEditorVAXCode->toPlainText();
+
+         outStream.flush();
+         file.close();
+     }
+     catch(std::exception e)
+    {
+        ui->txtOutput->append("Error: Saving VAXCode file");
+    }
 }
 
 void MainWindow::on_tsmiClose_triggered()

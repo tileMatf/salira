@@ -15,6 +15,8 @@ private:
     State _currentState;
 
     void Execute(bool forward);
+    GCommand previousPushInt(QList<GCommand> commands, int currentLine);
+    GCommand previousPushGlobal(QList<GCommand> commands, int currentLine);
 public:
     static Executor& Instance();
 

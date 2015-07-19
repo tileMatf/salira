@@ -23,6 +23,14 @@ State Executor::currentState()
     return this->_currentState;
 }
 
+GCommand Executor::previousPushInt(QList<GCommand> commands, int currentLine)
+{
+    for(int i = currentLine - 1; i >= 0; i--)
+        if(commands[i].value() == "PUSHINT")
+            return commands[i];
+    return GCommand("");
+}
+
 bool Executor::Init(QList<GCommand> commands, QString& errorMessage)
 {
     this->Reset();
@@ -55,8 +63,26 @@ bool Executor::Init(QList<GCommand> commands, QString& errorMessage)
             }
         }
 
+        bool ok;
+        if(nextState.command().value() == "JFALSE" && previousPushInt(commands, i).args()[0]->ToString().toInt(&ok, 10) == 0)
+        {
+            QString labelName = nextState.command().args()[0]->ToString();
 
+            for(int j = 0; j < commands.length(); j++)
+            {
+                if(commands[j].ToString() == QString("LABEL " + labelName + ";"))
+                {
+                    i = j - 1;
+                    break;
+                }
+            }
+        }
 
+/*        if(nextState.command().value() == "EVAL" )
+        {
+
+        }
+*/
         this->_states.push_back(nextState);
     }
 

@@ -299,7 +299,7 @@ bool State::Slide(GCommand command, State& state)
 
     if(arg < state.stack().length())
     {
-        state._errorMessage = "Error: Invalid command SLIDE";
+        state._errorMessage = "Error on line " + QString::number(currentLineNumber()) + ": Invalid command SLIDE";
         return false;
     }
     state = State(*this, command, _maxID);
@@ -397,7 +397,7 @@ bool State::Add(GCommand command, State& state)
 
     if(arg1Type != GraphNodeType::Integer || arg2Type != GraphNodeType::Integer)
     {
-        state._errorMessage = "Error: ADD instruction on non-INT node.";
+        state._errorMessage = "Error on line " + QString::number(currentLineNumber()) + ": ADD instruction on non-INT node.";
         return false;
     }
     int arg1 = state._graph[state._stack.at(state.stack().length() - 1)].value();
@@ -423,7 +423,7 @@ bool State::Sub(GCommand command, State& state)
 
     if(arg1Type != GraphNodeType::Integer || arg2Type != GraphNodeType::Integer)
     {
-        state._errorMessage = "Error: SUB instruction on non-INT node.";
+        state._errorMessage = "Error on line " + QString::number(currentLineNumber()) + ": SUB instruction on non-INT node.";
         return false;
     }
     int arg1 = state._graph[state._stack.at(state.stack().length() - 1)].value();
@@ -449,7 +449,7 @@ bool State::Mul(GCommand command, State& state)
 
     if(arg1Type != GraphNodeType::Integer || arg2Type != GraphNodeType::Integer)
     {
-        state._errorMessage = "Error: MUL instruction on non-INT node.";
+        state._errorMessage = "Error on line " + QString::number(currentLineNumber()) + ": MUL instruction on non-INT node.";
         return false;
     }
     int arg1 = state._graph[state._stack.at(state.stack().length() - 1)].value();
@@ -475,7 +475,7 @@ bool State::Div(GCommand command, State& state)
 
     if(arg1Type != GraphNodeType::Integer || arg2Type != GraphNodeType::Integer)
     {
-        state._errorMessage = "Error: DIV instruction on non-INT node.";
+        state._errorMessage = "Error on line " + QString::number(currentLineNumber()) + ": DIV instruction on non-INT node.";
         return false;
     }
 
@@ -484,7 +484,7 @@ bool State::Div(GCommand command, State& state)
 
     if(arg2 == 0)
     {
-        state._errorMessage = "Error: DIV instruction with zero second argument";
+        state._errorMessage = "Error on line " + QString::number(currentLineNumber()) + ": DIV instruction with zero second argument";
         return false;
     }
 
@@ -507,7 +507,7 @@ bool State::Neg(GCommand command, State& state) //mozda treba da se izbaci i cvo
 
     if(argType != GraphNodeType::Integer)
     {
-        state._errorMessage = "Error: NEG instruction on non-INT node.";
+        state._errorMessage = "Error on line " + QString::number(currentLineNumber()) + ": NEG instruction on non-INT node.";
         return false;
     }
 
@@ -529,7 +529,7 @@ bool State::Head(GCommand command, State& state) //mozda treba da se izbaci i cv
 
     if(argType != GraphNodeType::Cons)
     {
-        state._errorMessage = "Error: HEAD instruction on non-CONST node.";
+        state._errorMessage = "Error on line " + QString::number(currentLineNumber()) + ": HEAD instruction on non-CONST node.";
         return false;
     }
 
@@ -564,7 +564,7 @@ bool State::Print(GCommand command, State& state)
 {
     if(this->graph()[this->_stack[this->_stack.length() - 1]].type() != GraphNodeType::Integer)
     {
-        state._errorMessage = "Error: PRINT instruction on non-INT node";
+        state._errorMessage = "Error on line " + QString::number(currentLineNumber()) + ": PRINT instruction on non-INT node";
         return false;
     }
 
@@ -584,7 +584,7 @@ bool State::Min(GCommand command, State& state)
 
     if(arg1Type != GraphNodeType::Integer || arg2Type != GraphNodeType::Integer)
     {
-        state._errorMessage = "Error: MIN instruction on non-INT node.";
+        state._errorMessage = "Error on line " + QString::number(currentLineNumber()) + ": MIN instruction on non-INT node.";
         return false;
     }
     int arg1 = state.graph()[state.stack().at(state.stack().length() - 1)].value();
@@ -609,7 +609,7 @@ bool State::Max(GCommand command, State& state)
 
     if(arg1Type != GraphNodeType::Integer || arg2Type != GraphNodeType::Integer)
     {
-        state._errorMessage = "Error: MAX instruction on non-INT node.";
+        state._errorMessage = "Error on line " + QString::number(currentLineNumber()) + ": MAX instruction on non-INT node.";
         return false;
     }
     int arg1 = state.graph()[state.stack().at(state.stack().length() - 1)].value();
@@ -628,15 +628,13 @@ bool State::Max(GCommand command, State& state)
 
 bool State::Eval(GCommand command, State& state, QList<GCommand> commands)
 {
-    state = State(*this, command, _maxID);
     GraphNodeType argType = state.graph()[state.stack().at(state.stack().length() - 1)].type();
 
-   /* if(argType == GraphNodeType::Cons || argType == GraphNodeType::Integer)
+    if(argType == GraphNodeType::Cons || argType == GraphNodeType::Integer)
     {
-        state._cBegin++;
         return true;
     }
-
+/*
     if(argType == GraphNodeType::Application)
     {
         DumpNode dump;
@@ -652,28 +650,35 @@ bool State::Eval(GCommand command, State& state, QList<GCommand> commands)
         state._cBegin = 0; //nije uradjeno
         return true;
     }
-
+*/
     if(argType == GraphNodeType::Function)
     {
         int nodeID = state.stack().at(state.stack().length() - 1);
         int index = commandExists(state, commands);
+
+        if(index == -1)
+        {
+            state._errorMessage = "Error on line " + QString::number(this->currentLineNumber()) + ": No appropriate function " +
+                    command.args()[0]->ToString() + " for EVAL instruction.";
+            return false;
+        }
 
         DumpNode dump;
         QVector<int> stack;
         QVector<QString> code;
         for(int i = 0; i < state.stack().length(); i++)
             stack.push_back(state.stack().at(i));
-        for(int i = 0; i < state.stack().length(); i++)
-            state._stack.pop();
+        /*for(int i = 0; i < state.stack().length(); i++)
+            state._stack.pop();*/
         for(int i = cBegin(); i < commands.length(); i++)
             code.push_back(commands[i].ToString());  //proveriti dump
 
-        state._stack.push_back(stack.at(stack.length() - 1));
+//        state._stack.push_back(stack.at(stack.length() - 1));
 
         dump = DumpNode(stack, code);
         state._dump.push_back(dump);
 
-        state._cBegin = index;  // ovde treba da se preusmeri da izvrsava ono sto se nalazi u commands[index]
+        state = State(*this, command, _maxID);
 
         return true;
     }
@@ -682,7 +687,6 @@ bool State::Eval(GCommand command, State& state, QList<GCommand> commands)
         state._cBegin++;
         return true;
     }
-*/
     return true;
 }
 
@@ -711,38 +715,53 @@ bool State::Return(GCommand command, State& state, QList<GCommand> commands)
 bool State::Label(GCommand command, State& state, QList<GCommand> commands, int lineNumber)
 {
     state = State(*this, command, _maxID, lineNumber + 1);
-
-    //state._cBegin++;
     return true;
 }
 
 
 bool State::Jump(GCommand command, State& state, QList<GCommand> commands)
 {
-    //state = State(*this, command, _maxID);
     int index = labelExists(commands, command.args()[0]->ToString());
 
     if(index == -1)
     {
-        state._errorMessage = "Error: No appropriate label for JUMP instruction.";
+        state._errorMessage = "Error on line " + QString::number(this->currentLineNumber()) + ": No appropriate label " +
+                command.args()[0]->ToString() + " for JUMP instruction.";
         return false;
     }
 
-    state = State(*this, command, _maxID);  //index je pozicija labele na koju treba da se skoci
-                                                   //treba da se ode na to stanje, ali ovo ne radi ovako
+    state = State(*this, command, _maxID);
     return true;
 }
 
 bool State::JFalse(GCommand command, State& state, QList<GCommand> commands)
 {
-    /*GraphNodeType argType = state._graph[state._stack.at(state._ep)].type();
+
+    GraphNodeType argType = state.graph()[state.stack().at(state.stack().length() - 1)].type();
 
     if(argType != GraphNodeType::Integer)
     {
-        state._errorMessage = "Error: JFALSE instruction on non-INT node.";
+        state._errorMessage = "Error on line " + QString::number(this->currentLineNumber())
+                + ": JFALSE instruction on non-INT node.";
         return false;
     }
-    */
+
+    if(state.graph()[state.stack().at(state.stack().length() - 1)].value() == 0)
+    {
+        int index = labelExists(commands, command.args()[0]->ToString());
+
+        if(index == -1)
+        {
+            state._errorMessage = "Error on line " + QString::number(this->currentLineNumber()) + ": No appropriate label " +
+                    command.args()[0]->ToString() + " for JFALSE instruction.";
+            return false;
+        }
+    }
+
+
+    state = State(*this, command, _maxID);
+    state._stack.pop();
+
     return true;
 }
 
