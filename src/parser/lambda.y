@@ -28,6 +28,9 @@
 	// Arguments of function		  
 	std::vector<Expression> arguments{};
 	
+	// Values for each argument 		  
+	std::vector<Expression> values{};
+	
 	// Variables map and their position in arguments order
 	std::unordered_map< std::string, int > variables{};
 	
@@ -56,7 +59,7 @@
 %token <doubleNum> DOUBLE_NUM
 %token <str> ID COMMENT ID_F
 %token LET IN MAX MIN NEG 
-%type <e> EXP ARGS ARGEXP ARGS_F
+%type <e> EXP ARGS ARGEXP ARGS_F VALS VAL 
 
 
 // Defining priority and associativity
@@ -138,7 +141,9 @@ LINE : ID_F ARGS '=' EXP  {
 			      {
 				  std::cout << item->print() << std::endl;
 			      }
+			      
 			      SaliraUtility::insertFunctionInPool($1, $4, arguments);
+			      
 			      // testing
 			      
 			      SaliraDev::MapPrint();
@@ -153,13 +158,20 @@ LINE : ID_F ARGS '=' EXP  {
 			      }
 			      
 			      Expression f = new Functor($1, test);
-			      f->generateGCode(writter); 
-			      SaliraInt* temp =(SaliraInt*) f->eval(test);
-			      std::cout << "Rez" <<  temp->value() << std::endl;
+			      
+			      std::cout << "udje" << std::endl;
+			      ((Functor*)f)->generateGCodeStart(writter,std::vector<Expression>(),$1);
+			      
+			      f->generateGCode(writter, test);
+			      
 			      arguments.clear();
 			      variables.clear();
 			      counter = 0;
 }
+| ID_F VALS {
+// F 3 4 
+      std::cout << " ID " << $1<< std::endl; 
+      }
 ;
 ARGS : ARGS ARGEXP {} 
 | ARGEXP {}
@@ -172,17 +184,19 @@ ARGEXP : ID {
 	}
 	arguments.push_back(new Token(variables[$1],ExpressionBase::S_INT ));
 }
-| INT_NUM {
+;
+VALS : VALS VAL {}
+| VAL {}
+;
+VAL: INT_NUM {
 	    std::cout << " INT_NUM " << std::endl; 
-	    arguments.push_back(Expression(new SaliraInt($1)));
+	    values.push_back(Expression(new SaliraInt($1)));
 	   }
 | DOUBLE_NUM {
+	    
 	    std::cout << " DOUBLE_NUM " << std::endl; 
-	    arguments.push_back(Expression(new SaliraInt($1)));
+	    values.push_back(Expression(new SaliraInt($1)));
 	    }
-/*| ID_F ARGS_F  {
-	  $$ = new Functor($1,{$2});
-}*/
 ;
 EXP : EXP '+' EXP { 
 	std::cout << "PLUS" << std::endl;
@@ -210,7 +224,6 @@ EXP : EXP '+' EXP {
 }
 | ID_F ARGS_F  %prec "func"{
 	 auto a = new Functor($1,{$2});
-	 $$ = a->eval({$2});
 }
 | ID {
 	std::cout << " ID " << $1 << std::endl;

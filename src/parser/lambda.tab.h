@@ -139,7 +139,7 @@ namespace Lambda {
     /// Symbol semantic values.
     union semantic_type
     {
-    #line 47 "lambda.y" // lalr1.cc:372
+    #line 50 "lambda.y" // lalr1.cc:372
 
 	int intNum;
 	double doubleNum;
@@ -360,7 +360,7 @@ namespace Lambda {
     static const char* const yytname_[];
 
   // YYRLINE[YYN] -- Source line where rule number YYN was defined.
-  static const unsigned char yyrline_[];
+  static const unsigned short int yyrline_[];
     /// Report on the debug stream that the rule \a r is going to be reduced.
     virtual void yy_reduce_print_ (int r);
     /// Print the state stack on the debug stream.
@@ -454,10 +454,10 @@ namespace Lambda {
     enum
     {
       yyeof_ = 0,
-      yylast_ = 41,     ///< Last index in yytable_.
-      yynnts_ = 7,  ///< Number of nonterminal symbols.
+      yylast_ = 42,     ///< Last index in yytable_.
+      yynnts_ = 9,  ///< Number of nonterminal symbols.
       yyempty_ = -2,
-      yyfinal_ = 9, ///< Termination state number.
+      yyfinal_ = 11, ///< Termination state number.
       yyterror_ = 1,
       yyerrcode_ = 256,
       yyntokens_ = 24  ///< Number of tokens.
