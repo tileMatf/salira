@@ -81,7 +81,7 @@ void MainWindow::FillStack(bool clearOnly)
     if(clearOnly)
         return;
 
-    for(int i = 0; i < Executor::Instance().currentState().stack().length(); i++)
+    for(int i = Executor::Instance().currentState().stack().length() - 1; i >= 0; i--)
     {
         QString nodeName = "NODE [" + QString::number(Executor::Instance().currentState().stack().at(i)+1) + "]";
         ui->frameStack->layout()->addWidget(new QPushButton(nodeName));
@@ -95,7 +95,7 @@ void MainWindow::FillGraph(bool clearOnly)
     if(clearOnly)
         return;
 
-    for(int i = 0; i < Executor::Instance().currentState().graph().length(); i++)
+    for(int i = Executor::Instance().currentState().graph().length()-1; i >= 0 ; i--)
     {
         QString nodeName;
         switch(Executor::Instance().currentState().graph()[i].type())
