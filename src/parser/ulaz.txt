@@ -1,8 +1,4 @@
 G x = x;
-K x 3 = x;
-<<<<<<< HEAD
-F n k = n +  G K 0 3  + 5; 
-=======
-F n k = n + F G K 0 3 n + 5; 
-
->>>>>>> fe44c8348fe67bb222ea67b77f721a28524b8c54
+K x y = x;
+F n k = n +  G K 0 3  + 5;
+F 3 4;
