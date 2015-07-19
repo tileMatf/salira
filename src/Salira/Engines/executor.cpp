@@ -2,6 +2,7 @@
 #include <iostream>
 
 static Executor *instance = nullptr;
+const int STACK_SIZE = 256;
 
 Executor::Executor()
 {
@@ -84,6 +85,11 @@ bool Executor::Init(QList<GCommand> commands, QString& errorMessage)
         }
 */
         this->_states.push_back(nextState);
+        if(_states.length() >= STACK_SIZE)
+        {
+            errorMessage = "Error: Stack or Graph overflow! It is possible that there is an infinite loop on input!";
+            return false;
+        }
     }
 
     if(this->_states.length() > 0 && !error)
