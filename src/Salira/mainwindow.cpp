@@ -234,9 +234,11 @@ void MainWindow::Evaluate()
     endIndex = plainText.lastIndexOf("\n") + 1;
     buffer.push_back(QString(plainText.begin() + endIndex, plainText.length() - endIndex));
 
+    for (int i = 0; i <= buffer.length() - 1 && buffer[0] == ""; i++)
+        buffer.removeAt(0);
+
     for (int i = buffer.length() - 1; i >= 0 && buffer[i] == ""; i--)
         buffer.removeAt(i);
-
 
     if(Parser::Instance().Parse(buffer, &gCommands))
     {
@@ -244,7 +246,6 @@ void MainWindow::Evaluate()
         if(Executor::Instance().Init(gCommands, errorMessage))
         {
             this->RefreshUI();
-            this->RefreshFileMenu(true, true, false);
             this->RefreshRunMenu(false, true, false, true, false);
             this->FillVAXCodeEditor(true);
             ui->btnTranslate->setEnabled(true);
@@ -256,6 +257,8 @@ void MainWindow::Evaluate()
             ui->txtOutput->append(errorMessage);
         }
     }
+
+    this->RefreshFileMenu(ui->txtEditorGCode->toPlainText().length() > 0, ui->txtEditorGCode->toPlainText().length() > 0, false);
 }
 
 void MainWindow::Next()
@@ -316,6 +319,9 @@ void MainWindow::on_tsmiOpen_triggered()
             while(!in.atEnd())
                 buffer.push_back(in.readLine());
             file.close();
+
+            for (int i = 0; i <= buffer.length() - 1 && buffer[0] == ""; i++)
+                buffer.removeAt(0);
 
             for (int i = buffer.length() - 1; i >= 0 && buffer[i] == ""; i--)
                 buffer.removeAt(i);

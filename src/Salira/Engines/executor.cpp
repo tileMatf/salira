@@ -2,6 +2,7 @@
 #include <iostream>
 
 static Executor *instance = nullptr;
+const int STACK_SIZE = 256;
 
 Executor::Executor()
 {
@@ -34,7 +35,6 @@ bool Executor::Init(QList<GCommand> commands, QString& errorMessage)
 {
     this->Reset();
 
-    bool error = false;
     State initialState = State(0);
     this->_states.push_back(initialState);
 
@@ -46,8 +46,8 @@ bool Executor::Init(QList<GCommand> commands, QString& errorMessage)
         state = nextState;
         if(!(this->_states.last().GetNext(command, nextState, commands, i)))
         {
-            error = true;
-            break;
+            errorMessage = nextState.errorMessage();;
+            return false;
         }
 
         if(nextState.command().value() == "JUMP")
@@ -79,18 +79,27 @@ bool Executor::Init(QList<GCommand> commands, QString& errorMessage)
         }
 
         this->_states.push_back(nextState);
+        if(_states.length() >= STACK_SIZE)
+        {
+            errorMessage = "Error: Stack or Graph overflow! It is possible that there is an infinite loop on input!";
+            return false;
+        }
     }
 
-    if(this->_states.length() > 0 && !error)
+    if(this->_states.length() < 3)
     {
-        this->_currentState = this->_states[0];
-        return true;
-    }
-    else if(error)
-    {
-        errorMessage = nextState.errorMessage();
+        errorMessage = "Error: GCode must contain minimum two commands!";
         return false;
     }
+
+    /*if(this->_states[1].command().value() != "BEGIN" || this->_states.last().command().value() != "END")
+    {
+        errorMessage = "Error: First command in GCode must be 'BEGIN'! Last command in GCode must be 'END'!";
+        return false;
+    }*/
+
+    this->_currentState = this->_states[0];
+    return true;
 }
 
 void Executor::Execute(bool forward)
