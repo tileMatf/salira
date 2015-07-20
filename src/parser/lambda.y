@@ -38,7 +38,7 @@
 	int counter = 0;
 	
 	// Object for writting gcode
-	const SaliraWritter writter;
+	
 	
 	// Prototype for the yylex function
 	static int yylex(Lambda::BisonParser::semantic_type *yylval, Lambda::FlexScanner &scanner);
@@ -129,10 +129,8 @@ PROGRAM : PROGRAM LINE ';'
 ;
 LINE : ID_F ARGS '=' EXP  {
 			      //NOTE: Need to  be called at the begining of program to load all basic functions
-			      Functor::initBaseFunctions(writter);
-	
-			      std::cout << " USAO " << std::endl; 
-			    
+			      Functor::initBaseFunctions();
+						Functor::gCodeBegin();
 			      std::cout << $1 << std::endl;
 			      std::cout << arguments.size() << std::endl;
 			      std::cout << "args " << std::endl;
@@ -142,28 +140,12 @@ LINE : ID_F ARGS '=' EXP  {
 				  std::cout << item->print() << std::endl;
 			      }
 			      
-			      SaliraUtility::insertFunctionInPool($1, $4, arguments);
-			      
-			      // testing
-			      
-			      SaliraDev::MapPrint();
-			      
-			      std::vector<Expression> test;
-			      
-			      for(unsigned i = 0, ie = arguments.size(); i < ie; i++)
-				test.push_back(new SaliraInt(6));
-				std::cout << "args2 " << std::endl;
-			      for(auto item : test){
-				std::cout << item->print() << std::endl;
-			      }
-			      
-			      Expression f = new Functor($1, test);
-			      
+			      Expression f = new Functor($1, {$4}, arguments.size());			      
+			      std::cout << " dd   " << $1 << std::endl;
+			      std::cout << $4->print() << std::endl;
+			      f->generateGCode();
 			      std::cout << "udje" << std::endl;
-			      ((Functor*)f)->generateGCodeStart(writter,std::vector<Expression>(),$1);
-			      
-			      f->generateGCode(writter, test);
-			      
+						
 			      arguments.clear();
 			      variables.clear();
 			      counter = 0;
@@ -182,7 +164,7 @@ ARGEXP : ID {
 	 variables[$1] = counter;
 	 counter++;
 	}
-	arguments.push_back(new Token(variables[$1],ExpressionBase::S_INT ));
+	arguments.push_back(new Token(variables[$1]));
 }
 ;
 VALS : VALS VAL {}
@@ -200,19 +182,19 @@ VAL: INT_NUM {
 ;
 EXP : EXP '+' EXP { 
 	std::cout << "PLUS" << std::endl;
-	$$ = new Functor("plus",{$1,$3});
+	$$ = new Functor("$ADD",{$1,$3});
 	}
 | EXP '-' EXP { 
 	std::cout << " MINUS " << std::endl;
-	$$ = new Functor("minus",{$1,$3});
+	$$ = new Functor("$SUB",{$1,$3});
 	}
 | EXP '*' EXP {
 	std::cout << " MULT " << std::endl;
-	$$ = new Functor("mult",{$1,$3});
+	$$ = new Functor("$MUL",{$1,$3});
 	}
 | EXP '/' EXP { 
 	std::cout << " DIV " << std::endl;
-	$$ = new Functor("div",{$1,$3});
+	$$ = new Functor("$DIV",{$1,$3});
 } 
 | INT_NUM { 
 	  std::cout << " INT_NUM " <<  std::to_string($1) << std::endl;
@@ -233,7 +215,7 @@ EXP : EXP '+' EXP {
 	}
 	
 	// NOTE: Second argument is artificial, todo -> type checking
-	$$ = new Token(variables[$1], ExpressionBase::S_INT);
+	$$ = new Token(variables[$1]);
 }
 | '(' EXP ')'   { 	
 		  std::cout << " ZAGRADE " << std::endl;

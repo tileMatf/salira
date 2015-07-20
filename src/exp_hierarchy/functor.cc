@@ -1,159 +1,165 @@
 #include "functor.hh"
-#include "salira_utility.hh"
 
-// Constructor
-Functor::Functor(std::string id, std::initializer_list<Expression> list) 
-    : _identifier(id), ExpressionBase(false) {
-      for(Expression item  : list){
-	_arguments.push_back(item);
-      }
-}
-Functor::Functor(std::string id, std::vector<Expression> args)
-: _identifier(id), ExpressionBase(false),  _arguments(args) {}
+//////////////////////////////// Constructors //////////////////////////////////
 
-// Static interface
-
-  // vars
-FuncMap Functor::functions = FuncMap();
-  
-  // API
-bool Functor::isFunctionDefined(std::string identifier){
-    return Functor::functions.find(identifier) == Functor::functions.end() ? false : true; 
-  }
-  
-FuncDecl Functor::getFunc(std::string identifier, std::vector<Expression> args)  
-throw(){
-    // Basic check if function is defined.0
-    if(!Functor::isFunctionDefined(identifier)){
-      throw SaliraException("Function doesn't exist! Id: = " + identifier);
-    }
-    else{
-      return Functor::functions[identifier].find(args);
-    }
-}
-
-bool Functor::insertFunc(std::string identifier, FuncDecl f, std::vector<Expression> args){
-    if(Functor::isFunctionDefined(identifier)){
-      Functor::functions[identifier].addDeclaration(args,f);
-      return false;
-    }
-    else {
-      MetaFunc t{};
-      t.addDeclaration(args, f);
-      Functor::functions.insert(std::pair<std::string, MetaFunc>(identifier, t));
-      return true;
-    }
-}
-  
-bool Functor::initBaseFunctions(const SaliraWritter &out){  
-  // NOTE: Think about moving this into type's class, it should definetly make more sense and be
-  // more readable.
-	// TODO: Define $Prog functor;
-  if(Functor::functions.size() != 0)
-    return true;
-  
-  // Initializing G code
-  out.write("BEGIN; \nPUSHGLOBAL $Prog; \nEVAL; \nPRINT; \nEND;\n");
-  // plus
-  FuncDecl plus = [](const SaliraWritter& out, std::vector<Expression> values){
-		values[0]->generateGCode(out, values);
-		values[1]->generateGCode(out, values);
-		out.write("PUSHGLOBAL $ADD; \n");
-	};
-  std::vector<Expression> tempp;
-  tempp.push_back(new Token(0, ExpressionBase::T_INT));
-  tempp.push_back(new Token(1, ExpressionBase::T_INT));
-  Functor::insertFunc("$ADD", plus, tempp);
-  // minus
-  FuncDecl minus = [](const SaliraWritter& out,std::vector<Expression> values){
-		values[0]->generateGCode(out, values);
-		values[1]->generateGCode(out, values);
-		out.write("PUSHGLOBAL $SUB; \n");
-	};
-  std::vector<Expression> tempm;
-  tempm.push_back(new Token(0, ExpressionBase::T_INT));
-  tempm.push_back(new Token(1, ExpressionBase::T_INT));
-  Functor::insertFunc("$SUB", minus, tempm);
-  // Multiplication
-  FuncDecl mult = [](const SaliraWritter& out, std::vector<Expression> values){
-		values[0]->generateGCode(out, values);
-		values[1]->generateGCode(out, values);
-		out.write("PUSHGLOBAL $MUL; \n");
-	};
-  std::vector<Expression> tempmu;
-  tempmu.push_back(new Token(0, ExpressionBase::T_INT));
-  tempmu.push_back(new Token(1, ExpressionBase::T_INT));
-  Functor::insertFunc("$MUL", mult, tempmu);
-  // Division
-  FuncDecl div = [](const SaliraWritter& out, std::vector<Expression> values){ 
+	Functor::Functor(std::string id, std::initializer_list<Expression> list, int 
+num)
+		: ExpressionBase(), _identifier(id), _num_of_args(num)
+	{
+		for(Expression item  : list)
+			_args.push_back(item);
+	}
+	Functor::Functor(std::string id, std::vector<Expression>& arr, int num)
+		: ExpressionBase(), _identifier(id), _args(arr), _num_of_args(num) {}
 	
-		values[0]->generateGCode(out, values);
-		values[1]->generateGCode(out, values);
-		out.write("PUSHGLOBAL $DIV; \n");
-	};
-  std::vector<Expression> tempd;
-  tempd.push_back(new Token(0, ExpressionBase::T_INT));
-  tempd.push_back(new Token(1, ExpressionBase::T_INT));  
-  Functor::insertFunc("$DIV", div, tempd);
-  
-	FuncDecl neg = [](const SaliraWritter& out, std::vector<Expression> values){ 
+////////////////////////////////////////////////////////////////////////////////
 	
-		values[0]->generateGCode(out, values);
-		out.write("PUSHGLOBAL $NEG; \n");
-	};
-  std::vector<Expression> tempn;
-  tempd.push_back(new Token(0, ExpressionBase::T_INT));
-  Functor::insertFunc("$NEG", neg, tempn);
+/////////////////////////////// Static Map API /////////////////////////////////
+
+// Variables
+	FMap Functor::_map = FMap();
+	FMap Functor::_base_functions = FMap();
+
+void Functor::insertInMap(std::string id) throw() {
+	if(_map.find(id) == _map.end()){
+		_map.insert(std::pair<std::string,bool>(id,true));
+	}
+	else{
+		throw SaliraException(
+			std::string(" There is already defined function with given") +
+			std::string(" id : ") + id);
+	}
+}
+
+////////////////////////////////////////////////////////////////////////////////
+
+///////////////////////////// Static Init API //////////////////////////////////
+
+void Functor::initBaseFunctions(){
+	// Initialize base functions
+	_base_functions.insert(std::pair<std::string,bool>("$ADD",true));
+	_base_functions.insert(std::pair<std::string,bool>("$SUB",true));
+	_base_functions.insert(std::pair<std::string,bool>("$DIV",true));
+	_base_functions.insert(std::pair<std::string,bool>("$MUL",true));
+	_base_functions.insert(std::pair<std::string,bool>("$NEG",true));
 	
+	
+	_map.insert(std::pair<std::string,bool>("$ADD",true));
+	_map.insert(std::pair<std::string,bool>("$SUB",true));
+	_map.insert(std::pair<std::string,bool>("$DIV",true));
+	_map.insert(std::pair<std::string,bool>("$MUL",true));
+	_map.insert(std::pair<std::string,bool>("$NEG",true));
 }
 
-// Printing on console functor, at least, identifier for now.
-std::string Functor::print() const {
-  return std::string("Functor: ") + _identifier;
+void Functor::gCodeBegin() {
+	SaliraWriter& out = SaliraWriter::getInstance();
+	out.write("BEGIN");
+	out.write("PUSHGLOBAL $PROG");
+	out.write("EVAL");
+	out.write("PRINT");
+	out.write("END");
 }
+void Functor::gCodeEnd(Expression f) {
+	SaliraWriter& out = SaliraWriter::getInstance();
+	out.write("GLOBSTART $PROG, 0");
+	f->generateGCode();
+	out.write("EVAL");
+	out.write("UPDATE 1");
+	out.write("UNWIND");
+	
 
-void Functor::generateGCodeStart(const SaliraWritter& out, 
-std::vector<Expression> 
-values, std::string name){
-	// There is definition in map pool
-		out.write("GLOBSTART "+name + ", " + std::to_string(values.size()) + 
-";\n");
-		Functor::getFunc(_identifier, _arguments)(out, _arguments);
-		out.write("UPDATE "+std::to_string(values.size()+1) +";\n");
-		out.write("POP "+std::to_string(values.size()) +";\n");
-		out.write("UNWIND;\n");
-		
 }
+////////////////////////////////////////////////////////////////////////////////
 
-// Generating G code
-void Functor::generateGCode(const SaliraWritter &out,std::vector<Expression>
-values){
-		std::string temp = "";
-		std::vector<Expression>::reverse_iterator iter = _arguments.rbegin();
-		while(iter != _arguments.rend()){
-			(*iter)->generateGCode(out, values);
+///////////////////////////////// GCode API ////////////////////////////////////
+
+void Functor::baseGcode(bool run) const{
+	SaliraWriter& out = SaliraWriter::getInstance();
+	// NOTE: Is always same order of calling? Is there need for forward one?
+	//run = !run;
+	if (run == true) {
+		std::vector<Expression>::const_reverse_iterator iter = _args.rbegin();
+		std::vector<Expression>::const_reverse_iterator itere = _args.rend();
+		while(iter != itere){
+			(*iter)->generateGCode();
 			++iter;
 		}
-		out.write("PUSHGLOBAL "+_identifier+";\n");
-		out.write("MKAP; \n");
+	}
+	else {
+		std::vector<Expression>::const_iterator iter = _args.begin();
+		std::vector<Expression>::const_iterator itere = _args.end();
+		while(iter != itere){
+			(*iter)->generateGCode();
+			++iter;
+		}
+	}
+	out.write(std::string("PUSHGLOBAL ") + _identifier);
+	out.write("MKAP");
 }
 
-// API
-// Problem: Need to check if arguments need to evaluate
-Expression Functor::eval(const std::vector<Expression>& values)const { 
-    /*
-		std::vector<Expression> mid_result;
-    for(auto item : _arguments){
-      mid_result.push_back(item->eval(values));
-    }
-    SaliraLog::log(_identifier);
-    SaliraLog::log("Evaluated args: ");
-    for (auto item : mid_result){
-      SaliraLog::log("\t" + item->print());
-    }
-    SaliraLog::log("Name " + _identifier);		
-		return Functor::getFunc(_identifier, mid_result)(mid_result);
+void Functor::gCodeDeclaration() const{
+	SaliraWriter& out = SaliraWriter::getInstance();
+	out.write("GLOBSTART " + _identifier + ", " + std::to_string(_num_of_args));
+	/*
+		* NOTE: Heavy assumption that parser would insert correct tokens on right
+		* place.
 		*/
-		Functor* ret = new Functor("dummy", std::vector<Expression>());
-    return ret;
-  }
+	for(int i = 0,size = _args.size(); i < size; ++i){
+		_args[i]->generateGCode();
+	}
+	out.write("UPDATE "+std::to_string(_num_of_args+1));
+	out.write("POP "+std::to_string(_num_of_args));
+	out.write("UNWIND");
+}
+	
+void Functor::gCodeCall() const{
+	SaliraWriter& out = SaliraWriter::getInstance();
+	std::vector<Expression>::const_reverse_iterator iter = _args.rbegin();
+	while(iter != _args.rend()){
+		(*iter)->generateGCode();
+		++iter;
+	}
+	out.write("PUSHGLOBAL "+_identifier);
+	out.write("MKAP");
+}
+
+void Functor::generateGCode() {
+	std::cout << "--------------------" << std::endl;
+	SaliraWriter& out = SaliraWriter::getInstance();	
+	if(isDefined()){
+		if(isBase()){
+			baseGcode();
+		}
+		else{
+			gCodeCall();
+		}
+	}
+	else{
+		if(_num_of_args > 0)
+		Token:: changeSize(_num_of_args);
+		gCodeDeclaration();
+		Functor::insertInMap(_identifier);
+		Token:: changeSize(0);
+	}
+}
+
+////////////////////////////////////////////////////////////////////////////////
+
+bool Functor::isDefined() const {
+	if(Functor::_map.find(_identifier) == Functor::_map.end()){
+		return false;
+	}
+	else{
+		return true;
+	}
+}
+
+bool Functor::isBase() const {
+	if(Functor::_base_functions.find(_identifier) == 
+Functor::_base_functions.end()){
+		return false;
+	}
+	else{
+		return true;
+	}
+}
