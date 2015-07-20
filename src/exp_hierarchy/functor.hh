@@ -2,6 +2,7 @@
 #define FUNCTOR_H__
 
 #include "exp.hh"
+#include "token.hh"
 #include <vector>
 #include <initializer_list>
 
@@ -26,7 +27,7 @@ public:
 	
 	virtual std::string print() const {return std::string("Functor")+_identifier;}
 	virtual Type getType() const {return ExpressionBase::S_FUNCTOR;};
-  virtual void generateGCode() const;
+  virtual void generateGCode();
 
 private:
 	// NOTE: Find better place for this;

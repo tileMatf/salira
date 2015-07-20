@@ -16,7 +16,7 @@ public:
   ExpressionBase(){}
   virtual std::string print() const = 0;
   virtual Type getType() const = 0;
-	virtual void generateGCode() const = 0; 
+	virtual void generateGCode() = 0; 
   virtual ~ExpressionBase() {}
 };
 
@@ -29,7 +29,7 @@ public:
   virtual std::string print() const { return 
 std::string("SaliraInt:")+std::to_string(_value); }
 	virtual Type getType() const {return ExpressionBase::S_INT;};
-  virtual void generateGCode() const{
+  virtual void generateGCode() {
 		SaliraWriter& out = SaliraWriter::getInstance();		
     out.write("PUSHINT " + std::to_string(_value));
   }

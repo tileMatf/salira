@@ -17,6 +17,7 @@ public:
   // write result;
   void write(const std::string text)
   {
+		std::cout << "KURCINA!" << std::endl;
     file << text + ";\n";
   }
 private:

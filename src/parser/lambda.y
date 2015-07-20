@@ -38,7 +38,7 @@
 	int counter = 0;
 	
 	// Object for writting gcode
-	SaliraWriter& writer = SaliraWriter::getInstance();
+	
 	
 	// Prototype for the yylex function
 	static int yylex(Lambda::BisonParser::semantic_type *yylval, Lambda::FlexScanner &scanner);
@@ -130,7 +130,7 @@ PROGRAM : PROGRAM LINE ';'
 LINE : ID_F ARGS '=' EXP  {
 			      //NOTE: Need to  be called at the begining of program to load all basic functions
 			      Functor::initBaseFunctions();
-			    
+						Functor::gCodeBegin();
 			      std::cout << $1 << std::endl;
 			      std::cout << arguments.size() << std::endl;
 			      std::cout << "args " << std::endl;
@@ -140,16 +140,15 @@ LINE : ID_F ARGS '=' EXP  {
 				  std::cout << item->print() << std::endl;
 			      }
 			      
-			      Expression f = new Functor($1, {$4}, arguments.size());
-			      Token::changeSize(arguments.size());
+			      Expression f = new Functor($1, {$4}, arguments.size());			      
+			      std::cout << " dd   " << $1 << std::endl;
+			      std::cout << $4->print() << std::endl;
 			      f->generateGCode();
-			      Functor::insertInMap($1);
 			      std::cout << "udje" << std::endl;
-			      
+						
 			      arguments.clear();
 			      variables.clear();
 			      counter = 0;
-			      Token::changeSize(0);
 }
 | ID_F VALS {
 // F 3 4 

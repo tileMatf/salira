@@ -1,6 +1,7 @@
 #include <iostream>
 #include "exp.hh"
 #include "functor.hh"
+#include "token.hh"
 
 int main(int argc, char **argv) {
 		SaliraWriter& out = SaliraWriter::getInstance();
@@ -14,9 +15,7 @@ int main(int argc, char **argv) {
 		Expression mul = new Functor("$MUL", {ten,tokenX});
 		Expression plus = new Functor("$ADD",{mul, tokenY});
 		Expression g = new Functor("$G",{plus}, 2);
-		Token::changeSize(2);
 		g->generateGCode();
-		Functor::insertInMap("$G");
 		
 		Expression one = new SaliraInt(1);
 		Expression my = new Functor("$SUB", {tokenX,one});
@@ -26,7 +25,6 @@ int main(int argc, char **argv) {
 		Expression fplus = new Functor("$ADD", {gd, gm});
 		Expression f = new Functor("$F", {fplus}, 2);
 		f->generateGCode();
-		Functor::insertInMap("$F");
 		
 		Expression three = new SaliraInt(3);
 		Expression four = new SaliraInt(4);

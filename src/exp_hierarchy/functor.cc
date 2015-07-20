@@ -123,7 +123,8 @@ void Functor::gCodeCall() const{
 	out.write("MKAP");
 }
 
-void Functor::generateGCode() const{
+void Functor::generateGCode() {
+	std::cout << "--------------------" << std::endl;
 	SaliraWriter& out = SaliraWriter::getInstance();	
 	if(isDefined()){
 		if(isBase()){
@@ -134,7 +135,11 @@ void Functor::generateGCode() const{
 		}
 	}
 	else{
+		if(_num_of_args > 0)
+		Token:: changeSize(_num_of_args);
 		gCodeDeclaration();
+		Functor::insertInMap(_identifier);
+		Token:: changeSize(0);
 	}
 }
 
