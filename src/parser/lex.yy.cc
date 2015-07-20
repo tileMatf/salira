@@ -451,14 +451,13 @@ static yyconst flex_int16_t yy_chk[75] =
 #include <stdlib.h>
 
 #include "../exp_hierarchy/auto_load.hh"
-#include "../exp_hierarchy/expression.hh"
 #include "location.hh"
 	#include "position.hh"
 
 #include "LambdaScanner.h"
 #include "lambda.tab.h"
 
-#line 462 "lex.yy.cc"
+#line 461 "lex.yy.cc"
 
 #define INITIAL 0
 
@@ -590,9 +589,9 @@ YY_DECL
 		}
 
 	{
-#line 18 "lambda.l"
+#line 17 "lambda.l"
 
-#line 596 "lex.yy.cc"
+#line 595 "lex.yy.cc"
 
 	while ( 1 )		/* loops until end-of-file is reached */
 		{
@@ -651,33 +650,33 @@ do_action:	/* This label is used only to access EOF actions. */
 
 case 1:
 YY_RULE_SETUP
-#line 19 "lambda.l"
+#line 18 "lambda.l"
 { return Lambda::BisonParser::token::LET;}
 	YY_BREAK
 case 2:
 YY_RULE_SETUP
-#line 20 "lambda.l"
+#line 19 "lambda.l"
 { return Lambda::BisonParser::token::IN;}
 	YY_BREAK
 case 3:
 YY_RULE_SETUP
-#line 21 "lambda.l"
+#line 20 "lambda.l"
 { return Lambda::BisonParser::token::MAX;}
 	YY_BREAK
 case 4:
 YY_RULE_SETUP
-#line 22 "lambda.l"
+#line 21 "lambda.l"
 { return Lambda::BisonParser::token::MIN; }
 	YY_BREAK
 case 5:
 YY_RULE_SETUP
-#line 23 "lambda.l"
+#line 22 "lambda.l"
 { return Lambda::BisonParser::token::NEG;}
 	YY_BREAK
 case 6:
 /* rule 6 can match eol */
 YY_RULE_SETUP
-#line 24 "lambda.l"
+#line 23 "lambda.l"
 {
 		// One line comment
 		
@@ -695,7 +694,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 7:
 YY_RULE_SETUP
-#line 38 "lambda.l"
+#line 37 "lambda.l"
 { // ID_F: starts with big letter and optional big or small letters or numbers after (F1, Ga2, ...)
 		yylval->str = (char*) malloc(strlen(yytext) + 1);
 		if(yylval->str == NULL)
@@ -711,7 +710,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 8:
 YY_RULE_SETUP
-#line 50 "lambda.l"
+#line 49 "lambda.l"
 { 
 		// ID: starts with small letter and optional big or small letters or numbers after (x1, minCal, iQ1,...)
 		yylval->str = (char*) malloc(strlen(yytext) + 1);
@@ -728,7 +727,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 9:
 YY_RULE_SETUP
-#line 63 "lambda.l"
+#line 62 "lambda.l"
 { 	// Int numeric
   
 		// Copy to yylval
@@ -738,7 +737,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 10:
 YY_RULE_SETUP
-#line 69 "lambda.l"
+#line 68 "lambda.l"
 { 
 			// Double numeric
 			
@@ -749,7 +748,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 11:
 YY_RULE_SETUP
-#line 77 "lambda.l"
+#line 76 "lambda.l"
 { 
 			// One character
 			// return ASCII value
@@ -759,13 +758,13 @@ YY_RULE_SETUP
 case 12:
 /* rule 12 can match eol */
 YY_RULE_SETUP
-#line 82 "lambda.l"
+#line 81 "lambda.l"
 { // Ignore whitespaces 
 	}
 	YY_BREAK
 case 13:
 YY_RULE_SETUP
-#line 84 "lambda.l"
+#line 83 "lambda.l"
 {  
       // Error
       std::cerr << "ERROR: Unrecognized character(s) -> " << yytext << std::endl;
@@ -773,10 +772,10 @@ YY_RULE_SETUP
 	YY_BREAK
 case 14:
 YY_RULE_SETUP
-#line 88 "lambda.l"
+#line 87 "lambda.l"
 YY_FATAL_ERROR( "flex scanner jammed" );
 	YY_BREAK
-#line 780 "lex.yy.cc"
+#line 779 "lex.yy.cc"
 case YY_STATE_EOF(INITIAL):
 	yyterminate();
 
@@ -1675,7 +1674,7 @@ void yyfree (void * ptr )
 
 #define YYTABLES_NAME "yytables"
 
-#line 87 "lambda.l"
+#line 86 "lambda.l"
 
 
 

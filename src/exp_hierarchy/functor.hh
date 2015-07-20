@@ -1,94 +1,43 @@
 #ifndef FUNCTOR_H__
 #define FUNCTOR_H__
 
-#include "expression.hh"
-#include "salira_types.hh"
-#include "metafunc.hh"
-#include "salira_log.hh"
+#include "exp.hh"
+#include <vector>
+#include <initializer_list>
 
-/*
- * Functor, class for representating functions.
- * 
- * Ground for more complex function mechanism. 
- * It should have for starting test version just checking if function is defined. 
- * Further it should be implemented testing for polymorph functions and argument checking.
- * 
- * TODO: Implement argument number check
- * TODO: Implement polymorph 
- * 
- * NOTE: Need to enhance mechanism so it can support pattern matching, polymorphism and type conversion.
- * Central func pool need to have more  informations and think way how can pattern matching be realized easily. 
- * And also most critical part, how to ensure that newly made Expressions will be part of that. 
- * 
- */
-// 
-using FuncMap = std::unordered_map<std::string, MetaFunc>;
+using FMap = std::unordered_map<std::string,bool>;
 
-class Functor : public ExpressionBase {
-friend class SaliraDev;
-public:
-  static FuncMap functions;
-public:
-  
-  // Operation which will be used often, so it is promoted to method, in case if  
-  // mechanism is changed.
-  static bool isFunctionDefined(std::string identifier);
-  // Inserting new function
-  static bool insertFunc(std::string identifier, FuncDecl f, std::vector<Expression> args);
-  // Initialize basic functions and G code. Filling FuncMap with functions. 
-  // NOTE: Similar mechanism can be used for including another .hs file.
-  static bool initBaseFunctions(const SaliraWritter &out);
- 
-  // Reaching for function from map.
-  static FuncDecl getFunc(std::string identifier, std::vector<Expression> args) throw();
+class Functor : public ExpressionBase{
 private:
-  std::string _identifier;
-	std::string _idenF;
-  std::vector<Expression> _arguments;
+	static FMap _map;
+	static FMap _base_functions;
+	std::vector<Expression> _args;
+	std::string _identifier;
+	int _num_of_args;
 public:
-  Functor(std::string id, std::initializer_list<Expression> list);
-  Functor(std::string id, std::vector<Expression> args);
-  
+	Functor(std::string, std::initializer_list<Expression>, int = 0);
+	Functor(std::string, std::vector<Expression>& , int = 0);
 	
-	void setIdF(std::string id){
-		_idenF = id;
-	}
+	static void insertInMap(std::string ) throw();	
+	static void initBaseFunctions();
 	
-	void generateGCodeStart(const SaliraWritter& out, std::vector<Expression> 
-values, std::string name);
-  // Adding additional argument to arguments
-  // Intention: So functor can be modified through parsing expression, translation for parsing purposes
-  inline void addToArguments(Expression t){ _arguments.push_back(t); }
-  
-  // Setter and getter for identifier
-  inline void setIdentifier(std::string s) {_identifier = s;}
-  inline std::string identifier() {return _identifier;}
-  
-  void changeArgument(int index, Expression t){
-	if(index > _arguments.size()){
-	  throw SaliraException("There is no arguments with given index");
-	}
-	_arguments[index] = t;
-  }
-  
-  
-  virtual std::string print() const;
-  // Check functions
-  inline virtual bool isToken() const { return false; }
-  inline virtual bool isConstant() const { return true; }
-  virtual Expression eval(const std::vector<Expression>& values) const;
+	static void gCodeBegin();
+	static void gCodeEnd(Expression);
+	
+	virtual std::string print() const {return std::string("Functor")+_identifier;}
+	virtual Type getType() const {return ExpressionBase::S_FUNCTOR;};
+  virtual void generateGCode() const;
 
-  virtual void generateGCode(const SaliraWritter &out, 
-std::vector<Expression>
-values = std::vector<Expression>()) ;
-  virtual Type getType() const {return S_FUNCTOR;};
-  virtual ~Functor() {
-    // Deleting memory from arguments
-    for (auto item : _arguments){
-      delete item;
-    }
-  }
+private:
+	// NOTE: Find better place for this;
+	
+	
+	bool isDefined() const;
+	bool isBase() const;
+	// GCode
+	void gCodeDeclaration() const;
+	void gCodeCall() const;
+	void baseGcode(bool = true) const;
 };
-
 
 #endif // FUNCTOR_H__

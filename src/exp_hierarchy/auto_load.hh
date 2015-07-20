@@ -1,12 +1,11 @@
-#ifndef SALIRA_AUTO_LOAD_H_
-#define SALIRA_AUTO_LOAD_H_
+#ifndef AUTO_LOAD__H_
+#define AUTO_LOAD__H_
 
 
-#include "expression.hh"
+#include "exp.hh"
 #include "functor.hh"
-#include "salira_types.hh"
-#include "salira_utility.hh"
-#include "salira_log.hh"
-#include "salira_dev.hh"
+#include "token.hh"
+#include "salira_writer.hh"
+#include "SaliraExceptions.hh"
 
-#endif // SALIRA_AUTO_LOAD_H_
+#endif // AUTO_LOAD__H_

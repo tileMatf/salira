@@ -2,15 +2,12 @@ Map contents!
 	K Num: 1
 		Declaration: 
 			Arguments
-				Token: int
-				Token: int
+				Token:  just token
+				Token:  just token
 	G Num: 1
 		Declaration: 
 			Arguments
-				Token: int
-	$NEG Num: 1
-		Declaration: 
-			Arguments
+				Token:  just token
 	$DIV Num: 1
 		Declaration: 
 			Arguments
@@ -26,11 +23,9 @@ Map contents!
 			Arguments
 				Token:  just token
 				Token:  just token
-	F Num: 1
+	$NEG Num: 1
 		Declaration: 
 			Arguments
-				Token: int
-				Token: int
 	$ADD Num: 1
 		Declaration: 
 			Arguments
