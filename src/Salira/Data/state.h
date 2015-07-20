@@ -2,9 +2,9 @@
 #define STATE_H
 #include <QStack>
 #include <QVector>
-#include<Data/graphnode.h>
-#include<Data/dumpnode.h>
-#include<Data/gcommand.h>
+#include <Data/graphnode.h>
+#include <Data/dumpnode.h>
+#include <Data/gcommand.h>
 
 class State
 {
@@ -24,7 +24,8 @@ private:
     QString _errorMessage;
     int _currentLineNumber;
 
-    int commandExists(State& state, QList<GCommand> commands);
+    int functionExists(QString functionName, QList<GCommand> commands);
+    int functionExistsWithZero(QString functionName, QList<GCommand> commands);
     int labelExists(QList<GCommand> commands, QString labelName);
 
 public:

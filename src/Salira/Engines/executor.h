@@ -18,6 +18,8 @@ private:
     void Execute(bool forward);
 
     int valueOfGraphNode(int id, State state);
+    GraphNodeType typeOfGraphNode(int id, State state);
+    QString nameOfGraphNode(int id, State state);
 
 public:
     static Executor& Instance();

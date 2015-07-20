@@ -31,6 +31,20 @@ int Executor::valueOfGraphNode(int id, State state)
             return state.graph()[i].value();
 }
 
+GraphNodeType Executor::typeOfGraphNode(int id, State state)
+{
+    for(int i = 0; i < state.graph().length(); i++)
+        if(state.graph()[i].id() == id)
+            return state.graph()[i].type();
+}
+
+QString Executor::nameOfGraphNode(int id, State state)
+{
+    for(int i = 0; i < state.graph().length(); i++)
+        if(state.graph()[i].id() == id)
+            return state.graph()[i].functionName();
+}
+
 bool Executor::Init(QList<GCommand> commands, QString& errorMessage)
 {
     this->Reset();
@@ -78,7 +92,25 @@ bool Executor::Init(QList<GCommand> commands, QString& errorMessage)
             }
         }
 
+        if(nextState.command().value() == "EVAL")
+        {
+            QString funName = nameOfGraphNode(state.stack().last(), nextState);
+
+            if(nextState.command().ToString() == QString("GLOBSTART " + funName))
+            {
+                for(int j = 0; j < commands.length(); j++)
+                {
+                    if(commands[j].ToString() == QString("GLOBSTART " + funName + " 0"))
+                    {
+                        i = j - 1;
+                        break;
+                    }
+                }
+            }
+        }
+
         this->_states.push_back(nextState);
+
         if(_states.length() >= STACK_SIZE)
         {
             errorMessage = "Error: Stack or Graph overflow! It is possible that there is an infinite loop on input!";

@@ -117,13 +117,22 @@ int State::currentLineNumber()
     return this->_currentLineNumber;
 }
 
-int State::commandExists(State& state, QList<GCommand> commands)
+int State::functionExists(QString functionName, QList<GCommand> commands)
 {
-    int nodeID = state.stack().at(state.stack().length() - 1);
-
     for(int i = 0; i < commands.length(); i++) {
-        if(commands[i].ToString() == QString("GLOBSTART " + state.graph()[nodeID].functionName() + " "
-                + QString::number(state.graph()[nodeID].value()) + ";"))
+        if(commands[i].args().length() > 0)
+            if(QString(commands[i].value() + " " + commands[i].args()[0]->ToString()) ==
+                    QString("GLOBSTART " + functionName))
+            return i;
+    }
+    return -1;
+}
+
+int State::functionExistsWithZero(QString functionName, QList<GCommand> commands)
+{
+    for(int i = 0; i < commands.length(); i++) {
+        if(commands[i].args().length() > 0)
+            if(commands[i].ToString() == QString("GLOBSTART " + functionName + " 0;"))
             return i;
     }
     return -1;
@@ -790,79 +799,75 @@ bool State::Max(GCommand command, State& state)
 
 bool State::Eval(GCommand command, State& state, QList<GCommand> commands)
 {
+    state = State(*this, command, _maxID);
     GraphNodeType argType;
+    QString funName;
 
     foreach (GraphNode node, state.graph()) {
         if(node.id() == state.stack().last())
+        {
             argType = node.type();
+            funName = node.functionName();
+        }
     }
 
     if(argType == GraphNodeType::Cons || argType == GraphNodeType::Integer)
     {
-        state = State(*this, command, _maxID);
         return true;
     }
 
-   /* if(argType == GraphNodeType::Application)
+
+    DumpNode dump;
+    QVector<int> dumpStack;
+    QVector<QString> dumpCode;
+
+
+    if(argType == GraphNodeType::Application)
     {
-        DumpNode dump;
-        QVector<int> dumpStack;
-        QVector<QString> dumpCode;
-
-
+        int tmp = state.stack().last();
         for(int i = 0; i < state.stack().length()-1; i++)
             dumpStack.push_back(state.stack()[i]);
 
+        for(int i = currentLineNumber()+1; i < commands.length(); i++)
+            dumpCode.push_back(commands[i].ToString());
+
         dump = DumpNode(dumpStack, dumpCode);
         state._dump.push_back(dump);
+
+        state._stack.clear();
+        state._stack.push_back(tmp);
+
+        return Unwind(GCommand("Unwind;"), state, commands);
     }
+
     if(argType == GraphNodeType::Function)
     {
-        int nodeID = state.stack().last();
-        int index = commandExists(state, commands);
+        int index = functionExists(funName, commands);
 
         if(index == -1)
         {
-            state._errorMessage = "Error on line " + QString::number(this->currentLineNumber()) + ": No appropriate function " +
-                    command.args()[0]->ToString() + " for EVAL instruction.";
+            state._errorMessage = "Error on line " + QString::number(currentLineNumber())
+                    + ": EVAL instruction on non-existent function " + funName + ".";
             return false;
         }
 
-        DumpNode dump;
-        QVector<int> stack;
-        QVector<QString> code;
-        for(int i = 0; i < state.stack().length(); i++)
-            stack.push_back(state.stack().at(i));
+        if(functionExistsWithZero(funName, commands) != -1)
+        {
+            int tmp = state.stack().last();
+            if(state.stack().length() > 2)
+                for(int i = 0; i < state.stack().length() - 1; i++)
+                    dumpStack.push_back(state.stack()[i]);
+            for(int i = currentLineNumber()+1; i < commands.length(); i++)
+                dumpCode.push_back(commands[i].ToString());
 
-        for(int i = cBegin(); i < commands.length(); i++)
-            code.push_back(commands[i].ToString());
+            dump = DumpNode(dumpStack, dumpCode);
 
-        dump = DumpNode(stack, code);
-        state._dump.push_back(dump);
+            state._stack.clear();
+            state._stack.push_back(tmp);
 
-
-        return true;
+            return true;
+        }
     }
-
-/*
-    if(argType == GraphNodeType::Application)
-    {
-        DumpNode dump;
-        QVector<int> stack;
-        QVector<QString> code;
-        for(int i = 0; i < state.stack().length(); i++)
-            stack.push_back(state.stack().at(i));
-        for(int i = 0; i < state.stack().length(); i++)
-            state._stack.pop();
-        for(int i = cBegin(); i < commands.length(); i++)
-            code.push_back(commands[i].ToString());  //proveriti dump
-
-        state._cBegin = 0; //nije uradjeno
-        return true;
-    }
-*/
-    state = State(*this, command, _maxID);
-
     return true;
 }
 
@@ -873,7 +878,52 @@ bool State::Eval2(GCommand command, State& state, QList<GCommand> commands)
 
 bool State::Unwind(GCommand command, State& state, QList<GCommand> commands)
 {
+/*    state = State(*this, command, _maxID);
+    GraphNodeType argType;
+    int id1, id2;
+    QString funName;
 
+    foreach (GraphNode node, state.graph()) {
+        if(node.id() == state.stack().last())
+        {
+            argType = node.type();
+            id1 = node.idRef1();
+            funName = node.functionName();
+        }
+        if(node.id() == state.stack()[state.stack().length() -2])
+            id2 = node.idRef2();
+    }
+
+    if(argType == GraphNodeType::Cons || argType == GraphNodeType::Integer)
+    {
+        int tmp = state.stack().last();
+        state.stack().clear();
+
+        if(state.dump().length() > 0)
+        {
+            for(int i = 0; i < state.dump().last().stack().length(); i++)
+                state.stack().push_back(state.dump().last().stack()[i]);
+
+            state.dump().last().stack().clear();
+            state.stack().push_back(tmp);
+
+            state.dump().last().code().clear();
+        }
+
+        return true;
+    }
+
+    if(argType == GraphNodeType::Application)
+    {
+        state.stack().push_back(id);
+    }
+
+    if(argType == GraphNodeType::Function)
+    {
+        if(funName == QString("$NEG"))
+            state.Neg(command, state);
+    }
+*/
     return true;
 }
 

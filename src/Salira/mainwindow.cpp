@@ -112,7 +112,9 @@ void MainWindow::FillGraph(bool clearOnly)
                     + "]\n" + Executor::Instance().currentState().graph()[i].functionName();
             break;
         case 3:
-            nodeName = "CONST";
+            nodeName = "CONST\nNODE[" + QString::number(Executor::Instance().currentState().graph()[i].id()+1)
+                    + "]\nNODE [" + QString::number(Executor::Instance().currentState().graph()[i].idRef1()+1)
+                    + "]\nNODE [" + QString::number(Executor::Instance().currentState().graph()[i].idRef2()+1);
             break;
         case 4:
             nodeName = "APPLICATION\nNODE[" + QString::number(Executor::Instance().currentState().graph()[i].id()+1)
@@ -130,6 +132,14 @@ void MainWindow::FillDump(bool clearOnly)
 
     if(clearOnly)
         return;
+
+    if(Executor::Instance().currentState().dump().length() > 0)
+        for(int i = Executor::Instance().currentState().dump().length()-1; i <= 0; i++)
+        {
+            QString nodeName = "NODE [" + QString::number(Executor::Instance().currentState().dump().last().stack().at(i)+1) + "]";
+            ui->frameDump->layout()->addWidget(new QPushButton(nodeName));
+        }
+
 }
 
 void MainWindow::FillOutput(bool clearOnly)
@@ -156,9 +166,15 @@ void MainWindow::FillOutput(bool clearOnly)
                               + " " + QString::number(Executor::Instance().currentState().graph()[i].idRef2()));
 
     ui->txtOutput->append(QString("Dump:"));
-    for(int i =0; i < Executor::Instance().currentState().dump().length(); i++)
-        for(int j = 0; j < Executor::Instance().currentState().dump()[i].stack().length(); j++)
-        ui->txtOutput->append(QString::number(Executor::Instance().currentState().dump()[i].stack()[j]) + " ");
+    if(Executor::Instance().currentState().dump().length() > 0)
+    {
+        for(int j = 0; j < Executor::Instance().currentState().dump().last().stack().length(); j++)
+            ui->txtOutput->append(QString::number(Executor::Instance().currentState().dump().last().stack()[j]) + " ");
+    }
+    ui->txtOutput->append(QString("Dump Code:"));
+    if(Executor::Instance().currentState().dump().length() > 0)
+    for(int i = 0; i < Executor::Instance().currentState().dump().last().code().length(); i++)
+        ui->txtOutput->append(Executor::Instance().currentState().dump().last().code()[i]);
 }
 
 void MainWindow::RefreshUI(bool clearOnly, bool keepGCodeText)
