@@ -25,7 +25,7 @@ int main(int argc, char **argv) {
 		Expression fplus = new Functor("$ADD", {gd, gm});
 		Expression f = new Functor("$F", {fplus}, 2);
 		f->generateGCode();
-		
+		f->tree(0);
 		Expression three = new SaliraInt(3);
 		Expression four = new SaliraInt(4);
 		

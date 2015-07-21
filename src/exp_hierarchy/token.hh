@@ -26,6 +26,9 @@ public:
 	virtual void generateGCode();
 	static void changeSize(int);
 	static int size() {return _size;}
+#ifdef DEBUG
+	virtual void tree(int lvl) const;
+#endif
 };
 
 #endif // TOKEN__H_

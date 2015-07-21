@@ -45,7 +45,7 @@
 	#include "location.hh"
 	#include "position.hh"
 	#include "../exp_hierarchy/auto_load.hh"
-	
+	extern FILE *fp;	
 	// Forward-declare the Scanner class; the Parser needs to be assigned a 
 	// Scanner, but the Scanner can't be declared without the Parser
 	namespace Lambda {

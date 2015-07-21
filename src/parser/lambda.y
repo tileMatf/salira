@@ -11,7 +11,7 @@
 	#include "location.hh"
 	#include "position.hh"
 	#include "../exp_hierarchy/auto_load.hh"
-	
+	extern FILE *fp;	
 	// Forward-declare the Scanner class; the Parser needs to be assigned a 
 	// Scanner, but the Scanner can't be declared without the Parser
 	namespace Lambda {
@@ -141,7 +141,10 @@ LINE : ID_F ARGS '=' EXP  {
 			      }
 			      
 			      Expression f = new Functor($1, {$4}, arguments.size());			      
+			      f->tree(0);
+			      SaliraLog::log("ttt");
 			      f->generateGCode();
+			      
 			      std::cout << "udje" << std::endl;
 						
 			      arguments.clear();

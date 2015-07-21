@@ -27,6 +27,9 @@
 #include <unordered_map>
 #include "SaliraExceptions.hh"
 #include "salira_writer.hh"
+#include "salira_log.hh"
+
+#define DEBUG 1
 
 class ExpressionBase;
 
@@ -45,8 +48,12 @@ public:
   ExpressionBase(){}
   virtual std::string print() const = 0;
   virtual Type getType() const = 0;
-	virtual void generateGCode() = 0; 
+	virtual void generateGCode() = 0;
   virtual ~ExpressionBase() {}
+#ifdef DEBUG
+	virtual void tree(int lvl) const = 0;
+#endif
+  
 };
 
 
@@ -69,6 +76,14 @@ std::string("SaliraInt:")+std::to_string(_value); }
 	
   inline int value() { return _value; }
   inline void setValue(int new_value) { _value = new_value;}
+ #ifdef DEBUG
+	virtual void tree(int lvl) const{
+		std::string res = "";
+		for (int i = 0; i < lvl; ++i)
+			res += "  ";
+		SaliraLog::tree(res + this->print());
+	};
+#endif
 };
 
 

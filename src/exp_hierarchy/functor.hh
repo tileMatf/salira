@@ -47,6 +47,10 @@ public:
 	virtual Type getType() const {return ExpressionBase::S_FUNCTOR;};
   virtual void generateGCode();
 
+#ifdef DEBUG
+	virtual void tree(int lvl) const;
+#endif
+	
 private:
 	// Checking if function is already defined, so it must be 
 	// function call.

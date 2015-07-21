@@ -162,3 +162,15 @@ Functor::_base_functions.end()){
 		return true;
 	}
 }
+
+
+#ifdef DEBUG
+void Functor::tree(int lvl) const{
+	std::string res = "";
+	for (int i = 0; i < lvl; ++i)
+		res += "  ";
+	SaliraLog::tree(res + this->print());
+	for(Expression exp : _args)
+		exp->tree(lvl+1);
+};
+#endif

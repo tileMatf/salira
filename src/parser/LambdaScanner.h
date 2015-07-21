@@ -1,5 +1,5 @@
 #pragma once
-
+#include <fstream>
 #if ! defined(yyFlexLexerOnce)
 #include <FlexLexer.h>
 #endif
@@ -22,6 +22,7 @@ namespace Lambda
 			int yylex(Lambda::BisonParser::semantic_type *lval)
 			{
 				yylval = lval;
+			
 				return yylex();
 			}
 		private:
