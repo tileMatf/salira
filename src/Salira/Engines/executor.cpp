@@ -96,15 +96,12 @@ bool Executor::Init(QList<GCommand> commands, QString& errorMessage)
         {
             QString funName = nameOfGraphNode(state.stack().last(), nextState);
 
-            if(nextState.command().ToString() == QString("GLOBSTART " + funName))
+            for(int j = 0; j < commands.length(); j++)
             {
-                for(int j = 0; j < commands.length(); j++)
+                if(commands[j].ToString() == QString("GLOBSTART " + funName + " 0;"))
                 {
-                    if(commands[j].ToString() == QString("GLOBSTART " + funName + " 0"))
-                    {
-                        i = j - 1;
-                        break;
-                    }
+                    i = j - 1;
+                    break;
                 }
             }
         }
