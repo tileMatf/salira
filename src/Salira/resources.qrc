@@ -10,5 +10,6 @@
         <file>Images/folder-open.png</file>
         <file>Images/brush.png</file>
         <file>Images/book-go.png</file>
+        <file>Images/execute.png</file>
     </qresource>
 </RCC>

@@ -59,18 +59,20 @@
 %token <doubleNum> DOUBLE_NUM
 %token <str> ID COMMENT ID_F
 %token LET IN MAX MIN NEG 
-%type <e> EXP ARGS ARGEXP ARGS_F VALS VAL 
+%type <e> EXP ARGS ARGEXP ARGS_F VALS VAL
 
 
 // Defining priority and associativity
+
+%left "func"
+%left "func2"
+%left "func1"
 %left '+' '-'
 %left '*'
 %left '/'
+
 %left '(' ')'
 %left '='
-%right "func"
-%right "func2"
-%right "func1"
 /*
 * 
 *  Grammar:
@@ -124,13 +126,20 @@
 */
 
 %%
-PROGRAM : PROGRAM LINE ';'
-| LINE ';'
+P : PROGRAM { // END
+std::cout << "END" << std::endl;
+}
+;
+PROGRAM : PROGRAM LINE ';' {
+}
+| LINE ';' { 
+}
 ;
 LINE : ID_F ARGS '=' EXP  {
+
 			      //NOTE: Need to  be called at the begining of program to load all basic functions
 			      Functor::initBaseFunctions();
-						Functor::gCodeBegin();
+			      Functor::gCodeBegin();
 			      std::cout << $1 << std::endl;
 			      std::cout << arguments.size() << std::endl;
 			      std::cout << "args " << std::endl;
@@ -151,10 +160,9 @@ LINE : ID_F ARGS '=' EXP  {
 			      variables.clear();
 			      counter = 0;
 }
-//| ID_F VALS {
+| ID_F VALS {
 // F 3 4 
-//      std::cout << " ID " << $1<< std::endl; 
-//      }
+      }
 ;
 ARGS : ARGS ARGEXP {} 
 | ARGEXP {}
@@ -168,9 +176,8 @@ ARGEXP : ID {
 	arguments.push_back(new Token(variables[$1]));
 }
 ;
-/*VALS : VALS VAL {}
+VALS : VALS VAL {}
 | VAL {
-	std::cout << "Neki ispis!" << std::endl;
 }
 ;
 VAL: INT_NUM {
@@ -182,7 +189,7 @@ VAL: INT_NUM {
 	    std::cout << " DOUBLE_NUM " << std::endl; 
 	    values.push_back(Expression(new SaliraInt($1)));
 	    }
-;*/
+;
 EXP : EXP '+' EXP { 
 	std::cout << "PLUS" << std::endl;
 	$$ = new Functor("$ADD",{$1,$3});
@@ -209,6 +216,7 @@ EXP : EXP '+' EXP {
 }
 | ID_F ARGS_F  %prec "func"{
 	 $$ = new Functor($1,{$2});
+	 std::cout << $1  << "poziv fje "<< std::endl;
 }
 | ID {
 	std::cout << " ID " << $1 << std::endl;
@@ -217,7 +225,6 @@ EXP : EXP '+' EXP {
 	  throw SaliraException("Variable not exists in declaration of function arguments.");
 	}
 	
-	// NOTE: Second argument is artificial, todo -> type checking
 	$$ = new Token(variables[$1]);
 }
 | '(' EXP ')'   { 	
@@ -241,8 +248,8 @@ LIST_LIST : LIST_LIST ',' LIST
 | LIST
 */
 ;
-ARGS_F : ARGS_F EXP %prec "func1" {}
-| EXP %prec "func2"{}
+ARGS_F : ARGS_F EXP %prec "func1" { std::cout << "lista" << std::endl; }
+| EXP %prec "func2"{ std::cout << "lista 1" << std::endl;}
 ;
 %%
 
@@ -257,6 +264,7 @@ void Lambda::BisonParser::error(const std::string &s)
 
 static int yylex(Lambda::BisonParser::semantic_type *yylval, Lambda::FlexScanner &scanner)
 {
+
 	return scanner.yylex(yylval);
 }
 

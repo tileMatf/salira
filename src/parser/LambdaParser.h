@@ -12,6 +12,8 @@ namespace Lambda
 
 			int parse()
 			{
+				//INIT
+				std::cout << "INIT" << std::endl;
 				return parser.parse();
 			}
 		private:
