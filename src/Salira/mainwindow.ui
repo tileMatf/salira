@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>980</width>
+    <width>1102</width>
     <height>500</height>
    </rect>
   </property>
@@ -25,10 +25,112 @@
      <number>0</number>
     </property>
     <item row="0" column="0" rowspan="4" colspan="7">
-     <layout class="QHBoxLayout" name="horizontalLayout_2" stretch="10,10">
+     <layout class="QHBoxLayout" name="horizontalLayout_2" stretch="0,10,10">
       <property name="spacing">
        <number>4</number>
       </property>
+      <item>
+       <widget class="QGroupBox" name="groupBox_5">
+        <property name="minimumSize">
+         <size>
+          <width>220</width>
+          <height>456</height>
+         </size>
+        </property>
+        <property name="title">
+         <string/>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
+        </property>
+        <layout class="QVBoxLayout" name="verticalLayout_7">
+         <property name="topMargin">
+          <number>5</number>
+         </property>
+         <item>
+          <layout class="QVBoxLayout" name="verticalLayout_6">
+           <property name="spacing">
+            <number>2</number>
+           </property>
+           <property name="sizeConstraint">
+            <enum>QLayout::SetDefaultConstraint</enum>
+           </property>
+           <item>
+            <layout class="QHBoxLayout" name="horizontalLayout">
+             <property name="spacing">
+              <number>0</number>
+             </property>
+             <item>
+              <widget class="QLabel" name="labelHaskell">
+               <property name="minimumSize">
+                <size>
+                 <width>0</width>
+                 <height>0</height>
+                </size>
+               </property>
+               <property name="text">
+                <string>Haskell code</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QPushButton" name="btnExecute">
+               <property name="enabled">
+                <bool>false</bool>
+               </property>
+               <property name="minimumSize">
+                <size>
+                 <width>32</width>
+                 <height>32</height>
+                </size>
+               </property>
+               <property name="maximumSize">
+                <size>
+                 <width>32</width>
+                 <height>32</height>
+                </size>
+               </property>
+               <property name="text">
+                <string/>
+               </property>
+               <property name="icon">
+                <iconset resource="resources.qrc">
+                 <normaloff>:/images/Images/execute.png</normaloff>:/images/Images/execute.png</iconset>
+               </property>
+               <property name="iconSize">
+                <size>
+                 <width>32</width>
+                 <height>32</height>
+                </size>
+               </property>
+               <property name="autoDefault">
+                <bool>false</bool>
+               </property>
+               <property name="default">
+                <bool>false</bool>
+               </property>
+               <property name="flat">
+                <bool>true</bool>
+               </property>
+              </widget>
+             </item>
+            </layout>
+           </item>
+           <item>
+            <widget class="QTextEdit" name="textEditHaskell">
+             <property name="minimumSize">
+              <size>
+               <width>0</width>
+               <height>0</height>
+              </size>
+             </property>
+            </widget>
+           </item>
+          </layout>
+         </item>
+        </layout>
+       </widget>
+      </item>
       <item>
        <widget class="QGroupBox" name="groupBox">
         <property name="minimumSize">
@@ -356,6 +458,9 @@
     </item>
     <item row="0" column="7" rowspan="4">
      <layout class="QVBoxLayout" name="verticalLayout_2" stretch="6,4">
+      <property name="spacing">
+       <number>2</number>
+      </property>
       <item>
        <widget class="QGroupBox" name="groupBox_3">
         <property name="minimumSize">
@@ -421,8 +526,8 @@
              <rect>
               <x>0</x>
               <y>0</y>
-              <width>125</width>
-              <height>230</height>
+              <width>124</width>
+              <height>216</height>
              </rect>
             </property>
             <layout class="QVBoxLayout" name="verticalLayout_3">
@@ -486,8 +591,8 @@
              <rect>
               <x>0</x>
               <y>0</y>
-              <width>126</width>
-              <height>230</height>
+              <width>124</width>
+              <height>216</height>
              </rect>
             </property>
             <layout class="QVBoxLayout" name="verticalLayout_4">
@@ -551,8 +656,8 @@
              <rect>
               <x>0</x>
               <y>0</y>
-              <width>125</width>
-              <height>230</height>
+              <width>124</width>
+              <height>216</height>
              </rect>
             </property>
             <layout class="QVBoxLayout" name="verticalLayout_5">
@@ -640,8 +745,8 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>980</width>
-     <height>30</height>
+     <width>1102</width>
+     <height>23</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuFile">
