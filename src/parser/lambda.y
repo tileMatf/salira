@@ -126,10 +126,17 @@
 */
 
 %%
-PROGRAM : PROGRAM LINE ';'
-| LINE ';'
+P : PROGRAM { // END
+std::cout << "END" << std::endl;
+}
+;
+PROGRAM : PROGRAM LINE ';' {
+}
+| LINE ';' { 
+}
 ;
 LINE : ID_F ARGS '=' EXP  {
+
 			      //NOTE: Need to  be called at the begining of program to load all basic functions
 			      Functor::initBaseFunctions();
 			      Functor::gCodeBegin();
@@ -254,6 +261,7 @@ void Lambda::BisonParser::error(const std::string &s)
 
 static int yylex(Lambda::BisonParser::semantic_type *yylval, Lambda::FlexScanner &scanner)
 {
+
 	return scanner.yylex(yylval);
 }
 
