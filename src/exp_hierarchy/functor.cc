@@ -124,7 +124,6 @@ void Functor::gCodeCall() const{
 }
 
 void Functor::generateGCode() {
-	std::cout << "--------------------" << std::endl;
 	SaliraWriter& out = SaliraWriter::getInstance();	
 	if(isDefined()){
 		if(isBase()){
