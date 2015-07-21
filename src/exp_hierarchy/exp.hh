@@ -1,6 +1,27 @@
 #ifndef EXPRESSION_H__
 #define EXPRESSION_H__
 
+/*
+ * exp.hh 
+ * 
+ * Contains base expression class and smaller inherited classes and
+ * those without static data fields. 
+ *
+ * Represents starting point of whole mechanism.
+ * 
+ * Whole mechanism is intended to be as minimalistic as possible so contains 
+ * hierarchy like this:
+ * 
+ * Root: ExpressionBase
+ * Functor : ExpressionBase
+ * Token : ExpressionBase
+ * SaliraInt : ExpressionBase
+ * 
+ * Future changes will be focused on SaliraInt so it can support more than
+ * one datatype so hierarchy tree will go deeper in that branch.
+ *
+ */
+
 #include <iostream>
 #include <vector>
 #include <unordered_map>
@@ -8,8 +29,16 @@
 #include "salira_writer.hh"
 
 class ExpressionBase;
-using Expression = ExpressionBase*;
 
+using Expression = ExpressionBase*;
+using FMap = std::unordered_map<std::string,bool>;
+
+/*
+ * Root class. Intention is to have universal container class and 
+ * to unify some features (as printing and generating gcode method).
+ * Like interface in Java or C#.
+ * 
+ */
 class ExpressionBase{
 public:
   enum Type {S_INT, S_FUNCTOR, S_TOKEN};
@@ -21,6 +50,10 @@ public:
 };
 
 
+/*
+ * Basic type of data currently supported. 
+ * Rest of code is basically self explanatory.
+ */
 class SaliraInt : public ExpressionBase{
 private:
   int _value;

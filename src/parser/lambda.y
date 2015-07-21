@@ -141,8 +141,6 @@ LINE : ID_F ARGS '=' EXP  {
 			      }
 			      
 			      Expression f = new Functor($1, {$4}, arguments.size());			      
-			      std::cout << " dd   " << $1 << std::endl;
-			      std::cout << $4->print() << std::endl;
 			      f->generateGCode();
 			      std::cout << "udje" << std::endl;
 						
@@ -150,10 +148,10 @@ LINE : ID_F ARGS '=' EXP  {
 			      variables.clear();
 			      counter = 0;
 }
-| ID_F VALS {
+//| ID_F VALS {
 // F 3 4 
-      std::cout << " ID " << $1<< std::endl; 
-      }
+//      std::cout << " ID " << $1<< std::endl; 
+//      }
 ;
 ARGS : ARGS ARGEXP {} 
 | ARGEXP {}
@@ -167,8 +165,10 @@ ARGEXP : ID {
 	arguments.push_back(new Token(variables[$1]));
 }
 ;
-VALS : VALS VAL {}
-| VAL {}
+/*VALS : VALS VAL {}
+| VAL {
+	std::cout << "Neki ispis!" << std::endl;
+}
 ;
 VAL: INT_NUM {
 	    std::cout << " INT_NUM " << std::endl; 
@@ -179,7 +179,7 @@ VAL: INT_NUM {
 	    std::cout << " DOUBLE_NUM " << std::endl; 
 	    values.push_back(Expression(new SaliraInt($1)));
 	    }
-;
+;*/
 EXP : EXP '+' EXP { 
 	std::cout << "PLUS" << std::endl;
 	$$ = new Functor("$ADD",{$1,$3});
@@ -205,7 +205,7 @@ EXP : EXP '+' EXP {
 	  $$ = new SaliraInt($1);
 }
 | ID_F ARGS_F  %prec "func"{
-	 auto a = new Functor($1,{$2});
+	 $$ = new Functor($1,{$2});
 }
 | ID {
 	std::cout << " ID " << $1 << std::endl;

@@ -1,12 +1,23 @@
 #ifndef TOKEN__H_
 #define TOKEN__H_
 
+/*
+ * Token represents input arguments of functions. Basically
+ * they are placeholders where our input values will be when 
+ * function call happen.
+ */
+
 #include "exp.hh"
 
 class Token : public ExpressionBase{
 private:
 	int _placement;
-	// Hack to test if mergin with parser is correct
+	/*
+	 * Static data to store number of all arguments.
+	 * Reason for this implementation (hack) is bad side of yacc
+	 * parser, which doesn't know how many arguments there are when
+	 * creating each token.
+	 */
 	static int _size;
 public:
 	Token(int place);
