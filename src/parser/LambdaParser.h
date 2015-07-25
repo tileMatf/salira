@@ -13,7 +13,8 @@ namespace Lambda
 			int parse()
 			{
 				//INIT
-				std::cout << "INIT" << std::endl;
+				Functor::initBaseFunctions();
+				Functor::gCodeBegin();
 				return parser.parse();
 			}
 		private:

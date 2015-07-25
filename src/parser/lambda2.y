@@ -28,14 +28,6 @@
 	// Arguments of function		  
 	std::vector<Expression> arguments{};
 	
-	
-	// Arguments of function call	  
-	std::vector<Expression> args_f{};
-	
-	
-	// Values for last function call	  
-	std::vector<Expression> vals_f{};
-	
 	// Values for each argument 		  
 	std::vector<Expression> values{};
 	
@@ -79,8 +71,6 @@
 %left '*'
 %left '/'
 %left '(' ')'
-
-
 /*
 * 
 *  Grammar:
@@ -133,9 +123,9 @@
 * 	
 */
 
-
 %%
-P : PROGRAM { 
+P : PROGRAM { // END
+std::cout << "END" << std::endl;
 }
 ;
 PROGRAM : PROGRAM LINE ';' {
@@ -144,98 +134,121 @@ PROGRAM : PROGRAM LINE ';' {
 }
 ;
 LINE : ID_F ARGS '=' EXP  {
-      
-			  Expression f = new Functor($1, {$4}, arguments.size());
-			  f->tree(0);
-			  SaliraLog::log("ttt");
-			  f->generateGCode();
-			  arguments.clear();
-			  variables.clear();
-			  counter = 0;
-			  
-			  // debug
-			  std::cout << "Deklaracija " <<$1 << std::endl;
+
+			      //NOTE: Need to  be called at the begining of program to load all basic functions
+			      Functor::initBaseFunctions();
+			      Functor::gCodeBegin();
+			      std::cout << $1 << std::endl;
+			      std::cout << arguments.size() << std::endl;
+			      std::cout << "args " << std::endl;
+			      // printing arguments
+			      for(auto item : arguments)
+			      {
+				  std::cout << item->print() << std::endl;
+			      }
+			      
+			      Expression f = new Functor($1, {$4}, arguments.size());			      
+			      f->tree(0);
+			      SaliraLog::log("ttt");
+			      f->generateGCode();
+			      
+						
+			      arguments.clear();
+			      variables.clear();
+			      counter = 0;
 }
 | ID_F VALS {
-	  std::cout << "Udje " <<$1 << std::endl;
-	  
-	  Expression f = new Functor($1, values, values.size());
-	  Functor::gCodeEnd(f);
+ 			      std::cout << "udje" << std::endl;
 
+  // F 3 4 
       }
-;ARGS : ARGS ARGEXP {} 
+;
+ARGS : ARGS ARGEXP {} 
 | ARGEXP {}
 ;
 ARGEXP : ID {	
-	    if(variables.find($1) == variables.end())
-	    {
-	      variables[$1] = counter;
-	      counter++;
-	    }
-	    arguments.push_back(new Token(variables[$1]));
-  }
+      std::cout << " ID " << $1<< std::endl; 
+      if(variables.find($1) == variables.end()){
+	 variables[$1] = counter;
+	 counter++;
+	}
+	arguments.push_back(new Token(variables[$1]));
+}
 ;
-VALS : VALS VAL {
-      }
+VALS : VALS VAL {}
 | VAL {
 }
 ;
 VAL: INT_NUM {
+	    std::cout << " INT_NUM " << std::endl; 
 	    values.push_back(Expression(new SaliraInt($1)));
 	   }
 | DOUBLE_NUM {
+	    
+	    std::cout << " DOUBLE_NUM " << std::endl; 
 	    values.push_back(Expression(new SaliraInt($1)));
-	   }
+	    }
 ;
-EXP : EXP '+' EXP {    
-		  $$ = new Functor("$ADD",{$1,$3});
-		  std::cout << "+" << std::endl;
+EXP : EXP '+' EXP { 
+	std::cout << "PLUS" << std::endl;
+	$$ = new Functor("$ADD",{$1,$3});
 	}
 | EXP '-' EXP { 
-	      $$ = new Functor("$SUB",{$1,$3});
-	      std::cout << "-" << std::endl;
+	std::cout << " MINUS " << std::endl;
+	$$ = new Functor("$SUB",{$1,$3});
 	}
 | EXP '*' EXP {
-		$$ = new Functor("$MUL",{$1,$3});
-		std::cout << "*" << std::endl;
+	std::cout << " MULT " << std::endl;
+	$$ = new Functor("$MUL",{$1,$3});
 	}
 | EXP '/' EXP { 
-		$$ = new Functor("$DIV",{$1,$3});
-		std::cout << "//" << std::endl;
+	std::cout << " DIV " << std::endl;
+	$$ = new Functor("$DIV",{$1,$3});
 } 
-| INT_NUM {   
+| INT_NUM { 
+	  std::cout << " INT_NUM " <<  std::to_string($1) << std::endl;
 	  $$ = new SaliraInt($1);
-	  std::cout << $1 << std::endl;
 }
 | DOUBLE_NUM {
-	    $$ = new SaliraInt($1);
+	  std::cout << " DOUBLE_NUM " <<  std::to_string($1) << std::endl;
+	  $$ = new SaliraInt($1);
 }
 | ID_F ARGS_F  %prec "func"{
-			    $$ = new Functor($1,args_f);
-			    args_f.clear();
-			    std::cout << $1 << std::endl;
+	 $$ = new Functor($1,{$2});
+	 std::cout << $1  << "poziv fje "<< std::endl;
 }
 | ID {
-      if(variables.find($1) == variables.end())
-      {
+	std::cout << " ID " << $1 << std::endl;
+	
+	if(variables.find($1) == variables.end()){
 	  throw SaliraException("Variable not exists in declaration of function arguments.");
 	}
 	
-      $$ = new Token(variables[$1]);
-      std::cout << $1 << std::endl;
+	$$ = new Token(variables[$1]);
 }
 | '(' EXP ')'   { 	
+		  std::cout << " ZAGRADE " << std::endl;
 		  $$ = $2;
 		  }
+/*
+| LIST {}
 ;
-ARGS_F : ARGS_F EXP %prec "func1" {
-				  args_f.push_back($2);
-				  std::cout  <<" argumenti funkcije" << std::endl;
-}
-| EXP %prec "func2"{ 
-		    args_f.push_back($1);
-		    std::cout << "argument funkcije" << std::endl;
-}
+LIST : '[' LIST_INT ']'
+| '[' LIST_DOUBLE ']'
+| '[' LIST_LIST ']'
+;
+LIST_INT : LIST_INT ',' INT_NUM
+| INT_NUM
+;
+LIST_DOUBLE : LIST_DOUBLE ',' DOUBLE_NUM
+| DOUBLE_NUM
+;
+LIST_LIST : LIST_LIST ',' LIST
+| LIST
+*/
+;
+ARGS_F : ARGS_F EXP %prec "func1" { std::cout << "lista" << std::endl; }
+| EXP %prec "func2"{ std::cout << "lista 1" << std::endl;}
 ;
 %%
 
@@ -253,27 +266,5 @@ static int yylex(Lambda::BisonParser::semantic_type *yylval, Lambda::FlexScanner
 
 	return scanner.yylex(yylval);
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
