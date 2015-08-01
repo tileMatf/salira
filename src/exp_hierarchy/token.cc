@@ -11,7 +11,8 @@ ExpressionBase::Type Token::getType() const {return ExpressionBase::S_TOKEN;}
 void Token::generateGCode() {
 	SaliraWriter& out = SaliraWriter::getInstance();
 	// TODO:  Check if calculating "index" of token is correct
-	out.write("PUSH "+std::to_string(Token::size() - _placement - 1));
+	out.write("PUSH "+std::to_string(_placement));
+	//out.write("PUSH "+std::to_string(Token::size() - _placement - 1));
 } 
 
 void Token::changeSize(int size){

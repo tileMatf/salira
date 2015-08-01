@@ -16,6 +16,7 @@ int main(int argc, char **argv) {
 		Expression plus = new Functor("$ADD",{mul, tokenY});
 		Expression g = new Functor("$G",{plus}, 2);
 		g->generateGCode();
+		g->tree(0);
 		
 		Expression one = new SaliraInt(1);
 		Expression my = new Functor("$SUB", {tokenX,one});

@@ -63,7 +63,6 @@ void Functor::gCodeEnd(Expression f) {
 	SaliraWriter& out = SaliraWriter::getInstance();
 	out.write("GLOBSTART $PROG, 0");
 	f->generateGCode();
-	out.write("EVAL");
 	out.write("UPDATE 1");
 	out.write("UNWIND");
 	
@@ -104,9 +103,12 @@ void Functor::gCodeDeclaration() const{
 		* NOTE: Heavy assumption that parser would insert correct tokens on right
 		* place.
 		*/
-	for(int i = 0,size = _args.size(); i < size; ++i){
+
+	for(int i = _args.size()-1; i >= 0; --i)
 		_args[i]->generateGCode();
-	}
+	//for(int i = 0,size = _args.size(); i < size; ++i){
+	//	_args[i]->generateGCode();
+	//}
 	out.write("UPDATE "+std::to_string(_num_of_args+1));
 	out.write("POP "+std::to_string(_num_of_args));
 	out.write("UNWIND");
