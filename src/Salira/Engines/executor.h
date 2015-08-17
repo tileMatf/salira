@@ -14,12 +14,12 @@ private:
     QList<State> _states;
     State _currentState;
 
-
     void Execute(bool forward);
 
     int valueOfGraphNode(int id, State state);
     GraphNodeType typeOfGraphNode(int id, State state);
     QString nameOfGraphNode(int id, State state);
+    int argOfFunction(QString name, QList<GCommand> commands);
 
 public:
     static Executor& Instance();

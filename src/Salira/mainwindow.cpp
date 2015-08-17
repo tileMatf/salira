@@ -356,6 +356,7 @@ void MainWindow::on_tsmiOpen_triggered()
                 }
                 else
                 {
+                    ui->txtEditorGCode->clear();
                     ui->txtOutput->clear();
                     ui->txtOutput->append(errorMessage);
                 }
@@ -500,4 +501,18 @@ void MainWindow::delay( int millisecondsToWait)
 void MainWindow::on_btnPlay_clicked()
 {
 
+}
+
+void MainWindow::on_btnExecute_clicked()
+{
+    ui->textEditHaskell->setEnabled(false);
+    ui->btnExecute->setEnabled(false);
+}
+
+void MainWindow::on_textEditHaskell_textChanged()
+{
+    if(ui->textEditHaskell->toPlainText().length() != 0)
+        ui->btnExecute->setEnabled(true);
+    else
+        ui->btnExecute->setEnabled(false);
 }

@@ -79,8 +79,7 @@ GCommand::GCommand(QString value)
             !GCommandParts[0].compare("END") || !GCommandParts[0].compare("BEGIN") ||
             !GCommandParts[0].compare("PRINT") || !GCommandParts[0].compare("MIN") ||
             !GCommandParts[0].compare("MAX") || !GCommandParts[0].compare("EVAL") ||
-            !GCommandParts[0].compare("EVAL2") || !GCommandParts[0].compare("UNWIND") ||
-            !GCommandParts[0].compare("UNWIND2") || !GCommandParts[0].compare("RETURN"))
+            !GCommandParts[0].compare("UNWIND") || !GCommandParts[0].compare("RETURN"))
     {
         if(GCommandParts.size() != 1)
             return;

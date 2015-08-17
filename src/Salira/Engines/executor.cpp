@@ -45,6 +45,14 @@ QString Executor::nameOfGraphNode(int id, State state)
             return state.graph()[i].functionName();
 }
 
+int Executor::argOfFunction(QString name, QList<GCommand> commands)
+{
+    for(int i = 0; i < commands.length(); i++)
+        if(commands[i].value() == "GLOBSTART" && commands[i].args()[0]->ToString() == name)
+            return commands[i].args()[1]->ToString().toInt();
+    return -1;
+}
+
 bool Executor::Init(QList<GCommand> commands, QString& errorMessage)
 {
     this->Reset();
@@ -100,10 +108,25 @@ bool Executor::Init(QList<GCommand> commands, QString& errorMessage)
             {
                 if(commands[j].ToString() == QString("GLOBSTART " + funName + " 0;"))
                 {
-                    i = j - 1;
+                    i = j;
                     break;
                 }
             }
+        }
+
+        if(nextState.command().value() == "UNWIND")
+        {
+            GraphNodeType nodeType = typeOfGraphNode(nextState.stack().last(), nextState);
+
+                QString funName = nameOfGraphNode(state.stack().last(), nextState);
+                int arg = argOfFunction(funName, commands);
+
+                if((funName == "$NEG" || state.stack().length() > arg)
+                        && State::returnTo().length() > 0)
+                {
+                        i = nextState._returnTo.pop();
+                        break;
+                }
         }
 
         this->_states.push_back(nextState);
@@ -121,11 +144,11 @@ bool Executor::Init(QList<GCommand> commands, QString& errorMessage)
         return false;
     }
 
-    /*if(this->_states[1].command().value() != "BEGIN" || this->_states.last().command().value() != "END")
+    if(this->_states[1].command().value() != "BEGIN" || this->_states.last().command().value() != "END")
     {
         errorMessage = "Error: First command in GCode must be 'BEGIN'! Last command in GCode must be 'END'!";
         return false;
-    }*/
+    }
 
     this->_currentState = this->_states[0];
     return true;
@@ -165,6 +188,3 @@ void Executor::Reset()
     this->currentState() = State();
     State::setMaxID(0);
 }
-
-
-

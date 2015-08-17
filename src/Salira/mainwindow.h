@@ -56,6 +56,10 @@ private slots:
 
     void on_btnPlay_clicked();
 
+    void on_btnExecute_clicked();
+
+    void on_textEditHaskell_textChanged();
+
 private:
     Ui::MainWindow *ui;
     void FillGCodeEditor();
