@@ -144,12 +144,12 @@ bool Executor::Init(QList<GCommand> commands, QString& errorMessage)
         return false;
     }
 
-    if(this->_states[1].command().value() != "BEGIN" || this->_states.last().command().value() != "END")
+/*    if(this->_states[1].command().value() != "BEGIN" || this->_states.last().command().value() != "END")
     {
         errorMessage = "Error: First command in GCode must be 'BEGIN'! Last command in GCode must be 'END'!";
         return false;
     }
-
+*/
     this->_currentState = this->_states[0];
     return true;
 }

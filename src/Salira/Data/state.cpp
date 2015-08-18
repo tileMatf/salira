@@ -791,9 +791,13 @@ bool State::Eval(GCommand command, State& state, QList<GCommand> commands, int l
 
     if(argType == GraphNodeType::Application)
     {
-        int tmp = state.stack().last();
-        for(int i = 0; i < state.stack().length()-1; i++)
-            dumpStack.push_back(state.stack()[i]);
+        int tmp;
+        if(state.stack().last() > 0)
+            tmp = state.stack().last();
+
+        if(state.stack().length() > 1)
+            for(int i = 0; i < state.stack().length()-1; i++)
+                dumpStack.push_back(state.stack()[i]);
 
         for(int i = currentLineNumber()+1; i < commands.length(); i++)
             dumpCode.push_back(commands[i].ToString());
@@ -805,7 +809,7 @@ bool State::Eval(GCommand command, State& state, QList<GCommand> commands, int l
         state._stack.push_back(tmp);
 
 
-        return Unwind(GCommand("Unwind;"), state, commands, lineNumber-1);
+        return Unwind(GCommand("Unwind;"), state, commands, lineNumber);
     }
 
     if(argType == GraphNodeType::Function)
@@ -832,7 +836,6 @@ bool State::Eval(GCommand command, State& state, QList<GCommand> commands, int l
 
             state._dump.push_back(dump);
             state._stack[0] = state._stack.last();
-            return true;
         }
     }
     return true;
@@ -868,7 +871,7 @@ bool State::Unwind(GCommand command, State& state, QList<GCommand> commands, int
                 state._stack.push_back(state._dump.last().stack()[i]);
 
             state._stack.push_back(tmp);
-            state._dump.clear();
+            state._dump.pop_back();
         }
 
         return true;
@@ -878,7 +881,7 @@ bool State::Unwind(GCommand command, State& state, QList<GCommand> commands, int
     {
         state._stack.push_back(id1);
         state = State(state, command, _maxID, lineNumber);
-        return Unwind(command, state, commands, lineNumber -1);
+        return Unwind(command, state, commands, lineNumber);
     }
 
     if(argType == GraphNodeType::Function)
@@ -933,7 +936,7 @@ bool State::Unwind(GCommand command, State& state, QList<GCommand> commands, int
                 state._stack.push_back(state._dump.last().stack()[i]);
 
             state._stack.push_back(tmp);
-            state._dump.clear();
+            state._dump.pop_back();
         }
     }
     return true;
