@@ -58,7 +58,7 @@
            <item>
             <layout class="QHBoxLayout" name="horizontalLayout">
              <property name="spacing">
-              <number>0</number>
+              <number>5</number>
              </property>
              <item>
               <widget class="QLabel" name="labelHaskell">
@@ -70,6 +70,44 @@
                </property>
                <property name="text">
                 <string>Haskell code</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QPushButton" name="btnOpen">
+               <property name="sizePolicy">
+                <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
+                 <horstretch>0</horstretch>
+                 <verstretch>0</verstretch>
+                </sizepolicy>
+               </property>
+               <property name="minimumSize">
+                <size>
+                 <width>32</width>
+                 <height>32</height>
+                </size>
+               </property>
+               <property name="maximumSize">
+                <size>
+                 <width>32</width>
+                 <height>32</height>
+                </size>
+               </property>
+               <property name="text">
+                <string/>
+               </property>
+               <property name="icon">
+                <iconset resource="resources.qrc">
+                 <normaloff>:/images/Images/folder-open.png</normaloff>:/images/Images/folder-open.png</iconset>
+               </property>
+               <property name="iconSize">
+                <size>
+                 <width>32</width>
+                 <height>32</height>
+                </size>
+               </property>
+               <property name="flat">
+                <bool>true</bool>
                </property>
               </widget>
              </item>
@@ -117,7 +155,7 @@
             </layout>
            </item>
            <item>
-            <widget class="QTextEdit" name="textEditHaskell">
+            <widget class="QTextEdit" name="txtEditHaskell">
              <property name="minimumSize">
               <size>
                <width>0</width>
@@ -420,34 +458,21 @@
           </widget>
          </item>
          <item row="0" column="0">
-          <widget class="QPushButton" name="btnTranslate">
-           <property name="enabled">
-            <bool>false</bool>
-           </property>
+          <widget class="QLabel" name="label">
            <property name="minimumSize">
             <size>
              <width>0</width>
-             <height>33</height>
+             <height>32</height>
             </size>
            </property>
            <property name="maximumSize">
             <size>
              <width>16777215</width>
-             <height>33</height>
+             <height>32</height>
             </size>
            </property>
            <property name="text">
-            <string>Translate to VAX Code</string>
-           </property>
-           <property name="icon">
-            <iconset resource="resources.qrc">
-             <normaloff>:/images/Images/book-go.png</normaloff>:/images/Images/book-go.png</iconset>
-           </property>
-           <property name="iconSize">
-            <size>
-             <width>24</width>
-             <height>24</height>
-            </size>
+            <string>TextLabel</string>
            </property>
           </widget>
          </item>
@@ -526,8 +551,8 @@
              <rect>
               <x>0</x>
               <y>0</y>
-              <width>124</width>
-              <height>216</height>
+              <width>125</width>
+              <height>232</height>
              </rect>
             </property>
             <layout class="QVBoxLayout" name="verticalLayout_3">
@@ -591,8 +616,8 @@
              <rect>
               <x>0</x>
               <y>0</y>
-              <width>124</width>
-              <height>216</height>
+              <width>126</width>
+              <height>232</height>
              </rect>
             </property>
             <layout class="QVBoxLayout" name="verticalLayout_4">
@@ -656,8 +681,8 @@
              <rect>
               <x>0</x>
               <y>0</y>
-              <width>124</width>
-              <height>216</height>
+              <width>125</width>
+              <height>232</height>
              </rect>
             </property>
             <layout class="QVBoxLayout" name="verticalLayout_5">
@@ -746,7 +771,7 @@
      <x>0</x>
      <y>0</y>
      <width>1102</width>
-     <height>23</height>
+     <height>30</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuFile">

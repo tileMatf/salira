@@ -60,6 +60,8 @@ private slots:
 
     void on_textEditHaskell_textChanged();
 
+    void on_btnOpen_clicked();
+
 private:
     Ui::MainWindow *ui;
     void FillGCodeEditor();
@@ -74,6 +76,7 @@ private:
     void RemoveAllButtons(QLayout *layout);
     void Clear(bool keepGCodeText = false);
 
+    void Open();
     void Evaluate();
     void Next();
     void Previous();

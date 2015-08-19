@@ -48,8 +48,6 @@ void MainWindow::FillGCodeEditor()
 
     ui->tsmiClear->setEnabled(true);
     ui->tsmiSaveGCode->setEnabled(true);
-
-    ui->btnTranslate->setEnabled(ui->txtEditorVAXCode->toPlainText().length() == 0);
     _gCodeValid = true;
 }
 
@@ -62,15 +60,12 @@ void MainWindow::FillVAXCodeEditor(bool clearOnly)
 
     if(!Translator::Instance().Translate(gCommands, &vaxCommands) || vaxCommands.size() == 0)
     {
-        ui->btnTranslate->setEnabled(true);
         ui->tsmiSaveVAXCode->setEnabled(false);
         return;
     }
 
     foreach (VAXCommand command, vaxCommands)
         ui->txtEditorVAXCode->append(command.ToString());
-
-    ui->btnTranslate->setEnabled(false);
     ui->tsmiSaveVAXCode->setEnabled(true);
 }
 
@@ -152,7 +147,7 @@ void MainWindow::FillOutput(bool clearOnly)
     foreach (QString line, Executor::Instance().currentState().output())
         ui->txtOutput->append(">> " + line + "\n");
 
-    ui->txtOutput->append(QString("Stack:"));
+    /*ui->txtOutput->append(QString("Stack:"));
     for(int i =0; i < Executor::Instance().currentState().stack().length(); i++)
         ui->txtOutput->append("id = " + QString::number(Executor::Instance().currentState().stack().at(i)));
     ui->txtOutput->append(QString("Graph:"));
@@ -174,7 +169,7 @@ void MainWindow::FillOutput(bool clearOnly)
     ui->txtOutput->append(QString("Dump Code:"));
     if(Executor::Instance().currentState().dump().length() > 0)
     for(int i = 0; i < Executor::Instance().currentState().dump().last().code().length(); i++)
-        ui->txtOutput->append(Executor::Instance().currentState().dump().last().code()[i]);
+        ui->txtOutput->append(Executor::Instance().currentState().dump().last().code()[i]);*/
 }
 
 void MainWindow::RefreshUI(bool clearOnly, bool keepGCodeText)
@@ -229,9 +224,45 @@ void MainWindow::Clear(bool keepGCodeText)
     this->RefreshRunMenu(false, false, false, false, false);
     this->RefreshUI(true, keepGCodeText);
 
-    ui->btnTranslate->setEnabled(false);
     ui->txtEditorVAXCode->clear();
     _gCodeValid = false;
+}
+
+void MainWindow::Open()
+{
+    try
+    {
+        fileName = QFileDialog::getOpenFileName (this, tr("Open File"), fileName /*, tr("Files (.)")*/);
+
+        if(fileName.length() > 0)
+        {
+            QFile file(fileName);
+            if(file.open(QIODevice::ReadOnly))
+            {
+                QTextStream in(&file);
+                QList<QString> buffer;
+
+                while(!in.atEnd())
+                    buffer.push_back(in.readLine());
+                file.close();
+
+                for (int i = 0; i <= buffer.length() - 1 && buffer[0] == ""; i++)
+                    buffer.removeAt(0);
+
+                for (int i = buffer.length() - 1; i >= 0 && buffer[i] == ""; i--)
+                    buffer.removeAt(i);
+
+                ui->txtEditHaskell->clear();
+                foreach (QString line, buffer)
+                    ui->txtEditHaskell->append(line);
+                ui->btnExecute->setEnabled(true);
+            }
+        }
+    }
+    catch(std::exception e)
+    {
+       ui->txtOutput->append("Error: Opening Haskell file");
+    }
 }
 
 void MainWindow::Evaluate()
@@ -263,8 +294,7 @@ void MainWindow::Evaluate()
         {
             this->RefreshUI();
             this->RefreshRunMenu(false, true, false, true, false);
-            this->FillVAXCodeEditor(true);
-            ui->btnTranslate->setEnabled(true);
+            this->FillVAXCodeEditor();
             _gCodeValid = true;
         }
         else
@@ -322,47 +352,7 @@ void MainWindow::Stop()
 
 void MainWindow::on_tsmiOpen_triggered()
 {
-    fileName = QFileDialog::getOpenFileName (this, tr("Open File"), fileName /*, tr("Files (.)")*/);
-
-    if(fileName.length() > 0)
-    {
-        QFile file(fileName);
-        if(file.open(QIODevice::ReadOnly))
-        {
-            QTextStream in(&file);
-            QList<QString> buffer;
-
-            while(!in.atEnd())
-                buffer.push_back(in.readLine());
-            file.close();
-
-            for (int i = 0; i <= buffer.length() - 1 && buffer[0] == ""; i++)
-                buffer.removeAt(0);
-
-            for (int i = buffer.length() - 1; i >= 0 && buffer[i] == ""; i--)
-                buffer.removeAt(i);
-
-            if(Parser::Instance().Parse(buffer, &gCommands))
-            {
-                QString errorMessage;
-                if(Executor::Instance().Init(gCommands, errorMessage))
-                {
-                    this->RefreshUI();
-                    this->RefreshFileMenu(true, true, false);
-                    this->RefreshRunMenu(false, true, false, true, false);
-                    this->FillVAXCodeEditor(true);
-                    ui->btnTranslate->setEnabled(true);
-                    _gCodeValid = true;
-                }
-                else
-                {
-                    ui->txtEditorGCode->clear();
-                    ui->txtOutput->clear();
-                    ui->txtOutput->append(errorMessage);
-                }
-            }
-        }
-    }
+    this->Open();
 }
 
 void MainWindow::on_tsmiClear_triggered()
@@ -444,6 +434,11 @@ void MainWindow::on_tsmiStop_triggered()
     this->Stop();
 }
 
+void MainWindow::on_btnOpen_clicked()
+{
+    this->Open();
+}
+
 void MainWindow::on_btnRestart_clicked()
 {
     this->Evaluate();
@@ -476,12 +471,11 @@ void MainWindow::on_txtEditorGCode_textChanged()
 
     this->RefreshFileMenu(notEmpty, notEmpty, ui->txtEditorVAXCode->toPlainText().length() > 0);
     this->RefreshRunMenu(notEmpty, false, false, false, false);
-    ui->btnTranslate->setEnabled(false);
 }
 
 void MainWindow::on_btnTranslate_clicked()
 {
-    this->FillVAXCodeEditor();
+    //obrisi
 }
 
 void MainWindow::on_txtEditorVAXCode_textChanged()
@@ -505,13 +499,38 @@ void MainWindow::on_btnPlay_clicked()
 
 void MainWindow::on_btnExecute_clicked()
 {
-    ui->textEditHaskell->setEnabled(false);
+    ui->txtEditHaskell->setEnabled(false);
     ui->btnExecute->setEnabled(false);
+
+    /*if(!system("../parser/proba ../parser/ulaz.txt"))
+    {
+
+    }*/
+
+    /*if(Parser::Instance().Parse(buffer, &gCommands))
+    {
+        QString errorMessage;
+        if(Executor::Instance().Init(gCommands, errorMessage))
+        {
+            this->RefreshUI();
+            this->RefreshFileMenu(true, true, false);
+            this->RefreshRunMenu(false, true, false, true, false);
+            this->FillVAXCodeEditor(true);
+            ui->btnTranslate->setEnabled(true);
+            _gCodeValid = true;
+        }
+        else
+        {
+            ui->txtEditorGCode->clear();
+            ui->txtOutput->clear();
+            ui->txtOutput->append(errorMessage);
+        }
+    }*/
 }
 
 void MainWindow::on_textEditHaskell_textChanged()
 {
-    if(ui->textEditHaskell->toPlainText().length() != 0)
+    if(ui->txtEditHaskell->toPlainText().length() != 0)
         ui->btnExecute->setEnabled(true);
     else
         ui->btnExecute->setEnabled(false);
