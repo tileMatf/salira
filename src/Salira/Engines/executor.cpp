@@ -125,7 +125,7 @@ bool Executor::Init(QList<GCommand> commands, QString& errorMessage)
                         && State::returnTo().length() > 0)
                 {
                         i = nextState._returnTo.pop();
-                        break;
+                        continue;
                 }
         }
 

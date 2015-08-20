@@ -8,7 +8,7 @@
 #include <Engines/executor.h>
 #include <unistd.h>
 #include <QTime>
-
+#include <iostream>
 
 static QString fileName = "/home/kostic/Downloads/Salira_Literatura/smiskovic_gmasina/";
 static QList<GCommand> gCommands;
@@ -502,36 +502,78 @@ void MainWindow::on_btnExecute_clicked()
     ui->txtEditHaskell->setEnabled(false);
     ui->btnExecute->setEnabled(false);
 
-    /*if(!system("../parser/proba ../parser/ulaz.txt"))
-    {
+    try{
+         QString saveFilename = "parser/input.txt";
 
-    }*/
+         QFile file(saveFilename);
+         file.open(QIODevice::WriteOnly);
 
-    /*if(Parser::Instance().Parse(buffer, &gCommands))
+         QTextStream outStream(&file);
+
+         if(ui->txtEditHaskell->toPlainText().length() > 0)
+             outStream << ui->txtEditHaskell->toPlainText();
+
+         outStream.flush();
+         file.close();
+     }
+     catch(std::exception e)
+     {
+        ui->txtOutput->append("Error: Saving GCode file");
+     }
+
+
+    if(!system("parser/proba < parser/input.txt"))
     {
-        QString errorMessage;
-        if(Executor::Instance().Init(gCommands, errorMessage))
+        QList<QString> buffer;
+        try
         {
-            this->RefreshUI();
-            this->RefreshFileMenu(true, true, false);
-            this->RefreshRunMenu(false, true, false, true, false);
-            this->FillVAXCodeEditor(true);
-            ui->btnTranslate->setEnabled(true);
-            _gCodeValid = true;
+                QFile file("gcode.txt");
+                if(file.open(QIODevice::ReadOnly))
+                {
+                    QTextStream in(&file);
+
+                    while(!in.atEnd())
+                        buffer.push_back(in.readLine());
+                    file.close();
+
+                    for (int i = 0; i <= buffer.length() - 1 && buffer[0] == ""; i++)
+                        buffer.removeAt(0);
+
+                    for (int i = buffer.length() - 1; i >= 0 && buffer[i] == ""; i--)
+                        buffer.removeAt(i);
+
+                    ui->txtEditorGCode->clear();
+                    foreach (QString line, buffer)
+                        ui->txtEditorGCode->append(line);
+                }
         }
-        else
+        catch(std::exception e)
         {
-            ui->txtEditorGCode->clear();
-            ui->txtOutput->clear();
-            ui->txtOutput->append(errorMessage);
+           ui->txtOutput->append("Error: Opening Haskell file");
         }
-    }*/
+
+        if(Parser::Instance().Parse(buffer, &gCommands))
+        {
+            QString errorMessage;
+            if(Executor::Instance().Init(gCommands, errorMessage))
+            {
+                this->RefreshUI();
+                this->RefreshFileMenu(true, true, false);
+                this->RefreshRunMenu(false, true, false, true, false);
+                this->FillVAXCodeEditor(true);
+                _gCodeValid = true;
+            }
+            else
+            {
+                ui->txtEditorGCode->clear();
+                ui->txtOutput->clear();
+                ui->txtOutput->append(errorMessage);
+            }
+        }
+    }
 }
 
 void MainWindow::on_textEditHaskell_textChanged()
 {
-    if(ui->txtEditHaskell->toPlainText().length() != 0)
         ui->btnExecute->setEnabled(true);
-    else
-        ui->btnExecute->setEnabled(false);
 }
