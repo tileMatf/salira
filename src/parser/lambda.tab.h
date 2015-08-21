@@ -342,7 +342,7 @@ namespace Lambda {
   // number is the opposite.  If YYTABLE_NINF, syntax error.
   static const unsigned char yytable_[];
 
-  static const signed char yycheck_[];
+  static const unsigned char yycheck_[];
 
   // YYSTOS[STATE-NUM] -- The (internal number of the) accessing
   // symbol of state STATE-NUM.
@@ -454,7 +454,7 @@ namespace Lambda {
     enum
     {
       yyeof_ = 0,
-      yylast_ = 39,     ///< Last index in yytable_.
+      yylast_ = 45,     ///< Last index in yytable_.
       yynnts_ = 10,  ///< Number of nonterminal symbols.
       yyempty_ = -2,
       yyfinal_ = 12, ///< Termination state number.

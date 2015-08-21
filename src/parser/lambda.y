@@ -215,6 +215,10 @@ EXP : EXP '+' EXP {
 			    args_f.clear();
 			    std::cout << $1 << std::endl;
 }
+| NEG '(' EXP ')' {
+			    $$ = new Functor("NEG",{$3});
+			    std::cout << " NEG " << std::endl;
+}
 | ID {
       if(variables.find($1) == variables.end())
       {

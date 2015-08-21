@@ -1,3 +1,2 @@
-G x y = 10*x + y;
-F x y = (G x y) + (G (x-1) (y-1));
-F 3 4;
+F x = NEG (x);
+F 3;
