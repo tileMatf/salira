@@ -145,7 +145,7 @@ PROGRAM : PROGRAM LINE ';' {
 ;
 LINE : ID_F ARGS '=' EXP  {
       
-			  Expression f = new Functor($1, {$4}, arguments.size());
+			  Expression f = new Functor(std::string("$")+std::string($1), {$4}, arguments.size());
 			  f->tree(0);
 			  SaliraLog::log("ttt");
 			  f->generateGCode();
@@ -159,7 +159,7 @@ LINE : ID_F ARGS '=' EXP  {
 | ID_F VALS {
 	  std::cout << "Udje " <<$1 << std::endl;
 	  
-	  Expression f = new Functor($1, values, values.size());
+	  Expression f = new Functor(std::string("$")+std::string($1), values, values.size());
 	  Functor::gCodeEnd(f);
 
       }
@@ -211,7 +211,7 @@ EXP : EXP '+' EXP {
 	    $$ = new SaliraInt($1);
 }
 | ID_F ARGS_F  %prec "func"{
-			    $$ = new Functor($1,args_f);
+			    $$ = new Functor(std::string("$")+std::string($1),args_f);
 			    args_f.clear();
 			    std::cout << $1 << std::endl;
 }

@@ -566,7 +566,7 @@ namespace Lambda {
 #line 146 "lambda.y" // lalr1.cc:847
     {
       
-			  Expression f = new Functor((yystack_[3].value.str), {(yystack_[0].value.e)}, arguments.size());
+			  Expression f = new Functor(std::string("$")+std::string((yystack_[3].value.str)), {(yystack_[0].value.e)}, arguments.size());
 			  f->tree(0);
 			  SaliraLog::log("ttt");
 			  f->generateGCode();
@@ -585,7 +585,7 @@ namespace Lambda {
     {
 	  std::cout << "Udje " <<(yystack_[1].value.str) << std::endl;
 	  
-	  Expression f = new Functor((yystack_[1].value.str), values, values.size());
+	  Expression f = new Functor(std::string("$")+std::string((yystack_[1].value.str)), values, values.size());
 	  Functor::gCodeEnd(f);
 
       }
@@ -703,7 +703,7 @@ namespace Lambda {
   case 20:
 #line 213 "lambda.y" // lalr1.cc:847
     {
-			    (yylhs.value.e) = new Functor((yystack_[1].value.str),args_f);
+			    (yylhs.value.e) = new Functor(std::string("$")+std::string((yystack_[1].value.str)),args_f);
 			    args_f.clear();
 			    std::cout << (yystack_[1].value.str) << std::endl;
 }
