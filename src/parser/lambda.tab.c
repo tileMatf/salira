@@ -713,7 +713,7 @@ namespace Lambda {
   case 21:
 #line 218 "lambda.y" // lalr1.cc:847
     {
-			    (yylhs.value.e) = new Functor("NEG",{(yystack_[1].value.e)});
+			    (yylhs.value.e) = new Functor("$NEG",{(yystack_[1].value.e)});
 			    std::cout << " NEG " << std::endl;
 }
 #line 720 "lambda.tab.c" // lalr1.cc:847

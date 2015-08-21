@@ -11,3 +11,6 @@ Functor$F
 Functor$F
   FunctorNEG
     SaliraToken
+Functor$F
+  Functor$NEG
+    SaliraToken
