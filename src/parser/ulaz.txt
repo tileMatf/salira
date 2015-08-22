@@ -1,2 +1,2 @@
-F x = NEG (x);
-F 3;
+F x = NEG(x);
+F 4;

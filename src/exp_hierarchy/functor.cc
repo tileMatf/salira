@@ -54,7 +54,7 @@ void Functor::initBaseFunctions(){
 void Functor::gCodeBegin() {
 	SaliraWriter& out = SaliraWriter::getInstance();
 	out.write("BEGIN");
-	out.write("PUSHGLOBAL $PROG");
+        out.write("PUSHGLOBAL $PROG 0");
 	out.write("EVAL");
 	out.write("PRINT");
 	out.write("END");
@@ -92,7 +92,8 @@ void Functor::baseGcode(bool run) const{
 			++iter;
 		}
 	}
-	out.write(std::string("PUSHGLOBAL ") + _identifier);
+	std::string args(_identifier == "$NEG" ? " 1" : " 2");
+	out.write(std::string("PUSHGLOBAL ") + _identifier + args);
 	out.write("MKAP");
 }
 
@@ -121,7 +122,7 @@ void Functor::gCodeCall() const{
 		(*iter)->generateGCode();
 		++iter;
 	}
-	out.write("PUSHGLOBAL "+_identifier);
+	out.write("PUSHGLOBAL "+_identifier + " " + std::to_string(_num_of_args));
 	out.write("MKAP");
 }
 
