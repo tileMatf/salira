@@ -6,8 +6,12 @@ int State::_cBegin = 0;
 QStack<unsigned> State::_returnTo;
 
 State::State()
-    :_command(GCommand("")), _ep(0), _hp(0), _sp(0), _op(0), _currentLineNumber(0)
+    :_command(GCommand("")), _id(0), _ep(0), _hp(0), _sp(0), _op(0), _currentLineNumber(0)
 {
+    _returnTo.clear();
+    _graph.clear();
+    _dump.clear();
+    _output.clear();
 }
 
 State::State(int id)
@@ -167,7 +171,7 @@ bool State::GetNext(GCommand command, State& nextState, QList<GCommand> commands
     this->_maxID++;
     if(command.value() == "")
     {
-        nextState = State(*this, command, _maxID, lineNumber);
+        nextState = State(nextState, command, _maxID, lineNumber);
         return true;
     }
 
@@ -257,7 +261,7 @@ bool State::GetNext(GCommand command, State& nextState, QList<GCommand> commands
 
 bool State::PushInt(GCommand command, State& state, int lineNumber)
 {
-    state = State(*this, command, _maxID, lineNumber + 1);
+    state = State(state, command, _maxID, lineNumber + 1);
     state._stack.push_back(state.hp());
     state._graph.push_back(GraphNode(state.hp(), GraphNodeType::Integer, command.args()[0]->ToString().toInt()));
     state._hp++;
@@ -267,7 +271,7 @@ bool State::PushInt(GCommand command, State& state, int lineNumber)
 
 bool State::PushGlobal(GCommand command, State& state, int lineNumber)
 {
-    state = State(*this, command, _maxID, lineNumber + 1);
+    state = State(state, command, _maxID, lineNumber + 1);
     state._stack.push_back(state.hp());
     state._graph.push_back(GraphNode(state.hp(),0,0,GraphNodeType::Function, command.args()[1]->ToString().toInt(), command.args()[0]->ToString()));
     state._hp++;
@@ -277,7 +281,7 @@ bool State::PushGlobal(GCommand command, State& state, int lineNumber)
 
 bool State::GlobStart(GCommand command, State& state, int lineNumber)
 {
-    state = State(*this, command, _maxID, lineNumber + 1);
+    state = State(state, command, _maxID, lineNumber + 1);
     return true;
 }
 
@@ -285,8 +289,8 @@ bool State::Push(GCommand command, State& state, int lineNumber)
 {
     int arg = command.args()[0]->ToString().toInt();
 
-    state = State(*this, command, _maxID, lineNumber + 1);
-    state._stack.push_back(state.hp() - arg - 1);
+    state = State(state, command, _maxID, lineNumber + 1);
+    state._stack.push_back(state.stack().at(state.stack().length()-arg-1));
 
     return true;
 }
@@ -295,7 +299,7 @@ bool State::Pop(GCommand command, State& state, int lineNumber)
 {
     int arg = command.args()[0]->ToString().toInt();
 
-    state = State(*this, command, _maxID, lineNumber + 1);
+    state = State(state, command, _maxID, lineNumber + 1);
 
     if(state.stack().length() < arg)
     {
@@ -313,7 +317,7 @@ bool State::Slide(GCommand command, State& state, int lineNumber)
 {
     int arg = command.args()[0]->ToString().toInt();
 
-    state = State(*this, command, _maxID, lineNumber + 1);
+    state = State(state, command, _maxID, lineNumber + 1);
 
     if(state.stack().length() < arg)
     {
@@ -332,7 +336,7 @@ bool State::Alloc(GCommand command, State& state, int lineNumber)
 {
     int arg = command.args()[0]->ToString().toInt();
 
-    state = State(*this, command, _maxID, lineNumber + 1);
+    state = State(state, command, _maxID, lineNumber + 1);
 
     for(int i = 0; i < arg; i++)
     {
@@ -347,7 +351,7 @@ bool State::Alloc(GCommand command, State& state, int lineNumber)
 
 bool State::Update(GCommand command, State& state, int lineNumber) //proveriti jos jednom
 {
-    state = State(*this, command, _maxID, lineNumber + 1);
+    state = State(state, command, _maxID, lineNumber + 1);
 
     int k = command.args()[0]->ToString().toInt();
 
@@ -372,7 +376,7 @@ bool State::Update(GCommand command, State& state, int lineNumber) //proveriti j
     int id = state._graph[state.stack().at(state.stack().length() - k - 1)].id();
     int index = state._stack.at(state.stack().length() - k - 1);
 
-    state._graph.at(index).~GraphNode();
+    //state._graph.at(index).~GraphNode();
     state._stack.pop();
 
     state._graph[index] = GraphNode(id, idRef1, idRef2, nodeType, value, funName);
@@ -382,7 +386,7 @@ bool State::Update(GCommand command, State& state, int lineNumber) //proveriti j
 
 bool State::Mkap(GCommand command, State& state, int lineNumber)
 {
-    state = State(*this, command, _maxID, lineNumber + 1);
+    state = State(state, command, _maxID, lineNumber + 1);
 
     int id1, id2;
     foreach(GraphNode node, state.graph())
@@ -405,7 +409,7 @@ bool State::Mkap(GCommand command, State& state, int lineNumber)
 
 bool State::Cons(GCommand command, State& state, int lineNumber)
 {
-    state = State(*this, command, _maxID, lineNumber + 1);
+    state = State(state, command, _maxID, lineNumber + 1);
     int id1, id2;
     foreach(GraphNode node, state.graph())
     {
@@ -427,7 +431,7 @@ bool State::Cons(GCommand command, State& state, int lineNumber)
 
 bool State::Add(GCommand command, State& state, int lineNumber)
 {
-    state = State(*this, command, _maxID, lineNumber + 1);
+    state = State(state, command, _maxID, lineNumber + 1);
 
     GraphNodeType arg1Type, arg2Type;
 
@@ -467,7 +471,7 @@ bool State::Add(GCommand command, State& state, int lineNumber)
 
 bool State::Sub(GCommand command, State& state, int lineNumber)
 {
-    state = State(*this, command, _maxID, lineNumber + 1);
+    state = State(state, command, _maxID, lineNumber + 1);
 
     GraphNodeType arg1Type, arg2Type;
 
@@ -507,7 +511,7 @@ bool State::Sub(GCommand command, State& state, int lineNumber)
 
 bool State::Mul(GCommand command, State& state, int lineNumber)
 {
-    state = State(*this, command, _maxID, lineNumber);
+    state = State(state, command, _maxID, lineNumber);
 
     GraphNodeType arg1Type, arg2Type;
 
@@ -547,7 +551,7 @@ bool State::Mul(GCommand command, State& state, int lineNumber)
 
 bool State::Div(GCommand command, State& state, int lineNumber)
 {
-    state = State(*this, command, _maxID, lineNumber + 1);
+    state = State(state, command, _maxID, lineNumber + 1);
 
     GraphNodeType arg1Type, arg2Type;
 
@@ -592,7 +596,7 @@ bool State::Div(GCommand command, State& state, int lineNumber)
 
 bool State::Neg(GCommand command, State& state, int lineNumber)
 {
-    state = State(*this, command, _maxID, lineNumber + 1);
+    state = State(state, command, _maxID, lineNumber + 1);
 
     GraphNodeType argType;
 
@@ -626,7 +630,7 @@ bool State::Neg(GCommand command, State& state, int lineNumber)
 
 bool State::Head(GCommand command, State& state, int lineNumber)
 {
-    state = State(*this, command, _maxID, lineNumber + 1);
+    state = State(state, command, _maxID, lineNumber + 1);
     GraphNodeType argType;
     int id;
 
@@ -652,13 +656,13 @@ bool State::Head(GCommand command, State& state, int lineNumber)
 
 bool State::End(GCommand command, State& state, int lineNumber)
 {
-    state = State(*this, command, _maxID, lineNumber + 1);
+    state = State(state, command, _maxID, lineNumber + 1);
     return true;
 }
 
 bool State::Begin(GCommand command, State& state, int lineNumber)
 {
-    state = State(*this, command, _maxID, lineNumber + 1);
+    state = State(state, command, _maxID, lineNumber + 1);
     state._stack.clear();
     state._graph.clear();
     state._dump.clear();
@@ -681,20 +685,20 @@ bool State::Print(GCommand command, State& state, int lineNumber)
     }
     if(argType != GraphNodeType::Integer)
     {
-        state._errorMessage = "Error on line " + QString::number(currentLineNumber()) + ": PRINT instruction on non-INT node";
+        state._errorMessage = "Error on line " + QString::number(currentLineNumber())
+                + ": PRINT instruction on non-INT node";
         return false;
     }
 
-    state = State(*this, state._command, _maxID, lineNumber + 1);
+    state = State(state, command, _maxID, lineNumber + 1);
     state._stack.pop();
     state._output.push_back(QString::number(value));
-
     return true;
 }
 
 bool State::Min(GCommand command, State& state, int lineNumber)
 {
-    state = State(*this, command, _maxID, lineNumber + 1);
+    state = State(state, command, _maxID, lineNumber + 1);
 
     GraphNodeType arg1Type, arg2Type;
     int arg1, arg2;
@@ -730,7 +734,7 @@ bool State::Min(GCommand command, State& state, int lineNumber)
 
 bool State::Max(GCommand command, State& state, int lineNumber)
 {
-    state = State(*this, command, _maxID, lineNumber + 1);
+    state = State(state, command, _maxID, lineNumber + 1);
 
     GraphNodeType arg1Type, arg2Type;
     int arg1, arg2;
@@ -766,7 +770,7 @@ bool State::Max(GCommand command, State& state, int lineNumber)
 
 bool State::Eval(GCommand command, State& state, QList<GCommand> commands, int lineNumber)
 {
-    state = State(*this, command, _maxID, lineNumber + 1);
+    state = State(state, command, _maxID, lineNumber + 1);
 
     GraphNodeType argType;
     QString funName;
@@ -814,7 +818,7 @@ bool State::Eval(GCommand command, State& state, QList<GCommand> commands, int l
 
     if(argType == GraphNodeType::Function)
     {
-        state._returnTo.push(_currentLineNumber+1);
+        state._returnTo.push(_currentLineNumber);
         int index = functionExists(funName, commands);
 
         if(index == -1)
@@ -922,7 +926,7 @@ bool State::Unwind(GCommand command, State& state, QList<GCommand> commands, int
         {
             for(int i = state.stack().length() - 1; i > state.stack().length() - 1 - arg; i--)
                 state._stack[i] = state._graph[state.stack()[i-1]].idRef2();
-            state._returnTo.push_back(index);
+            state._returnTo.push_back(index-1);
 
             return true;
         }
@@ -961,7 +965,7 @@ bool State::Return(GCommand command, State& state, QList<GCommand> commands, int
 
 bool State::Label(GCommand command, State& state, QList<GCommand> commands, int lineNumber)
 {
-    state = State(*this, command, _maxID, lineNumber + 1);
+    state = State(state, command, _maxID, lineNumber + 1);
     return true;
 }
 
@@ -977,7 +981,7 @@ bool State::Jump(GCommand command, State& state, QList<GCommand> commands, int l
         return false;
     }
 
-    state = State(*this, command, _maxID, lineNumber + 1);
+    state = State(state, command, _maxID, lineNumber + 1);
     return true;
 }
 
@@ -1012,7 +1016,7 @@ bool State::JFalse(GCommand command, State& state, QList<GCommand> commands, int
         }
     }
 
-    state = State(*this, command, _maxID, lineNumber + 1);
+    state = State(state, command, _maxID, lineNumber + 1);
     state._stack.pop();
 
     return true;

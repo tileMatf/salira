@@ -60,8 +60,9 @@ bool Executor::Init(QList<GCommand> commands, QString& errorMessage)
     State initialState = State(0);
     this->_states.push_back(initialState);
 
-    State nextState;
-    State state;
+    State nextState = State();
+    State state = State();
+
     for (int i = 0; i < commands.length(); i++)
     {
         GCommand command = commands[i];
@@ -70,6 +71,11 @@ bool Executor::Init(QList<GCommand> commands, QString& errorMessage)
         {
             errorMessage = nextState.errorMessage();;
             return false;
+        }
+
+        if(nextState.command().value() == "END")
+        {
+            break;
         }
 
         if(nextState.command().value() == "JUMP")
@@ -108,7 +114,7 @@ bool Executor::Init(QList<GCommand> commands, QString& errorMessage)
             {
                 if(commands[j].ToString() == QString("GLOBSTART " + funName + " 0;"))
                 {
-                    i = j;
+                    i = j-1;
                     break;
                 }
             }
