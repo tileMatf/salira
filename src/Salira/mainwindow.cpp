@@ -128,12 +128,21 @@ void MainWindow::FillDump(bool clearOnly)
     if(clearOnly)
         return;
 
-    if(Executor::Instance().currentState().dump().length() > 0)
-        for(int i = Executor::Instance().currentState().dump().length()-1; i <= 0; i++)
-        {
-            QString nodeName = "NODE [" + QString::number(Executor::Instance().currentState().dump().last().stack().at(i)+1) + "]";
-            ui->frameDump->layout()->addWidget(new QPushButton(nodeName));
+
+
+    if(Executor::Instance().currentState().dump().length() > 0){
+        // Avoiding sigsev.
+        // Check if stack of dump element is empty, if it is, ignoring dump stack
+        // NOTE: Pogledaj ovo.
+        bool avoidSigSev = Executor::Instance().currentState().dump().last().stack().empty();
+        if(!avoidSigSev){
+            for(int i = Executor::Instance().currentState().dump().length()-1; i <= 0; i++)
+            {
+                QString nodeName = "NODE [" + QString::number(Executor::Instance().currentState().dump().last().stack().at(i)+1) + "]";
+                ui->frameDump->layout()->addWidget(new QPushButton(nodeName));
+            }
         }
+    }
 
 }
 
