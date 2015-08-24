@@ -114,7 +114,7 @@ void MainWindow::FillGraph(bool clearOnly)
         case 4:
             nodeName = "APPLICATION\nNODE[" + QString::number(Executor::Instance().currentState().graph()[i].id()+1)
                     + "]\nNODE [" + QString::number(Executor::Instance().currentState().graph()[i].idRef1()+1)
-                    + "]\nNODE [" + QString::number(Executor::Instance().currentState().graph()[i].idRef2()+1);
+                    + "]\nNODE [" + QString::number(Executor::Instance().currentState().graph()[i].idRef2()+1) + "]";
             break;
         }
         ui->frameGraph->layout()->addWidget(new QPushButton(nodeName));
@@ -512,7 +512,7 @@ void MainWindow::on_btnExecute_clicked()
     ui->btnExecute->setEnabled(false);
 
     try{
-         QString saveFilename = "../parser/input.txt";
+         QString saveFilename = "parser/input.txt";
 
          QFile file(saveFilename);
          file.open(QIODevice::WriteOnly);
@@ -531,7 +531,7 @@ void MainWindow::on_btnExecute_clicked()
      }
 
 
-    if(!system("../parser/proba < ../parser/input.txt"))
+    if(!system("parser/proba < parser/input.txt"))
     {
         QList<QString> buffer;
         try

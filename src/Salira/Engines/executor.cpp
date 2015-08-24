@@ -106,6 +106,15 @@ bool Executor::Init(QList<GCommand> commands, QString& errorMessage)
             }
         }
 
+        if(nextState.command().value() == "RETURN")
+        {
+            if(State::returnTo().length() > 0)
+            {
+                i = nextState._returnTo.pop();
+                continue;
+            }
+        }
+
         if(nextState.command().value() == "EVAL")
         {
             QString funName = nameOfGraphNode(state.stack().last(), nextState);

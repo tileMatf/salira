@@ -290,6 +290,14 @@ bool State::Push(GCommand command, State& state, int lineNumber)
     int arg = command.args()[0]->ToString().toInt();
 
     state = State(state, command, _maxID, lineNumber + 1);
+
+    if(state.stack().length() <= arg )
+    {
+        state._errorMessage = "Error on line " + QString::number(currentLineNumber())
+                + ": Invalid argument in command PUSH.";
+        return false;
+    }
+
     state._stack.push_back(state.stack().at(state.stack().length()-arg-1));
 
     return true;
@@ -303,7 +311,8 @@ bool State::Pop(GCommand command, State& state, int lineNumber)
 
     if(state.stack().length() < arg)
     {
-        state._errorMessage = "Error on line " + QString::number(currentLineNumber()) + ": Invalid argument in command POP.";
+        state._errorMessage = "Error on line " + QString::number(currentLineNumber())
+                + ": Invalid argument in command POP.";
         return false;
     }
 
@@ -319,12 +328,12 @@ bool State::Slide(GCommand command, State& state, int lineNumber)
 
     state = State(state, command, _maxID, lineNumber + 1);
 
-    if(state.stack().length() < arg)
+    if(state.stack().length() <= arg)
     {
-        state._errorMessage = "Error on line " + QString::number(currentLineNumber()) + ": Invalid command SLIDE";
+        state._errorMessage = "Error on line " + QString::number(currentLineNumber())
+                + ": Invalid command SLIDE";
         return false;
     }
-
     state._stack[state.stack().length() - arg - 1] = state.stack().last();
     for(int i = 0; i < arg; i++)
         state._stack.pop();
@@ -337,6 +346,12 @@ bool State::Alloc(GCommand command, State& state, int lineNumber)
     int arg = command.args()[0]->ToString().toInt();
 
     state = State(state, command, _maxID, lineNumber + 1);
+
+    for(int i = 0; i < arg; i++)
+    {
+        state._stack.push_back(state.hp() + i);
+        state._graph.push_back(GraphNode(state.hp() + i, GraphNodeType::None, 0));
+    }
 
     for(int i = 0; i < arg; i++)
     {
@@ -373,6 +388,13 @@ bool State::Update(GCommand command, State& state, int lineNumber) //proveriti j
        }
     }
 
+    if(state.stack().length() <= k || state.stack().length() == 0)
+    {
+        state._errorMessage = "Error on line " + QString::number(currentLineNumber())
+                + ": Invalid argument in command UPDATE.";
+        return false;
+    }
+
     int id = state._graph[state.stack().at(state.stack().length() - k - 1)].id();
     int index = state._stack.at(state.stack().length() - k - 1);
 
@@ -388,20 +410,36 @@ bool State::Mkap(GCommand command, State& state, int lineNumber)
 {
     state = State(state, command, _maxID, lineNumber + 1);
 
-    int id1, id2;
+    if(state.stack().length() < 2)
+    {
+        state._errorMessage = "Error on line " + QString::number(currentLineNumber())
+                + ": Invalid argument in command MKAP.";
+        return false;
+    }
+
+    int id1, id2, value;
+
     foreach(GraphNode node, state.graph())
     {
         if(node.id() == state.stack().last())
+        {
             id1 = node.id();
+            if(node.type() == GraphNodeType::Integer)
+                value = node.value();
+        }
         if(node.id() == state.stack()[state.stack().length() - 2])
+        {
             id2 = node.id();
+            if(node.type() == GraphNodeType::Integer)
+                value = node.value();
+        }
     }
 
     state._stack.pop();
     state._stack.pop();
     state._stack.push_back(state.hp());
 
-    state._graph.push_back(GraphNode(state.hp(), id1, id2, GraphNodeType::Application, 0, NULL));
+    state._graph.push_back(GraphNode(state.hp(), id1, id2, GraphNodeType::Application, value, NULL));
     state._hp++;
 
     return true;
@@ -411,6 +449,14 @@ bool State::Cons(GCommand command, State& state, int lineNumber)
 {
     state = State(state, command, _maxID, lineNumber + 1);
     int id1, id2;
+
+    if(state.stack().length() < 2)
+    {
+        state._errorMessage = "Error on line " + QString::number(currentLineNumber())
+                + ": Invalid argument in command CONST.";
+        return false;
+    }
+
     foreach(GraphNode node, state.graph())
     {
         if(node.id() == state.stack().last())
@@ -434,6 +480,13 @@ bool State::Add(GCommand command, State& state, int lineNumber)
     state = State(state, command, _maxID, lineNumber + 1);
 
     GraphNodeType arg1Type, arg2Type;
+
+    if(state.stack().length() < 2)
+    {
+        state._errorMessage = "Error on line " + QString::number(currentLineNumber())
+                + ": Invalid arguments in command ADD.";
+        return false;
+    }
 
     foreach(GraphNode node, state.graph())
     {
@@ -475,6 +528,13 @@ bool State::Sub(GCommand command, State& state, int lineNumber)
 
     GraphNodeType arg1Type, arg2Type;
 
+    if(state.stack().length() < 2)
+    {
+        state._errorMessage = "Error on line " + QString::number(currentLineNumber())
+                + ": Invalid arguments in command SUB.";
+        return false;
+    }
+
     foreach(GraphNode node, state.graph())
     {
         if(node.id() == state.stack().last())
@@ -515,6 +575,13 @@ bool State::Mul(GCommand command, State& state, int lineNumber)
 
     GraphNodeType arg1Type, arg2Type;
 
+    if(state.stack().length() < 2)
+    {
+        state._errorMessage = "Error on line " + QString::number(currentLineNumber())
+                + ": Invalid arguments in command MUL.";
+        return false;
+    }
+
     foreach(GraphNode node, state.graph())
     {
         if(node.id() == state.stack().last())
@@ -554,6 +621,13 @@ bool State::Div(GCommand command, State& state, int lineNumber)
     state = State(state, command, _maxID, lineNumber + 1);
 
     GraphNodeType arg1Type, arg2Type;
+
+    if(state.stack().length() < 2)
+    {
+        state._errorMessage = "Error on line " + QString::number(currentLineNumber())
+                + ": Invalid arguments in command DIV.";
+        return false;
+    }
 
     foreach(GraphNode node, state.graph())
     {
@@ -600,6 +674,13 @@ bool State::Neg(GCommand command, State& state, int lineNumber)
 
     GraphNodeType argType;
 
+    if(state.stack().length() < 1)
+    {
+        state._errorMessage = "Error on line " + QString::number(currentLineNumber())
+                + ": Invalid argument in command NEG.";
+        return false;
+    }
+
     foreach(GraphNode node, state.graph())
     {
         if(node.id() == state.stack().last())
@@ -633,6 +714,13 @@ bool State::Head(GCommand command, State& state, int lineNumber)
     state = State(state, command, _maxID, lineNumber + 1);
     GraphNodeType argType;
     int id;
+
+    if(state.stack().length() < 1)
+    {
+        state._errorMessage = "Error on line " + QString::number(currentLineNumber())
+                + ": Invalid argument in command HEAD.";
+        return false;
+    }
 
     foreach(GraphNode node, state.graph())
     {
@@ -676,6 +764,14 @@ bool State::Print(GCommand command, State& state, int lineNumber)
 {
     GraphNodeType argType;
     int value;
+
+    if(state.stack().length() < 1)
+    {
+        state._errorMessage = "Error on line " + QString::number(currentLineNumber())
+                + ": Invalid argument in command PRINT, empty stack.";
+        return false;
+    }
+
     foreach (GraphNode node, state.graph()) {
         if(node.id() == state.stack().last())
         {
@@ -702,6 +798,13 @@ bool State::Min(GCommand command, State& state, int lineNumber)
 
     GraphNodeType arg1Type, arg2Type;
     int arg1, arg2;
+
+    if(state.stack().length() < 2)
+    {
+        state._errorMessage = "Error on line " + QString::number(currentLineNumber())
+                + ": Invalid arguments in command MIN.";
+        return false;
+    }
 
     foreach (GraphNode node, state.graph()) {
         if(node.id() == state.stack().last())
@@ -739,6 +842,13 @@ bool State::Max(GCommand command, State& state, int lineNumber)
     GraphNodeType arg1Type, arg2Type;
     int arg1, arg2;
 
+    if(state.stack().length() < 2)
+    {
+        state._errorMessage = "Error on line " + QString::number(currentLineNumber())
+                + ": Invalid arguments in command MAX.";
+        return false;
+    }
+
     foreach (GraphNode node, state.graph()) {
         if(node.id() == state.stack().last())
         {
@@ -775,6 +885,12 @@ bool State::Eval(GCommand command, State& state, QList<GCommand> commands, int l
     GraphNodeType argType;
     QString funName;
 
+    if(state.stack().length() < 1)
+    {
+        state._errorMessage = "Error on line " + QString::number(currentLineNumber())
+                + ": Invalid argument in command EVAL, empty stack.";
+        return false;
+    }
 
     foreach (GraphNode node, state.graph()) {
         if(node.id() == state.stack().last())
@@ -849,8 +965,15 @@ bool State::Unwind(GCommand command, State& state, QList<GCommand> commands, int
 {
     state = State(state, command, _maxID, lineNumber + 1);
     GraphNodeType argType;
-    int id1, id2;
+    int id1, id2, arg;
     QString funName;
+
+    if(state.stack().length() < 1)
+    {
+        state._errorMessage = "Error on line " + QString::number(currentLineNumber())
+                + ": Invalid argument in command UNWIND, less then 1 stack node.";
+        return false;
+    }
 
     foreach (GraphNode node, state.graph()) {
         if(node.id() == state.stack().last())
@@ -858,6 +981,7 @@ bool State::Unwind(GCommand command, State& state, QList<GCommand> commands, int
             argType = node.type();
             id1 = node.idRef1();
             funName = node.functionName();
+            arg = node.value();
         }
         if(state.stack().length() > 1)
             if(node.id() == state.stack()[state.stack().length()-2])
@@ -874,26 +998,35 @@ bool State::Unwind(GCommand command, State& state, QList<GCommand> commands, int
             for(int i = 0; i < state.dump().last().stack().length(); i++)
                 state._stack.push_back(state._dump.last().stack()[i]);
 
-            state._stack.push_back(tmp);
             state._dump.pop_back();
         }
-
+        state._stack.push_back(tmp);
         return true;
     }
 
     if(argType == GraphNodeType::Application)
     {
         state._stack.push_back(id1);
-        state = State(state, command, _maxID, lineNumber);
-        return Unwind(command, state, commands, lineNumber);
+//        state = State(state, command, _maxID, lineNumber);
+        return Unwind(command, state, commands, lineNumber-1);
     }
 
     if(argType == GraphNodeType::Function)
     {
         if(funName == QString("$NEG"))
         {
+            if(state.stack().length() < 2)
+            {
+                state._errorMessage = "Error on line " + QString::number(currentLineNumber())
+                        + ": Invalid argument in command UNWIND, less then 2 stack node.";
+                return false;
+            }
+
             state._stack.pop();
+            state._stack.pop();
+
             GraphNodeType nodeType = state._graph[state.stack().last()].type();
+
             if(nodeType != GraphNodeType::Application)
             {
                 state._errorMessage = "Error on line " + QString::number(currentLineNumber())
@@ -903,14 +1036,78 @@ bool State::Unwind(GCommand command, State& state, QList<GCommand> commands, int
             state._stack.push_back(state._graph[state.stack().last()].idRef2());
 
             return state.Neg(command, state, lineNumber-1);
-
-//            int index = findPrint(commands);
-
-//            if(index != -1)
-//                return Print(GCommand("Print;"), state, lineNumber);
-//            return true;
         }
 
+/*        if(funName == QString("$ADD") || funName == QString("$SUB")
+                || funName == QString("$DIV") || funName == QString("$MUL")
+                || funName == QString("$MIN") || funName == QString("$MAX"))
+        {
+            if(state.stack().length() < 3)
+            {
+                state._errorMessage = "Error on line " + QString::number(currentLineNumber())
+                        + ": Invalid argument in command UNWIND, less then 3 stack node.";
+                return false;
+            }
+
+            state._stack.pop();
+            int idArgValue1 = state._graph[state._stack.pop()].idRef2();
+
+            GraphNodeType nodeType = state._graph[state.stack().last()].type();
+
+            if(nodeType != GraphNodeType::Application)
+            {
+                state._errorMessage = "Error on line " + QString::number(currentLineNumber())
+                        + ": ADD,SUB,MUL,DIV, MIN or MAX instruction on non-integer node.";
+                return false;
+            }
+
+            int argValue2 = state._graph[state.stack().last()].value();
+
+            state._stack.push_back(idArgValue1);
+            state._stack.push_back(state.hp());
+            state._graph.push_back(GraphNode(state.hp(), GraphNodeType::Integer, argValue2));
+            state._hp++;
+
+            if(funName == QString("$ADD"))
+                return state.Add(command, state, lineNumber-1);
+            else if(funName == QString("$SUB"))
+                return state.Sub(command, state, lineNumber-1);
+            else if(funName == QString("$MUL"))
+                return state.Mul(command, state, lineNumber-1);
+            else if(funName == QString("$DIV"))
+                return state.Div(command, state, lineNumber-1);
+            else if(funName == QString("$MIN"))
+                return state.Min(command, state, lineNumber-1);
+            else if(funName == QString("$MAX"))
+                return state.Max(command, state, lineNumber-1);
+        }*/
+
+        if(funName == QString("$ADD") || funName == QString("$SUB")
+                || funName == QString("$DIV") || funName == QString("$MUL")
+                || funName == QString("$MIN") || funName == QString("$MAX"))
+        {
+            if(state.stack().length() > arg )
+            {
+                for(int i = state.stack().length() - 1; i > state.stack().length() - arg; i--)
+                    state._stack[i] = state._graph[state.stack()[i-1]].idRef2();
+
+                int value = state.graph()[state.stack().length()-arg-1].value();
+                state._graph[state.stack()[state.stack().length() - arg]] = GraphNode(state._stack.length()-arg, 0,0, GraphNodeType::Integer, value, NULL);
+
+                if(funName == QString("$ADD"))
+                    return state.Add(command, state, lineNumber-1);
+                else if(funName == QString("$SUB"))
+                    return state.Sub(command, state, lineNumber-1);
+                else if(funName == QString("$MUL"))
+                    return state.Mul(command, state, lineNumber-1);
+                else if(funName == QString("$DIV"))
+                    return state.Div(command, state, lineNumber-1);
+                else if(funName == QString("$MIN"))
+                    return state.Min(command, state, lineNumber-1);
+                else if(funName == QString("$MAX"))
+                    return state.Max(command, state, lineNumber-1);
+            }
+        }
 
         int index = functionExists(funName, commands);
         if(index == -1)
@@ -920,8 +1117,6 @@ bool State::Unwind(GCommand command, State& state, QList<GCommand> commands, int
             return false;
         }
 
-
-        int arg = commands[index].args().at(1)->ToString().toInt();
         if(state.stack().length() > arg )
         {
             for(int i = state.stack().length() - 1; i > state.stack().length() - 1 - arg; i--)
@@ -982,6 +1177,7 @@ bool State::Jump(GCommand command, State& state, QList<GCommand> commands, int l
     }
 
     state = State(state, command, _maxID, lineNumber + 1);
+    state._returnTo.push_back(_currentLineNumber);
     return true;
 }
 
@@ -989,6 +1185,13 @@ bool State::JFalse(GCommand command, State& state, QList<GCommand> commands, int
 {
     GraphNodeType argType;
     GraphNode currentNode;
+
+    if(state.stack().length() < 1)
+    {
+        state._errorMessage = "Error on line " + QString::number(currentLineNumber())
+                + ": Invalid argument in command JFALSE, less then 1 stack node.";
+        return false;
+    }
 
     foreach(GraphNode node, state.graph())
         if(node.id() == state.stack().last())
