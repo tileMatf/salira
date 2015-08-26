@@ -76,10 +76,15 @@ void MainWindow::FillStack(bool clearOnly)
     if(clearOnly)
         return;
 
-    for(int i = Executor::Instance().currentState().stack().length() - 1; i >= 0; i--)
+    bool stackEmpty = Executor::Instance().currentState().stack().empty();
+
+    if(!stackEmpty)
     {
-        QString nodeName = "NODE [" + QString::number(Executor::Instance().currentState().stack().at(i)+1) + "]";
-        ui->frameStack->layout()->addWidget(new QPushButton(nodeName));
+        for(int i = Executor::Instance().currentState().stack().length() - 1; i >= 0; i--)
+        {
+            QString nodeName = "NODE [" + QString::number(Executor::Instance().currentState().stack().at(i)+1) + "]";
+            ui->frameStack->layout()->addWidget(new QPushButton(nodeName));
+        }
     }
 }
 
@@ -90,34 +95,39 @@ void MainWindow::FillGraph(bool clearOnly)
     if(clearOnly)
         return;
 
-    for(int i = Executor::Instance().currentState().graph().length()-1; i >= 0 ; i--)
+    bool graphEmpty = Executor::Instance().currentState().graph().empty();
+
+    if(!graphEmpty)
     {
-        QString nodeName;
-        switch(Executor::Instance().currentState().graph()[i].type())
+        for(int i = Executor::Instance().currentState().graph().length()-1; i >= 0 ; i--)
         {
-        case 0:
-            nodeName = "HOLE";
-            break;
-        case 1:
-            nodeName = "INTEGER\nNODE [" + QString::number(Executor::Instance().currentState().graph()[i].id()+1)
-                    + "]\nValue = " + QString::number(Executor::Instance().currentState().graph()[i].value());
-            break;
-        case 2:
-            nodeName = "FUNCTION\nNODE [" + QString::number(Executor::Instance().currentState().graph()[i].id()+1)
-                    + "]\n" + Executor::Instance().currentState().graph()[i].functionName();
-            break;
-        case 3:
-            nodeName = "CONST\nNODE[" + QString::number(Executor::Instance().currentState().graph()[i].id()+1)
-                    + "]\nNODE [" + QString::number(Executor::Instance().currentState().graph()[i].idRef1()+1)
-                    + "]\nNODE [" + QString::number(Executor::Instance().currentState().graph()[i].idRef2()+1);
-            break;
-        case 4:
-            nodeName = "APPLICATION\nNODE[" + QString::number(Executor::Instance().currentState().graph()[i].id()+1)
-                    + "]\nNODE [" + QString::number(Executor::Instance().currentState().graph()[i].idRef1()+1)
-                    + "]\nNODE [" + QString::number(Executor::Instance().currentState().graph()[i].idRef2()+1) + "]";
-            break;
+            QString nodeName;
+            switch(Executor::Instance().currentState().graph()[i].type())
+            {
+            case 0:
+                nodeName = "HOLE";
+                break;
+            case 1:
+                nodeName = "INTEGER\nNODE [" + QString::number(Executor::Instance().currentState().graph()[i].id()+1)
+                        + "]\nValue = " + QString::number(Executor::Instance().currentState().graph()[i].value());
+                break;
+            case 2:
+                nodeName = "FUNCTION\nNODE [" + QString::number(Executor::Instance().currentState().graph()[i].id()+1)
+                        + "]\n" + Executor::Instance().currentState().graph()[i].functionName();
+                break;
+            case 3:
+                nodeName = "CONST\nNODE[" + QString::number(Executor::Instance().currentState().graph()[i].id()+1)
+                        + "]\nNODE [" + QString::number(Executor::Instance().currentState().graph()[i].idRef1()+1)
+                        + "]\nNODE [" + QString::number(Executor::Instance().currentState().graph()[i].idRef2()+1);
+                break;
+            case 4:
+                nodeName = "APPLICATION\nNODE[" + QString::number(Executor::Instance().currentState().graph()[i].id()+1)
+                        + "]\nNODE [" + QString::number(Executor::Instance().currentState().graph()[i].idRef1()+1)
+                        + "]\nNODE [" + QString::number(Executor::Instance().currentState().graph()[i].idRef2()+1) + "]";
+                break;
+            }
+            ui->frameGraph->layout()->addWidget(new QPushButton(nodeName));
         }
-        ui->frameGraph->layout()->addWidget(new QPushButton(nodeName));
     }
 }
 
@@ -127,8 +137,6 @@ void MainWindow::FillDump(bool clearOnly)
 
     if(clearOnly)
         return;
-
-
 
     if(Executor::Instance().currentState().dump().length() > 0){
         // Avoiding sigsev.

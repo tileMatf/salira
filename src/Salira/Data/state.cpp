@@ -744,7 +744,7 @@ bool State::Head(GCommand command, State& state, int lineNumber)
 
 bool State::End(GCommand command, State& state, int lineNumber)
 {
-    state = State(state, command, _maxID, lineNumber + 1);
+    state = State(state, command, _maxID, lineNumber);
     return true;
 }
 
@@ -762,6 +762,8 @@ bool State::Begin(GCommand command, State& state, int lineNumber)
 
 bool State::Print(GCommand command, State& state, int lineNumber)
 {
+    state = State(state, command, _maxID, lineNumber + 1);
+
     GraphNodeType argType;
     int value;
 
@@ -786,7 +788,6 @@ bool State::Print(GCommand command, State& state, int lineNumber)
         return false;
     }
 
-    state = State(state, command, _maxID, lineNumber + 1);
     state._stack.pop();
     state._output.push_back(QString::number(value));
     return true;
@@ -929,7 +930,7 @@ bool State::Eval(GCommand command, State& state, QList<GCommand> commands, int l
         state._stack.push_back(tmp);
 
 
-        return Unwind(GCommand("Unwind;"), state, commands, lineNumber);
+        return Unwind(GCommand("Eval;"), state, commands, lineNumber-1);
     }
 
     if(argType == GraphNodeType::Function)
@@ -1021,8 +1022,6 @@ bool State::Unwind(GCommand command, State& state, QList<GCommand> commands, int
                         + ": Invalid argument in command UNWIND, less then 2 stack node.";
                 return false;
             }
-
-            state._stack.pop();
             state._stack.pop();
 
             GraphNodeType nodeType = state._graph[state.stack().last()].type();
@@ -1033,6 +1032,7 @@ bool State::Unwind(GCommand command, State& state, QList<GCommand> commands, int
                         + ": NEG instruction on non-integer node.";
                 return false;
             }
+
             state._stack.push_back(state._graph[state.stack().last()].idRef2());
 
             return state.Neg(command, state, lineNumber-1);
