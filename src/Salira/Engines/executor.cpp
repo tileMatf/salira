@@ -70,6 +70,8 @@ bool Executor::Init(QList<GCommand> commands, QString& errorMessage)
 
         if(command.value() == "END")
         {
+            state = State(state,command, state.maxID());
+            this->_states.push_back(state);
             break;
         }
 
